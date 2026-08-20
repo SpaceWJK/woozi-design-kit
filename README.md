@@ -1,4 +1,4 @@
-한국어 | [English](README.en.md)
+한국어 | [English](README.en.md) | [日本語](README.ja.md) | [中文](README.zh.md)
 
 # woozi-design-kit
 
