@@ -1,0 +1,247 @@
+<!-- macro-demo: split-studio | 골격: 스플릿 스튜디오 | design: macrostructure=split-studio preset=neutral-editorial+rust | gate: WCAG ✓ AI-tell ✓ token ✓ | score: Philosophy 4 Hierarchy 5 Execution 4 Specificity 5 Restraint 4 Variety 4 -->
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>스튜디오 아를 — Split Studio 골격 데모</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --bg:#fbfaf8; --bg-dark:#181614; --tint:#f2ede8;
+    --ink:#181614; --ink-inv:#f4f1ec;
+    --mute:#6f6a63; --mute-inv:#b3aca3;
+    --line:#e3ddd4; --line-dark:#3a352e;
+    --accent:#a83f24; --accent-bright:#d6704f; --accent-tint:#f4e4de;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+    --ease:cubic-bezier(.4,0,.2,1);
+    --on-dark:#fff;
+    --bg-rgb:251,250,248;
+    --bar-fg:#d8d3cb;
+    --diagram-line:#514b43; --diagram-line-light:#c9beb0;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{font-family:var(--font);color:var(--ink);background:var(--bg);line-height:1.65;word-break:keep-all;overflow-x:hidden;font-size:15px}
+  h1,h2,h3{font-weight:800;letter-spacing:-.02em;line-height:1.22}
+  a{color:inherit}
+  ::selection{background:var(--accent);color:var(--on-dark)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+
+  /* ---- header ---- */
+  header.top{position:sticky;top:0;z-index:40;background:rgba(var(--bg-rgb),.92);backdrop-filter:blur(8px);padding:18px 28px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}
+  header.top .wordmark{font-weight:800;font-size:14.5px;letter-spacing:.02em}
+  header.top .wordmark::before{content:'◆';color:var(--accent);margin-right:8px;font-size:11px}
+  header.top nav{display:none;gap:30px;font-size:13px;color:var(--mute)}
+  header.top nav a{position:relative;padding-bottom:2px;text-decoration:none;transition:color .18s var(--ease)}
+  header.top nav a::after{content:'';position:absolute;left:0;bottom:-2px;width:0;height:1px;background:var(--accent);transition:width .22s var(--ease)}
+  header.top nav a:hover{color:var(--ink)}
+  header.top nav a:hover::after{width:100%}
+  @media(min-width:820px){header.top nav{display:flex}}
+  .top-cta{font-size:12.5px;font-weight:700;padding:9px 16px;border-radius:999px;background:var(--ink);color:var(--on-dark);text-decoration:none;white-space:nowrap;transition:background .18s var(--ease)}
+  .top-cta:hover{background:var(--accent)}
+  @media (prefers-reduced-motion:reduce){header.top nav a::after,.top-cta,.cta::after,.card{transition:none!important}}
+
+  /* ---- split blocks ---- */
+  .split{display:grid;grid-template-columns:1fr;min-height:auto}
+  @media(min-width:820px){.split{grid-template-columns:1fr 1fr;min-height:auto}}
+  .split.rev{direction:rtl}
+  .split.rev>*{direction:ltr}
+  .panel{padding:56px 28px;display:flex;flex-direction:column;justify-content:center;gap:18px;min-width:0}
+  @media(min-width:820px){.panel{padding:96px 72px}}
+  .panel.visual{position:relative;min-height:280px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .panel.dark{background:var(--bg-dark);color:var(--ink-inv)}
+  .panel.dark .mute{color:var(--mute-inv)}
+  .panel.light{background:var(--bg)}
+  .panel.tint{background:var(--tint)}
+  .mute{color:var(--mute);font-size:14px}
+
+  .eyebrow{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:800;display:flex;align-items:center;gap:8px}
+  .eyebrow .rule{width:22px;height:1px;background:var(--accent);display:inline-block}
+  .h-hero{font-size:clamp(32px,5.4vw,58px)}
+  .h-hero em{font-style:normal;color:var(--accent)}
+  .h-block{font-size:clamp(24px,3.4vw,36px)}
+  .body-txt{font-size:15px;color:var(--mute);max-width:46ch}
+  .panel.dark .body-txt{color:var(--mute-inv)}
+  .lede{font-size:16px;color:var(--mute);max-width:48ch;line-height:1.75}
+  .panel.dark .lede{color:var(--mute-inv)}
+
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px}
+  .cta{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;color:var(--accent);text-decoration:none;width:fit-content;padding:2px 0}
+  .cta::after{content:'→';transition:transform .2s var(--ease)}
+  .cta:hover::after{transform:translateX(5px)}
+  .btn-solid{background:var(--ink);color:var(--on-dark);padding:12px 22px;border-radius:999px;font-size:13.5px;font-weight:700;text-decoration:none;transition:background .18s var(--ease)}
+  .btn-solid:hover{background:var(--accent)}
+  .panel.dark .btn-outline{border:1px solid var(--line-dark);color:var(--ink-inv)}
+  .btn-outline{border:1px solid var(--line);padding:11px 22px;border-radius:999px;font-size:13.5px;font-weight:700;text-decoration:none;color:var(--ink);transition:border-color .18s var(--ease),background .18s var(--ease)}
+  .btn-outline:hover{border-color:var(--ink);background:var(--tint)}
+
+  .diagram{width:100%;height:100%;max-width:360px}
+  .caption-tag{position:absolute;left:20px;bottom:16px;font-size:10.5px;letter-spacing:.1em;color:var(--mute-inv);font-variant-numeric:tabular-nums}
+  .panel.tint .caption-tag,.panel.light .caption-tag{color:var(--mute)}
+
+  .badge-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:2px}
+  .badge{font-size:11px;padding:6px 12px;border:1px solid var(--line);border-radius:999px;color:var(--mute);font-weight:600}
+  .panel.dark .badge{border-color:var(--line-dark);color:var(--mute-inv)}
+  .result-line{font-size:13px;color:var(--ink);font-weight:700;display:flex;align-items:baseline;gap:8px;padding-top:6px;border-top:1px solid var(--line);margin-top:4px}
+  .result-line .num{font-size:20px;color:var(--accent);font-variant-numeric:tabular-nums}
+
+  /* ---- stat rail ---- */
+  .stat-rail{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--tint)}
+  @media(min-width:720px){.stat-rail{grid-template-columns:repeat(4,1fr)}}
+  .stat-cell{padding:28px 20px;text-align:center;border-right:1px solid var(--line);min-width:0}
+  .stat-cell:nth-child(2n){border-right:none}
+  @media(min-width:720px){.stat-cell:nth-child(2n){border-right:1px solid var(--line)}.stat-cell:last-child{border-right:none}}
+  .stat-cell .sv{font-size:clamp(24px,3vw,32px);font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .stat-cell .sl{font-size:11.5px;color:var(--mute);margin-top:4px}
+
+  /* ---- team grid ---- */
+  .team-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:6px}
+  @media(min-width:520px){.team-grid{grid-template-columns:repeat(3,1fr)}}
+  .team-card{border:1px solid var(--line-dark);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+  .team-avatar{width:34px;height:34px;border-radius:50%;background:var(--accent);color:var(--on-dark);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+  .team-card .tn{font-size:12.5px;font-weight:700}
+  .team-card .tr{font-size:11px;color:var(--mute-inv)}
+
+  /* ---- closing band ---- */
+  .closing{padding:72px 28px;text-align:center;background:var(--ink);color:var(--ink-inv)}
+  @media(min-width:820px){.closing{padding:100px 72px}}
+  .closing h2{font-size:clamp(26px,3.6vw,40px);max-width:20ch;margin:0 auto 16px}
+  .closing p{color:var(--mute-inv);font-size:14.5px;max-width:48ch;margin:0 auto 28px}
+  .closing .btn-solid{background:var(--accent)}
+  .closing .btn-solid:hover{background:var(--accent-bright)}
+
+  footer.site-foot{padding:44px 28px 100px;display:flex;flex-direction:column;gap:24px}
+  @media(min-width:640px){footer.site-foot{flex-direction:row;justify-content:space-between;align-items:flex-start}}
+  .foot-cols{display:flex;gap:48px;flex-wrap:wrap}
+  .foot-col h4{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-bottom:12px}
+  .foot-col a{display:block;font-size:13px;color:var(--ink);text-decoration:none;margin-bottom:8px}
+  .foot-col a:hover{color:var(--accent)}
+  .foot-meta{font-size:11.5px;color:var(--mute);max-width:36ch;line-height:1.7}
+
+  .demo-bar{position:fixed;left:0;right:0;bottom:0;background:var(--bg-dark);color:var(--bar-fg);font-size:11px;letter-spacing:.04em;padding:9px 16px;text-align:center;z-index:50;border-top:1px solid var(--line-dark)}
+  .demo-bar code{color:var(--accent-bright)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wordmark">STUDIO ARLE</div>
+  <nav><a href="#work-1">작업</a><a href="#studio">스튜디오</a><a href="#journal">저널</a><a href="#contact">문의</a></nav>
+  <a class="top-cta skin-cta" href="#contact">프로젝트 문의</a>
+</header>
+
+<main>
+  <!-- Hero split -->
+  <section class="split">
+    <div class="panel light">
+      <span class="eyebrow"><span class="rule"></span>STUDIO ARLE — 브랜드 · 프로덕트 · 공간</span>
+      <h1 class="h-hero skin-heading">보이는 것과<br><em>기능하는 것</em><br>사이를 짓습니다</h1>
+      <p class="lede">아를은 2018년부터 브랜드 아이덴티티, 디지털 프로덕트, 오프라인 공간을 오가며 작업해온 6인 스튜디오입니다. 로고 하나를 그리기 전에 그 브랜드가 어떻게 쓰이고, 어떻게 팔리고, 어떻게 기억되는지부터 함께 그립니다.</p>
+      <div class="cta-row">
+        <a class="btn-solid skin-cta" href="#contact">프로젝트 시작하기</a>
+        <a class="cta skin-cta" href="#work-1">작업 둘러보기</a>
+      </div>
+    </div>
+    <div class="panel visual dark" aria-hidden="true">
+      <svg class="diagram skin-frame" viewBox="0 0 300 220"><rect x="20" y="20" width="120" height="80" style="fill:none;stroke:var(--diagram-line)" stroke-width="1.5"/><rect x="160" y="60" width="120" height="140" style="fill:none;stroke:var(--diagram-line)" stroke-width="1.5"/><circle cx="80" cy="60" r="3" style="fill:var(--accent-bright)"/><circle cx="220" cy="130" r="3" style="fill:var(--accent-bright)"/><line x1="80" y1="60" x2="220" y2="130" style="stroke:var(--accent-bright)" stroke-width="1" stroke-dasharray="3 3"/></svg>
+      <span class="caption-tag skin-badge">STUDIO — EST. 2018</span>
+    </div>
+  </section>
+
+  <!-- Stat rail -->
+  <div class="stat-rail">
+    <!-- mockup: 데모용 플레이스홀더 수치 -->
+    <div class="stat-cell"><div class="sv">128</div><div class="sl">완료 프로젝트</div></div>
+    <div class="stat-cell"><div class="sv">47</div><div class="sl">함께한 브랜드</div></div>
+    <div class="stat-cell"><div class="sv">6</div><div class="sl">상주 인력</div></div>
+    <div class="stat-cell"><div class="sv">8년</div><div class="sl">평균 클라이언트 재계약</div></div>
+  </div>
+
+  <!-- Work 1: image left / text right -->
+  <section class="split" id="work-1">
+    <div class="panel visual tint" aria-hidden="true">
+      <svg class="diagram skin-frame" viewBox="0 0 300 220"><rect x="30" y="30" width="240" height="160" style="fill:none;stroke:var(--diagram-line-light)" stroke-width="1.5"/><line x1="30" y1="90" x2="270" y2="90" style="stroke:var(--diagram-line-light)"/><line x1="150" y1="30" x2="150" y2="190" style="stroke:var(--diagram-line-light)"/><rect x="150" y="90" width="120" height="100" style="fill:var(--accent)" opacity=".08"/></svg>
+      <span class="caption-tag skin-badge">PROJECT — 048</span>
+    </div>
+    <div class="panel light">
+      <span class="eyebrow"><span class="rule"></span>WORK 01 · 브랜드 아이덴티티</span>
+      <h2 class="h-block">노트리버 — 협업 노트 리브랜딩</h2>
+      <p class="body-txt">8년째 같은 로고를 쓰던 협업 노트 서비스가 팀 도구 시장에 뒤늦게 진입하며 아를을 찾았습니다. 로고·타입 시스템·제품 UI 톤을 8주간 재설계했고, "지루한 문서 도구"에서 "함께 생각하는 도구"로 인식을 옮기는 데 집중했습니다.</p>
+      <div class="badge-row"><span class="badge skin-badge">브랜드 아이덴티티</span><span class="badge skin-badge">UI 시스템</span><span class="badge skin-badge">8주</span></div>
+      <div class="result-line"><span class="num">+19%</span>출시 첫 달 인지도 지표 상승<!-- mockup: 데모용 플레이스홀더 수치 --></div>
+      <a class="cta skin-cta" href="#">케이스 스터디 보기</a>
+    </div>
+  </section>
+
+  <!-- Work 2: text left / image right (direction swap) -->
+  <section class="split rev">
+    <div class="panel visual dark" aria-hidden="true">
+      <svg class="diagram skin-frame" viewBox="0 0 300 220"><circle cx="150" cy="110" r="70" style="fill:none;stroke:var(--diagram-line)" stroke-width="1.5"/><circle cx="150" cy="110" r="40" style="fill:none;stroke:var(--accent-bright)" stroke-width="1.5"/><circle cx="150" cy="110" r="4" style="fill:var(--accent-bright)"/></svg>
+      <span class="caption-tag skin-badge">PROJECT — 041</span>
+    </div>
+    <div class="panel tint">
+      <span class="eyebrow"><span class="rule"></span>WORK 02 · 공간 디자인</span>
+      <h2 class="h-block">뭉치스토어 — 오프라인 쇼룸 공간 설계</h2>
+      <p class="body-txt">온라인에서만 팔리던 브랜드가 처음 여는 쇼룸이었습니다. 43평 공간의 동선·조명·집기를 처음부터 설계하며, "매장"이 아니라 "브랜드를 만지는 방"이 되도록 했습니다.</p>
+      <div class="badge-row"><span class="badge skin-badge">공간 디자인</span><span class="badge skin-badge">사이니지</span><span class="badge skin-badge">12주</span></div>
+      <div class="result-line"><span class="num">+9분</span>평균 체류 시간 증가 (12분 → 21분)<!-- mockup: 데모용 플레이스홀더 수치 --></div>
+      <a class="cta skin-cta" href="#">케이스 스터디 보기</a>
+    </div>
+  </section>
+
+  <!-- Work 3: image left / text right -->
+  <section class="split">
+    <div class="panel visual tint" aria-hidden="true">
+      <svg class="diagram skin-frame" viewBox="0 0 300 220"><polygon points="150,30 270,190 30,190" style="fill:none;stroke:var(--diagram-line-light)" stroke-width="1.5"/><circle cx="150" cy="140" r="3" style="fill:var(--accent)"/></svg>
+      <span class="caption-tag skin-badge">PROJECT — 036</span>
+    </div>
+    <div class="panel light">
+      <span class="eyebrow"><span class="rule"></span>WORK 03 · 패키지 디자인</span>
+      <h2 class="h-block">페이퍼레인 — 정기구독 패키지 시스템</h2>
+      <p class="body-txt">3종 사이즈로 확장 가능한 모듈형 박스 구조를 설계했습니다. 배송 중 파손 문의가 잦았던 문제를, 예쁜 디자인이 아니라 접는 방식 자체를 바꿔 해결한 사례입니다.</p>
+      <div class="badge-row"><span class="badge skin-badge">패키지 디자인</span><span class="badge skin-badge">구조 설계</span><span class="badge skin-badge">6주</span></div>
+      <div class="result-line"><span class="num">1.1%</span>파손 반품률 (기존 6.4%에서 감소)<!-- mockup: 데모용 플레이스홀더 수치 --></div>
+      <a class="cta skin-cta" href="#">케이스 스터디 보기</a>
+    </div>
+  </section>
+
+  <!-- About split (direction swap) -->
+  <section class="split rev" id="studio">
+    <div class="panel visual dark" aria-hidden="true">
+      <div class="team-grid">
+        <div class="team-card skin-surface"><div class="team-avatar">ㅈ</div><div class="tn">정우진</div><div class="tr">브랜드 전략</div></div>
+        <div class="team-card skin-surface"><div class="team-avatar">ㅎ</div><div class="tn">한소이</div><div class="tr">브랜드 전략</div></div>
+        <div class="team-card skin-surface"><div class="team-avatar">ㅁ</div><div class="tn">민경아</div><div class="tr">프로덕트 디자인</div></div>
+        <div class="team-card skin-surface"><div class="team-avatar">ㅅ</div><div class="tn">서준혁</div><div class="tr">프로덕트 디자인</div></div>
+        <div class="team-card skin-surface"><div class="team-avatar">ㅇ</div><div class="tn">유하린</div><div class="tr">공간 디자인</div></div>
+        <div class="team-card skin-surface"><div class="team-avatar">ㅂ</div><div class="tn">배도현</div><div class="tr">프로젝트 매니저</div></div>
+      </div>
+    </div>
+    <div class="panel tint">
+      <span class="eyebrow"><span class="rule"></span>STUDIO</span>
+      <h2 class="h-block">6명, 하나의 테이블</h2>
+      <p class="body-txt">브랜드 전략가 2명, 프로덕트 디자이너 2명, 공간 디자이너 1명, 프로젝트 매니저 1명. 모든 프로젝트는 처음부터 끝까지 같은 팀이 함께 봅니다 — 담당자가 바뀌어 맥락이 끊기는 일이 없도록.</p>
+      <a class="cta skin-cta" href="#">스튜디오 소개 보기</a>
+    </div>
+  </section>
+
+  <!-- Closing CTA -->
+  <section class="closing" id="contact">
+    <span class="eyebrow" style="justify-content:center;color:var(--accent-bright)"><span class="rule" style="background:var(--accent-bright)"></span>다음 프로젝트</span>
+    <h2>브랜드를 처음부터 다시 짓고 싶다면</h2>
+    <p>포트폴리오만 보고 연락하지 마세요. 30분 통화로 이 프로젝트가 아를과 맞는지부터 함께 판단합니다.</p>
+    <a class="btn-solid skin-cta" href="#">프로젝트 문의하기</a>
+  </section>
+
+  <footer class="site-foot" id="journal">
+    <div class="foot-cols">
+      <div class="foot-col"><h4>스튜디오</h4><a href="#">작업</a><a href="#">소개</a><a href="#">채용</a></div>
+      <div class="foot-col"><h4>연락</h4><a href="#">hello@studio-arle.example</a><a href="#">서울시 성동구</a></div>
+    </div>
+    <p class="foot-meta">© 2026 STUDIO ARLE · 이 페이지는 macrostructure 데모용으로 제작된 가상 스튜디오입니다.</p>
+  </footer>
+</main>
+
+<div class="demo-bar">스플릿 스튜디오 골격 데모 · <code>/taste --macro=split-studio</code></div>
+</body>
+</html>

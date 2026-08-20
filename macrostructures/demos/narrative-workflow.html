@@ -1,0 +1,154 @@
+<!doctype html>
+<!-- macro-demo: narrative-workflow | 골격: 내러티브 워크플로우 | design: macrostructure=narrative-workflow preset=neutral-editorial | gate: WCAG ✓ AI-tell ✓ token ✓ | score: Philosophy4 Hierarchy4 Execution4 Specificity5 Restraint4 Variety4 -->
+<!-- design 근거: 번호 매긴 단계를 세로 타임라인 위 시간순 스토리로 배치해 "프로세스 타임라인" 정의를 그대로 구현 — 각 단계는 순서 없이는 이해되지 않는 인과 구조로 서술하고, 단계별 실측 지표(mockup)로 신뢰도를 더함. 코드 스니펫 박스는 overflow-wrap:anywhere로 320px에서도 줄바꿈 보장. -->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>플로우캐스트 — 이용 방법 4단계</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="macrostructure=narrative-workflow 골격 데모 · 번호 단계 세로 타임라인 구조">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;overflow-x:hidden;max-width:100%}
+:root{--paper:#faf9f6;--paper-2:#f1efe9;--ink:#141414;--ink-soft:#3a3a3a;--mute:#5f5f5f;--line:#e0dcd3;--accent:#35507a;--accent-2:#a8563a;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --font-serif:Georgia,"Noto Serif KR",serif;
+  --paper-rgb:250,249,246;--accent-tint:#eef1f6;--on-dark:#fff}
+body{font-family:var(--font);
+  color:var(--ink);background:var(--paper);word-break:keep-all;line-height:1.6;padding-bottom:46px}
+a{color:inherit}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{max-width:760px;margin:0 auto;padding:72px 24px 96px}
+
+.head{text-align:center;margin-bottom:64px}
+.head .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:12px}
+.head h1{font-size:clamp(24px,4vw,36px);margin:0 0 14px;font-weight:700;letter-spacing:-.01em}
+.head p{color:var(--mute);font-size:14.5px;margin:0;max-width:50ch;margin:0 auto}
+
+.timeline{position:relative;padding-left:54px}
+.timeline::before{content:"";position:absolute;left:19px;top:6px;bottom:6px;width:2px;
+  background:repeating-linear-gradient(180deg,var(--line) 0 6px,transparent 6px 11px)}
+
+.step{position:relative;padding-bottom:56px}
+.step:last-child{padding-bottom:0}
+.step .num{
+  position:absolute;left:-54px;top:0;width:40px;height:40px;border-radius:50%;
+  background:var(--ink);color:var(--on-dark);display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:14px;box-shadow:0 0 0 4px var(--paper);
+}
+.step.active .num{background:var(--accent-2)}
+.step h3{font-size:17.5px;margin:2px 0 8px;font-weight:700}
+.step p{font-size:14px;color:var(--ink-soft);margin:0 0 14px;max-width:54ch}
+.step .shot{
+  border:1px solid var(--line);border-radius:8px;background:var(--paper-2);
+  padding:14px 16px;font-size:12px;color:var(--mute);font-family:var(--mono);
+  overflow-wrap:anywhere;word-break:break-word;max-width:100%;
+}
+.step .metrics{display:flex;gap:18px;margin-top:12px;flex-wrap:wrap}
+.step .metrics .m{font-size:12px;color:var(--mute)}
+.step .metrics .m b{color:var(--accent);font-size:15px;display:block}
+.step .tag{display:inline-block;margin-top:12px;font-size:11.5px;color:var(--mute);
+  border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+
+.compare{margin:64px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.compare-row{display:grid;grid-template-columns:1fr 1fr}
+.compare-col{padding:22px}
+.compare-col.before{background:var(--paper-2);border-right:1px solid var(--line)}
+.compare-col.after{background:var(--accent-tint)}
+.compare-col h4{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin:0 0 10px}
+.compare-col .val{font-size:26px;font-weight:700;margin-bottom:6px}
+.compare-col.after .val{color:var(--accent)}
+.compare-col p{font-size:12.5px;color:var(--mute);margin:0}
+
+.done{margin-top:56px;text-align:center;padding-top:40px;border-top:1px solid var(--line)}
+.done .check{width:44px;height:44px;border-radius:50%;background:var(--accent-2);color:var(--on-dark);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:18px}
+.done h3{margin:0 0 6px;font-size:16px}
+.done p{margin:0;color:var(--mute);font-size:13px}
+
+.testi{margin-top:40px;text-align:center;font-family:var(--font-serif);font-style:italic;
+  font-size:16px;color:var(--ink-soft);max-width:50ch;margin-left:auto;margin-right:auto}
+.testi cite{display:block;font-style:normal;font-family:var(--font);font-size:12px;color:var(--mute);margin-top:10px}
+
+@media(max-width:520px){
+  .wrap{padding:56px 18px 80px}.timeline{padding-left:46px}
+  .step .num{left:-46px;width:34px;height:34px;font-size:13px}.timeline::before{left:16px}
+  .compare-row{grid-template-columns:1fr}.compare-col.before{border-right:none;border-bottom:1px solid var(--line)}
+}
+.demo-bar{position:fixed;left:0;right:0;bottom:0;z-index:999;background:rgba(var(--paper-rgb),.94);
+  backdrop-filter:blur(4px);border-top:1px solid var(--line);padding:9px 16px;font-size:11px;color:var(--mute);
+  text-align:center;font-family:var(--mono);letter-spacing:.02em}
+.demo-bar code{color:var(--accent-2);font-weight:600}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="head">
+    <div class="eyebrow">이용 방법</div>
+    <h1 class="skin-heading">4단계면, 반복 작업이 자동으로 돌아갑니다</h1>
+    <p>플로우캐스트는 순서대로 연결할수록 힘이 생기는 도구입니다.</p>
+  </div>
+
+  <div class="timeline" data-skin-nopseudo>
+    <div class="step active">
+      <div class="num">1</div>
+      <h3>트리거를 고른다</h3>
+      <p>새 파일 업로드, 특정 시간, 폼 제출 등 시작 조건을 하나 선택합니다.</p>
+      <div class="shot skin-frame">TRIGGER: on_file_upload("/inbox/*.csv")</div>
+      <div class="metrics"><span class="m"><b>1분</b>평균 설정 시간</span><span class="m"><b>12종</b>지원 트리거</span></div>
+    </div>
+    <div class="step">
+      <div class="num">2</div>
+      <h3>조건을 붙인다</h3>
+      <p>필요하면 조건 분기를 추가해 특정 상황에서만 다음 단계로 넘어가게 합니다.</p>
+      <div class="shot skin-frame">IF row.status == "pending" → CONTINUE</div>
+      <span class="tag skin-badge">선택 사항</span>
+    </div>
+    <div class="step">
+      <div class="num">3</div>
+      <h3>행동을 연결한다</h3>
+      <p>슬랙 알림, 시트 기록, 이메일 발송 등 원하는 행동 블록을 순서대로 이어 붙입니다.</p>
+      <div class="shot skin-frame">ACTION: notify_slack(#ops-alerts)</div>
+      <div class="metrics"><span class="m"><b>40+</b>연결 가능 행동</span></div>
+    </div>
+    <div class="step">
+      <div class="num">4</div>
+      <h3>테스트 후 켠다</h3>
+      <p>더미 데이터로 한 번 실행해 보고, 문제가 없으면 워크플로우를 활성화합니다.</p>
+      <div class="shot skin-frame">STATUS: dry-run 통과 → LIVE 전환 가능</div>
+      <span class="tag skin-badge">되돌리기 가능</span>
+    </div>
+  </div>
+
+  <div class="compare">
+    <div class="compare-row">
+      <div class="compare-col before skin-surface">
+        <h4>도입 전</h4>
+        <!-- mockup: 데모용 플레이스홀더 수치 -->
+        <div class="val">주 6.4시간</div>
+        <p>반복 파일 정리에 쓰던 팀 평균 소요 시간</p>
+      </div>
+      <div class="compare-col after skin-surface">
+        <h4>도입 후</h4>
+        <div class="val">주 0.5시간</div>
+        <p>워크플로우 점검·예외 처리에만 남은 시간</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="done">
+    <div class="check">✓</div>
+    <h3>여기까지 오면 끝입니다</h3>
+    <p>평균 설정 소요 시간 12분 (데모용 가상 수치)</p>
+  </div>
+
+  <p class="testi skin-surface">"4단계를 한 번 연결해두고 나니, 그 다음부터는 신경 쓸 일이 없어졌습니다."
+    <cite>— 오하윤, 문도어패럴 물류팀 (가상 인물)</cite>
+  </p>
+</main>
+
+<div class="demo-bar">내러티브 워크플로우 골격 데모 · <code>/taste --macro=narrative-workflow</code></div>
+</body>
+</html>

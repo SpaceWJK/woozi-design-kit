@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>매크로스트럭처 갤러리 — woozi-design-kit</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="31종 페이지 구조 골격을 눈으로 고르고 taste 스킬 호출 스니펫을 바로 복사하는 정적 갤러리. 외부 의존 0, file:// 로도 동작.">
+<link rel="stylesheet" href="gallery.css">
+</head>
+<body>
+
+<header class="gk-header">
+  <h1>매크로스트럭처 갤러리 · 구조 골격 31종</h1>
+  <p>페이지 전체가 어떤 형태로 짜이는가를 정하는 구조 문법 카탈로그. 카드를 클릭하면 설명·피할 때·데모·<code>/taste --macro=&lt;id&gt;</code> 호출 스니펫을 볼 수 있다.</p>
+  <p class="gk-links"><a href="../macrostructures/macrostructures.md">전체 목록 문서(macrostructures.md)</a> · <a href="../docs/usage-guide.md">사용 가이드</a> · <a href="../README.md">저장소 README</a></p>
+</header>
+
+<div class="gk-wrap">
+  <div class="gk-filters">
+    <label class="gk-field">검색어
+      <input type="search" id="gk-search" placeholder="이름, 설명, 태그로 검색" aria-label="구조 골격 검색">
+    </label>
+    <label class="gk-field">정렬
+      <select id="gk-sort" aria-label="정렬 기준">
+        <option value="default">기본 순서</option>
+        <option value="name">가나다순</option>
+      </select>
+    </label>
+    <div class="gk-field">
+      용도 태그(다중 선택)
+      <div class="gk-tagbox" id="gk-tagbox"></div>
+    </div>
+    <span class="gk-count" id="gk-count"></span>
+  </div>
+
+  <div class="gk-grid" id="gk-grid"></div>
+</div>
+
+<div class="gk-scrim" id="gk-scrim">
+  <div class="gk-modal" role="dialog" aria-modal="true" aria-labelledby="gk-modal-title">
+    <div class="gk-modal-head">
+      <div>
+        <h2 id="gk-modal-title"></h2>
+        <p class="gk-name-en" id="gk-modal-en"></p>
+      </div>
+      <button class="gk-modal-close" id="gk-modal-close" aria-label="닫기">✕</button>
+    </div>
+    <div class="gk-modal-body" id="gk-modal-body"></div>
+  </div>
+</div>
+
+<script src="gallery-data.js"></script>
+<script src="gallery.js"></script>
+</body>
+</html>

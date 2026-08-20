@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="300" height="200">
+  <rect x="0.0" y="0.0" width="300.0" height="200.0" fill="#fafafa"/>
+  <text x="14.0" y="24.0" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="#3f3f46" text-anchor="start">매니페스토</text>
+  <text x="286.0" y="24.0" font-family="ui-monospace,monospace" font-size="8" font-weight="400" fill="#9a9aa2" text-anchor="end">manifesto</text>
+  <rect x="14.0" y="30.0" width="272.0" height="156.0" fill="none" stroke="#c9c9cf" stroke-width="1"/>
+  <g transform="rotate(-3 150.0 84.0)"><rect x="30.0" y="70.0" width="240.0" height="22.0" fill="#52525b"/></g>
+  <g transform="rotate(-3 150.0 118.0)"><rect x="60.0" y="106.0" width="190.0" height="16.0" fill="#a1a1aa"/></g>
+  <g transform="rotate(-3 150.0 148.0)"><rect x="90.0" y="136.0" width="130.0" height="10.0" fill="#d4d4d8"/></g>
+</svg>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="300" height="200">
+  <rect x="0.0" y="0.0" width="300.0" height="200.0" fill="#fafafa"/>
+  <text x="14.0" y="24.0" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="#3f3f46" text-anchor="start">롱 다큐먼트</text>
+  <text x="286.0" y="24.0" font-family="ui-monospace,monospace" font-size="8" font-weight="400" fill="#9a9aa2" text-anchor="end">long-document</text>
+  <rect x="14.0" y="30.0" width="272.0" height="156.0" fill="none" stroke="#c9c9cf" stroke-width="1"/>
+  <rect x="55.0" y="36.0" width="190.0" height="5.0" fill="#e4e4e7"/>
+  <rect x="55.0" y="50.0" width="174.8" height="5.0" fill="#e4e4e7"/>
+  <rect x="55.0" y="64.0" width="184.3" height="5.0" fill="#e4e4e7"/>
+  <rect x="55.0" y="78.0" width="95.0" height="5.0" fill="#e4e4e7"/>
+  <rect x="55.0" y="96.0" width="76.0" height="8.0" fill="#a1a1aa"/>
+  <rect x="55.0" y="118.0" width="190.0" height="5.0" fill="#e4e4e7"/>
+  <rect x="55.0" y="132.0" width="167.2" height="5.0" fill="#e4e4e7"/>
+  <rect x="55.0" y="146.0" width="180.5" height="5.0" fill="#e4e4e7"/>
+  <rect x="55.0" y="160.0" width="114.0" height="5.0" fill="#e4e4e7"/>
+  <rect x="55.0" y="174.0" width="190.0" height="5.0" fill="#e4e4e7"/>
+  <rect x="55.0" y="188.0" width="133.0" height="5.0" fill="#e4e4e7"/>
+</svg>

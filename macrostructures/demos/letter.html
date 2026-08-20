@@ -1,0 +1,104 @@
+<!doctype html>
+<!-- macro-demo: letter | 골격: 레터 | design: macrostructure=letter preset=neutral-editorial | gate: WCAG ✓ AI-tell ✓ token ✓ | score: Philosophy5 Hierarchy4 Execution4 Specificity5 Restraint5 Variety4 -->
+<!-- design 근거: 1인칭 인사말로 열고 첫 화면 안에는 버튼을 두지 않는 골격 정의를 그대로 따름 — CTA는 편지 끝, 서명 아래에서만 등장. 드롭캡·풀쿼트·모노그램으로 "편지"의 물성을 더하되 장식이 텍스트 흐름을 가리지 않도록 절제. -->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>코이 스튜디오 — 이든에게 보내는 편지</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="macrostructure=letter 골격 데모 · 1인칭 편지글 구조, 첫 화면 버튼 없음">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;overflow-x:hidden;max-width:100%}
+:root{--paper:#faf9f6;--paper-2:#f1efe9;--ink:#141414;--ink-soft:#2b2b2b;--mute:#5f5f5f;--line:#e0dcd3;--accent:#35507a;--accent-2:#a8563a;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --font-serif:Georgia,"Times New Roman","Noto Serif KR",serif;
+  --paper-rgb:250,249,246}
+body{font-family:var(--font);
+  color:var(--ink);background:var(--paper);word-break:keep-all;line-height:1.6;padding-bottom:46px}
+a{color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.page{max-width:640px;margin:0 auto;padding:88px 28px 96px}
+
+.mono{width:44px;height:44px;border:1.5px solid var(--ink);border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-family:var(--font-serif);font-size:17px;margin-bottom:36px}
+
+.date{font-size:12.5px;color:var(--mute);margin-bottom:44px;letter-spacing:.03em;display:flex;justify-content:space-between}
+
+.salute{font-size:20px;font-weight:700;margin-bottom:30px}
+p{font-size:15.5px;line-height:1.92;color:var(--ink-soft);margin:0 0 22px}
+p.lead{font-size:17px;color:var(--ink)}
+p.lead::first-letter{font-family:var(--font-serif);font-size:52px;font-weight:700;float:left;
+  line-height:.82;padding-right:8px;padding-top:4px;color:var(--accent-2)}
+
+.pull{margin:40px 0;padding-left:20px;border-left:2px solid var(--accent-2)}
+.pull p{font-family:var(--font-serif);font-style:italic;font-size:18px;color:var(--ink);margin:0;line-height:1.65}
+
+.rule{width:48px;height:2px;background:var(--line);margin:48px 0}
+
+.sign{margin-top:8px}
+.sign .script{font-family:var(--font-serif);font-style:italic;font-size:27px;margin-bottom:6px}
+.sign .role{font-size:13px;color:var(--mute)}
+
+.ps{margin-top:56px;padding:20px 22px;border:1px solid var(--line);border-radius:6px;background:var(--paper-2);
+  font-size:13.5px;color:var(--mute)}
+.ps b{color:var(--ink)}
+.ps .dates{margin-top:10px;display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px}
+.ps .dates span{font-weight:700;color:var(--ink-soft)}
+
+.closing-cta{margin-top:56px;text-align:center}
+.closing-cta a{display:inline-block;font-size:14px;font-weight:700;color:var(--ink);
+  border-bottom:2px solid var(--accent-2);padding-bottom:3px;transition:color .15s}
+.closing-cta a:hover{color:var(--accent-2)}
+
+.foot{margin-top:72px;text-align:center;font-size:11.5px;color:var(--mute)}
+
+.demo-bar{position:fixed;left:0;right:0;bottom:0;z-index:999;background:rgba(var(--paper-rgb),.94);
+  backdrop-filter:blur(4px);border-top:1px solid var(--line);padding:9px 16px;font-size:11px;color:var(--mute);
+  text-align:center;font-family:var(--mono);letter-spacing:.02em}
+.demo-bar code{color:var(--accent-2);font-weight:600}
+@media(max-width:480px){.page{padding:64px 20px 80px}p.lead::first-letter{font-size:42px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="page skin-band">
+  <div class="mono skin-frame">KO</div>
+  <div class="date"><span>2026년 8월 · 서울</span><span>No. 014</span></div>
+  <div class="salute skin-heading">이든에게,</div>
+
+  <p class="lead">이 편지를 여는 사람이 실제로는 한 명이 아니라 수천 명일 거라는 걸 압니다. 그래도 저는 한 사람에게 말하듯 쓰겠습니다.</p>
+
+  <p>코이 스튜디오를 시작할 때 저희는 "완벽한 도구"를 만들겠다고 하지 않았습니다. 대신 매주 조금씩 나아지는 도구를 만들겠다고 약속했어요. 그 약속은 지금도 유효합니다.</p>
+
+  <div class="pull">
+    <p>사람들이 원하는 건 화려한 기능이 아니라, 믿을 수 있는 반복이었습니다.</p>
+  </div>
+
+  <p>지난 두 해 동안 저희가 배운 건 정확히 이 문장이었습니다. 그래서 이번 개편에서도 새 버튼을 늘리는 대신 기존 흐름을 다듬는 데 시간을 더 썼습니다. 눈에 띄는 변화는 적지만, 매일 쓰는 사람에게는 가장 크게 느껴질 변화라고 믿습니다.</p>
+
+  <div class="rule"></div>
+
+  <p>혹시 지금 쓰고 계신 방식에 불편한 점이 있다면, 이 편지에 그냥 답장해 주세요. 진짜로 제가 읽습니다 — 지난달 받은 편지 47통 중 41통에 직접 답장했습니다.</p>
+
+  <div class="sign">
+    <div class="script">하은 드림</div>
+    <div class="role">코이 스튜디오 · 공동 창업자 (가상 인물, 데모용)</div>
+  </div>
+
+  <div class="ps skin-surface">
+    <b>추신.</b> 이번 주부터 베타 초대를 다시 열었습니다 — 신청자 중 매주 40명씩만 순서대로 초대합니다.
+    <div class="dates"><span>신청 마감</span> 8월 28일 · <span>초대 발송</span> 매주 월요일</div>
+  </div>
+
+  <div class="closing-cta">
+    <a class="skin-cta" href="#">베타 초대 신청하기</a>
+  </div>
+
+  <div class="foot">코이 스튜디오 (가상 서비스) · 데모용 더미 편지</div>
+</main>
+
+<div class="demo-bar">레터 골격 데모 · <code>/taste --macro=letter</code></div>
+</body>
+</html>

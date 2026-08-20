@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="300" height="200">
+  <rect x="0.0" y="0.0" width="300.0" height="200.0" fill="#fafafa"/>
+  <text x="14.0" y="24.0" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="#3f3f46" text-anchor="start">내러티브 워크플로우</text>
+  <text x="286.0" y="24.0" font-family="ui-monospace,monospace" font-size="8" font-weight="400" fill="#9a9aa2" text-anchor="end">narrative-workflow</text>
+  <rect x="14.0" y="30.0" width="272.0" height="156.0" fill="none" stroke="#c9c9cf" stroke-width="1"/>
+  <line x1="28.0" y1="49.5" x2="28.0" y2="166.5" stroke="#c9c9cf" stroke-width="2"/>
+  <circle cx="28.0" cy="49.5" r="7.0" fill="#52525b"/>
+  <rect x="50.0" y="39.5" width="228.0" height="20.0" fill="#e4e4e7"/>
+  <rect x="60.0" y="45.5" width="114.0" height="6.0" fill="#d4d4d8"/>
+  <circle cx="28.0" cy="88.5" r="7.0" fill="#a1a1aa"/>
+  <rect x="50.0" y="78.5" width="228.0" height="20.0" fill="#e4e4e7"/>
+  <rect x="60.0" y="84.5" width="114.0" height="6.0" fill="#d4d4d8"/>
+  <circle cx="28.0" cy="127.5" r="7.0" fill="#a1a1aa"/>
+  <rect x="50.0" y="117.5" width="228.0" height="20.0" fill="#e4e4e7"/>
+  <rect x="60.0" y="123.5" width="114.0" height="6.0" fill="#d4d4d8"/>
+  <circle cx="28.0" cy="166.5" r="7.0" fill="#a1a1aa"/>
+  <rect x="50.0" y="156.5" width="228.0" height="20.0" fill="#e4e4e7"/>
+  <rect x="60.0" y="162.5" width="114.0" height="6.0" fill="#d4d4d8"/>
+</svg>

@@ -1,0 +1,240 @@
+<!doctype html>
+<!-- macro-demo: commerce-showcase | 골격: 커머스 쇼케이스 | design: macrostructure=commerce-showcase preset=warm-editorial-commerce | gate: WCAG ✓ AI-tell ✓ token ✓ | score: Philosophy5 Hierarchy5 Execution4 Specificity5 Restraint4 Variety4 -->
+<!-- design 근거: 좌측 갤러리(메인샷+색상 스와치=썸네일 겸용)·우측 구매패널 2컬럼 고정비율로 "단일 상품 구매 결정"에만 집중. 실존 브랜드 미사칭 가상 오디오 스튜디오 시나리오(스펙·배송·리뷰 수치 구체화)로 특정성 확보. 색상 스와치 클릭이 메인샷 그라디언트+가격 라벨을 동시 갱신하는 실동작 인터랙션 1개 + 수량 스테퍼로 소계 갱신 1개. -->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>아를로 오디오 — AR-1 인시츄 스피커</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="macrostructure=commerce-showcase 골격 데모 · 갤러리와 구매 패널이 짝을 이루는 단일 상품 구조">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;overflow-x:hidden;max-width:100%}
+:root{
+  --paper:#f7f5f1;--card:#fffdfa;--ink:#1c1a17;--mute:#6b6560;--line:#e4dfd6;
+  --accent:#a8563a;--accent-ink:#7c3f28;--ok:#3f6b4a;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --paper-rgb:247,245,241;--on-accent:#fff;--ink-soft:#3c3833;
+  --overlay-white-rgb:255,255,255;--overlay-black-rgb:0,0,0;
+  --swatch-1-tint:#e9dcc8;--swatch-1-a:#3a332c;--swatch-1-b:#5a4d3f;--swatch-1-c:#2a251f;
+  --swatch-2-tint:#fff6e6;--swatch-2-a:#cbb28a;--swatch-2-b:#e9d3ab;--swatch-2-c:#b89968;
+  --swatch-3-tint:#eef2e6;--swatch-3-a:#5c6b52;--swatch-3-b:#7c8d6c;--swatch-3-c:#454f3c;
+  --swatch-4-tint:#fbe3d6;--swatch-4-a:var(--accent);--swatch-4-b:#c97a58;--swatch-4-c:var(--accent-ink);
+}
+body{font-family:var(--font);
+  color:var(--ink);background:var(--paper);word-break:keep-all;line-height:1.6;padding-bottom:48px}
+a{color:inherit}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--line);max-width:1240px;margin:0 auto}
+.wordmark{font-weight:700;font-size:15px;letter-spacing:.01em}
+.wordmark span{color:var(--accent-ink)}
+.crumbs{font-size:12.5px;color:var(--mute)}
+.crumbs a:hover{color:var(--ink)}
+
+.stage{max-width:1240px;margin:0 auto;padding:40px 24px 0;display:grid;grid-template-columns:1.15fr .85fr;gap:56px}
+
+/* ---- gallery ---- */
+.gallery{min-width:0}
+.main-shot{position:relative;aspect-ratio:1/1;border-radius:18px;overflow:hidden;border:1px solid var(--line);
+  background:radial-gradient(circle at 32% 28%,var(--swatch-1-tint),transparent 55%),
+             conic-gradient(from 210deg at 50% 62%,var(--swatch-1-a),var(--swatch-1-b) 30%,var(--swatch-1-c) 60%,var(--swatch-1-a) 100%);
+  transition:background .35s ease}
+.main-shot::after{content:"";position:absolute;inset:18% 30%;border-radius:50%;
+  background:radial-gradient(circle at 40% 35%,rgba(var(--overlay-white-rgb),.35),rgba(255,255,255,0) 60%),
+              repeating-radial-gradient(circle at 50% 50%,rgba(var(--overlay-black-rgb),.12) 0 2px,transparent 2px 8px);
+  box-shadow:inset 0 0 0 2px rgba(var(--overlay-white-rgb),.08)}
+.badge-new{position:absolute;top:16px;left:16px;background:var(--card);color:var(--accent-ink);font-size:11px;
+  font-weight:700;letter-spacing:.06em;padding:6px 10px;border-radius:999px;border:1px solid var(--line);z-index:2}
+.main-shot[data-tone="sand"]{background:radial-gradient(circle at 32% 28%,var(--swatch-2-tint),transparent 55%),
+  conic-gradient(from 210deg at 50% 62%,var(--swatch-2-a),var(--swatch-2-b) 30%,var(--swatch-2-c) 60%,var(--swatch-2-a) 100%)}
+.main-shot[data-tone="sage"]{background:radial-gradient(circle at 32% 28%,var(--swatch-3-tint),transparent 55%),
+  conic-gradient(from 210deg at 50% 62%,var(--swatch-3-a),var(--swatch-3-b) 30%,var(--swatch-3-c) 60%,var(--swatch-3-a) 100%)}
+.main-shot[data-tone="terracotta"]{background:radial-gradient(circle at 32% 28%,var(--swatch-4-tint),transparent 55%),
+  conic-gradient(from 210deg at 50% 62%,var(--swatch-4-a),var(--swatch-4-b) 30%,var(--swatch-4-c) 60%,var(--swatch-4-a) 100%)}
+
+.swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+.swatch{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12px;color:var(--mute)}
+.swatch .chip{width:100%;aspect-ratio:1/1;border-radius:8px}
+.swatch[data-tone="charcoal"] .chip{background:linear-gradient(135deg,var(--swatch-1-a),var(--swatch-1-c))}
+.swatch[data-tone="sand"] .chip{background:linear-gradient(135deg,var(--swatch-2-b),var(--swatch-2-a))}
+.swatch[data-tone="sage"] .chip{background:linear-gradient(135deg,var(--swatch-3-b),var(--swatch-3-c))}
+.swatch[data-tone="terracotta"] .chip{background:linear-gradient(135deg,var(--swatch-4-b),var(--swatch-4-c))}
+.swatch[aria-pressed="true"]{border-color:var(--accent-ink);color:var(--ink);font-weight:700}
+.swatch[aria-pressed="true"] .chip{box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--accent-ink)}
+
+.specs{margin-top:28px}
+.specs summary{cursor:pointer;font-size:13.5px;font-weight:700;padding:14px 0;border-top:1px solid var(--line);list-style:none}
+.specs summary::-webkit-details-marker{display:none}
+.specs summary::before{content:"+ ";color:var(--accent-ink)}
+.specs[open] summary::before{content:"− "}
+.specs:last-of-type{border-bottom:1px solid var(--line)}
+.specs dl{display:grid;grid-template-columns:120px 1fr;row-gap:8px;font-size:13px;color:var(--mute);padding:0 0 18px}
+.specs dt{color:var(--ink);font-weight:600}
+
+/* ---- purchase panel ---- */
+.panel{min-width:0}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:10px}
+h1{font-size:clamp(24px,3vw,32px);line-height:1.28;margin:0 0 10px;letter-spacing:-.01em}
+.rating{font-size:13px;color:var(--mute);margin-bottom:18px}
+.rating .stars{color:var(--accent-ink);letter-spacing:1px}
+.price-row{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.price{font-size:28px;font-weight:700}
+.price-tone{font-size:12.5px;color:var(--mute)}
+.desc{font-size:14px;color:var(--ink-soft);margin:14px 0 24px;max-width:46ch}
+
+.field-label{font-size:12.5px;font-weight:700;color:var(--mute);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.qty-row{display:flex;align-items:center;gap:16px;margin:22px 0 26px}
+.stepper{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.stepper button{width:40px;height:40px;border:0;background:var(--card);font-size:16px;cursor:pointer;color:var(--ink)}
+.stepper button:hover{background:var(--paper)}
+.stepper output{width:44px;text-align:center;font-size:14px;font-weight:700}
+.subtotal{font-size:13px;color:var(--mute)}
+.subtotal strong{color:var(--ink)}
+
+.cta-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px}
+.btn{min-height:48px;border-radius:10px;font-size:14.5px;font-weight:700;cursor:pointer;border:1px solid transparent;
+  transition:transform .12s ease,background .15s ease}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--accent);color:var(--on-accent)}
+.btn-primary:hover{background:var(--accent-ink)}
+.btn-ghost{background:var(--card);border-color:var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--accent-ink)}
+
+.trust{list-style:none;margin:0 0 8px;padding:0;font-size:12.5px;color:var(--mute);display:flex;flex-direction:column;gap:8px}
+.trust li::before{content:"✓ ";color:var(--ok);font-weight:700}
+
+.live-status{position:absolute;left:-9999px}
+
+@media(max-width:860px){
+  .stage{grid-template-columns:1fr;gap:36px;padding:28px 20px 0}
+  .cta-row{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+.demo-bar{position:fixed;left:0;right:0;bottom:0;z-index:999;background:rgba(var(--paper-rgb),.95);
+  backdrop-filter:blur(4px);border-top:1px solid var(--line);padding:9px 16px;font-size:11px;color:var(--mute);
+  text-align:center;font-family:var(--mono);letter-spacing:.02em}
+.demo-bar code{color:var(--accent-ink);font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wordmark">아를로<span>오디오</span></div>
+  <nav class="crumbs" aria-label="이동 경로"><a href="#">홈</a> / <a href="#">인시츄 라인업</a> / AR-1</nav>
+</div>
+
+<div class="stage">
+  <section class="gallery" aria-label="상품 이미지">
+    <div class="main-shot skin-frame" id="mainShot" data-tone="charcoal" data-skin-nopseudo>
+      <span class="badge-new skin-badge">신제품</span>
+    </div>
+    <div class="swatches" role="group" aria-label="색상 선택">
+      <button class="swatch" data-tone="charcoal" aria-pressed="true">
+        <span class="chip" aria-hidden="true"></span>차콜
+      </button>
+      <button class="swatch" data-tone="sand" aria-pressed="false">
+        <span class="chip" aria-hidden="true"></span>샌드
+      </button>
+      <button class="swatch" data-tone="sage" aria-pressed="false">
+        <span class="chip" aria-hidden="true"></span>세이지
+      </button>
+      <button class="swatch" data-tone="terracotta" aria-pressed="false">
+        <span class="chip" aria-hidden="true"></span>테라코타
+      </button>
+    </div>
+
+    <details class="specs" open>
+      <summary>제품 스펙</summary>
+      <dl>
+        <dt>드라이버</dt><dd>13cm 우퍼 + 2.5cm 실크 트위터</dd>
+        <dt>출력</dt><dd>60W RMS (피크 90W)</dd>
+        <dt>연결</dt><dd>Wi-Fi 6 · Bluetooth 5.3 · 광입력</dd>
+        <dt>크기/무게</dt><dd>180 × 260 × 180mm · 3.4kg</dd>
+      </dl>
+    </details>
+    <details class="specs">
+      <summary>배송 및 반품</summary>
+      <dl>
+        <dt>배송</dt><dd>결제 후 평균 2.1일 출고 (전국 무료)</dd>
+        <dt>반품</dt><dd>수령 후 14일 이내 무상 반품</dd>
+      </dl>
+    </details>
+  </section>
+
+  <section class="panel skin-band" aria-label="구매 옵션">
+    <p class="eyebrow">AR-1 시리즈 · 인시츄 스피커</p>
+    <h1 class="skin-heading">공간의 결을 바꾸는 소리, 아를로 AR-1</h1>
+    <p class="rating"><span class="stars" aria-hidden="true">★★★★★</span> 4.8 · 리뷰 128개</p>
+
+    <div class="price-row">
+      <span class="price">₩428,000</span>
+      <span class="price-tone" id="toneLabel">선택 색상: 차콜</span>
+    </div>
+    <p class="desc">원목 우퍼 인클로저와 룸 튜닝 마이크를 내장해, 설치한 공간의 잔향을 스스로 보정합니다. 거실이든 서재든 3분이면 최적 음장을 맞춥니다.</p>
+
+    <div class="field-label">수량</div>
+    <div class="qty-row">
+      <div class="stepper">
+        <button type="button" id="qtyMinus" aria-label="수량 감소">−</button>
+        <output id="qtyOut" aria-live="polite">1</output>
+        <button type="button" id="qtyPlus" aria-label="수량 증가">+</button>
+      </div>
+      <span class="subtotal">소계 <strong id="subtotal">₩428,000</strong></span>
+    </div>
+
+    <div class="cta-row">
+      <button class="btn btn-ghost skin-cta" type="button">장바구니 담기</button>
+      <button class="btn btn-primary skin-cta" type="button">바로 구매</button>
+    </div>
+
+    <ul class="trust">
+      <li>3년 무상 A/S (등록 시 1년 연장)</li>
+      <li>전국 지정일 배송 무료</li>
+      <li>구매 후 30일 청음 만족 보장</li>
+    </ul>
+    <p class="live-status" role="status" id="liveStatus"></p>
+  </section>
+</div>
+
+<div class="demo-bar">커머스 쇼케이스 골격 데모 · <code>/taste --macro=commerce-showcase</code></div>
+
+<script>
+(function(){
+  var toneNames = {charcoal:"차콜", sand:"샌드", sage:"세이지", terracotta:"테라코타"};
+  var shot = document.getElementById('mainShot');
+  var label = document.getElementById('toneLabel');
+  var swatches = document.querySelectorAll('.swatch');
+  var live = document.getElementById('liveStatus');
+
+  swatches.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      swatches.forEach(function(b){ b.setAttribute('aria-pressed','false'); });
+      btn.setAttribute('aria-pressed','true');
+      var tone = btn.getAttribute('data-tone');
+      shot.setAttribute('data-tone', tone);
+      label.textContent = '선택 색상: ' + toneNames[tone];
+      live.textContent = toneNames[tone] + ' 색상으로 변경됨';
+    });
+  });
+
+  var qty = 1;
+  var unit = 428000;
+  var qtyOut = document.getElementById('qtyOut');
+  var subtotal = document.getElementById('subtotal');
+  function fmt(n){ return '₩' + n.toLocaleString('ko-KR'); }
+  function render(){ qtyOut.textContent = qty; subtotal.textContent = fmt(unit*qty); }
+  document.getElementById('qtyMinus').addEventListener('click', function(){
+    if(qty>1){ qty--; render(); }
+  });
+  document.getElementById('qtyPlus').addEventListener('click', function(){
+    if(qty<9){ qty++; render(); }
+  });
+})();
+</script>
+</body>
+</html>

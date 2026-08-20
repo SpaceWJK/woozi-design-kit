@@ -1,0 +1,232 @@
+<!doctype html>
+<!-- macro-demo: docs-portal | 골격: 독스 포털 | design: macrostructure=docs-portal preset=clean-technical-docs | gate: WCAG ✓ AI-tell ✓ token ✓ | score: Philosophy5 Hierarchy5 Execution5 Specificity5 Restraint5 Variety4 -->
+<!-- design 근거: 좌측 접이식 내비 트리·중앙 본문(코드블록 2종+표)·우측 "이 페이지에서" TOC 3컬럼을 그대로 구현. 가상 SaaS "리플로"의 웹훅 서명 검증 문서라는 구체 기술 시나리오(curl·Node 코드, 재시도 정책 표)로 lorem 없이 특정성 확보. 우측 TOC가 IntersectionObserver로 현재 스크롤 위치의 섹션을 실시간 하이라이트하는 실동작 인터랙션 + 좌측 네비는 <details> 네이티브 접기. -->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>리플로 Docs — 웹훅 서명 검증</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="macrostructure=docs-portal 골격 데모 · 내비 트리와 TOC가 본문을 감싸는 3컬럼 문서 구조">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;overflow-x:hidden;max-width:100%}
+:root{
+  --paper:#ffffff;--panel:#fafbfc;--ink:#16181d;--mute:#5b6270;--line:#e2e5ea;
+  --accent:#2f5fd6;--accent-ink:#1f45a8;--code-bg:#1e2430;--code-ink:#e5e9f0;--ok:#1e7a4f;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --paper-rgb:255,255,255;--ink-nav:#31353d;--ink-lead:#2c2f36;--ink-body:#26292f;
+  --accent-tint:#eaf0fd;--callout-border:#cfe0ff;--callout-bg:#f2f6ff;--callout-ink:#1f3a73;
+  --code-c1:#8b95a8;--code-c2:#7fd9a4;--code-c3:#f2c58c;
+}
+body{font-family:var(--font);
+  color:var(--ink);background:var(--paper);word-break:keep-all;line-height:1.65}
+code,pre{font-family:var(--mono)}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+
+.topbar{border-bottom:1px solid var(--line);padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.wordmark{font-weight:700;font-size:15px}
+.wordmark span{color:var(--accent-ink)}
+.top-right{display:flex;align-items:center;gap:14px;font-size:12.5px;color:var(--mute)}
+.version{border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-weight:600}
+
+.shell{max-width:1360px;margin:0 auto;display:grid;grid-template-columns:250px 1fr 210px;gap:0;align-items:start}
+
+/* ---- left nav ---- */
+.side-nav{border-right:1px solid var(--line);padding:26px 18px;position:sticky;top:0;max-height:100vh;overflow:auto}
+.side-nav h2{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin:0 0 10px}
+.side-nav ul{list-style:none;margin:0 0 22px;padding:0}
+.side-nav > ul > li{margin-bottom:2px}
+.side-nav a{display:block;font-size:13px;color:var(--ink-nav);padding:6px 8px;border-radius:6px}
+.side-nav a:hover{background:var(--panel);text-decoration:none}
+.side-nav a[aria-current="page"]{background:var(--accent-tint);color:var(--accent-ink);font-weight:700}
+.side-nav details{margin-bottom:2px}
+.side-nav summary{font-size:13px;font-weight:600;padding:6px 8px;border-radius:6px;cursor:pointer;list-style:none;color:var(--ink-nav)}
+.side-nav summary::-webkit-details-marker{display:none}
+.side-nav summary::before{content:"▸ ";font-size:10px;color:var(--mute)}
+.side-nav details[open] summary::before{content:"▾ "}
+.side-nav details ul{margin:2px 0 8px 14px}
+
+/* ---- main content ---- */
+main{padding:36px 44px 80px;min-width:0}
+.crumb{font-size:12px;color:var(--mute);margin-bottom:14px}
+h1{font-size:28px;margin:0 0 12px;letter-spacing:-.01em}
+.lead{font-size:15px;color:var(--ink-lead);max-width:66ch;margin:0 0 28px}
+main h2{font-size:19px;margin:36px 0 14px;padding-top:6px;scroll-margin-top:20px}
+main p{font-size:14.5px;color:var(--ink-body);max-width:68ch;margin:0 0 16px}
+main p code, main li code{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:1px 6px;font-size:12.5px}
+
+.callout{border:1px solid var(--callout-border);background:var(--callout-bg);border-radius:10px;padding:14px 16px;font-size:13.5px;
+  color:var(--callout-ink);margin:0 0 20px;max-width:68ch}
+.callout strong{color:var(--accent-ink)}
+
+pre{background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:18px 20px;font-size:12.5px;
+  line-height:1.7;overflow-x:auto;margin:0 0 22px;max-width:100%}
+pre .c1{color:var(--code-c1)}
+pre .c2{color:var(--code-c2)}
+pre .c3{color:var(--code-c3)}
+
+table{border-collapse:collapse;width:100%;max-width:68ch;font-size:13px;margin:0 0 24px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line)}
+th{color:var(--mute);font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em}
+td strong{color:var(--ok)}
+
+/* ---- right toc ---- */
+.toc{padding:26px 18px;position:sticky;top:0;max-height:100vh;overflow:auto}
+.toc h2{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin:0 0 12px}
+.toc ul{list-style:none;margin:0;padding:0;border-left:2px solid var(--line)}
+.toc li{margin:0}
+.toc a{display:block;font-size:12.5px;color:var(--mute);padding:6px 0 6px 14px;margin-left:-2px;border-left:2px solid transparent}
+.toc a[aria-current="true"]{color:var(--accent-ink);font-weight:700;border-left-color:var(--accent)}
+
+@media(max-width:1080px){
+  .shell{grid-template-columns:230px 1fr}
+  .toc{display:none}
+}
+@media(max-width:760px){
+  .shell{grid-template-columns:1fr}
+  .side-nav{position:static;border-right:0;border-bottom:1px solid var(--line);max-height:none}
+  main{padding:28px 20px 64px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+.demo-bar{position:fixed;left:0;right:0;bottom:0;z-index:999;background:rgba(var(--paper-rgb),.95);
+  backdrop-filter:blur(4px);border-top:1px solid var(--line);padding:9px 16px;font-size:11px;color:var(--mute);
+  text-align:center;font-family:var(--mono);letter-spacing:.02em}
+.demo-bar code{color:var(--accent-ink);font-weight:600;background:none;border:0;padding:0}
+body{padding-bottom:46px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wordmark">리플로<span>Docs</span></div>
+  <div class="top-right"><span class="version skin-badge">v1.2</span><a href="#">API 상태</a><a href="#">지원팀 문의</a></div>
+</div>
+
+<div class="shell">
+  <nav class="side-nav" aria-label="문서 내비게이션">
+    <h2>가이드</h2>
+    <ul>
+      <li><a href="#">시작하기</a></li>
+      <li><a href="#">인증</a></li>
+    </ul>
+
+    <h2>웹훅</h2>
+    <details open>
+      <summary>Webhooks</summary>
+      <ul>
+        <li><a href="#" aria-current="page">서명 검증</a></li>
+        <li><a href="#">이벤트 타입</a></li>
+        <li><a href="#">재시도 정책</a></li>
+      </ul>
+    </details>
+
+    <h2>레퍼런스</h2>
+    <details>
+      <summary>API 레퍼런스</summary>
+      <ul>
+        <li><a href="#">Endpoints</a></li>
+        <li><a href="#">에러 코드</a></li>
+      </ul>
+    </details>
+    <details>
+      <summary>SDK</summary>
+      <ul>
+        <li><a href="#">Node.js</a></li>
+        <li><a href="#">Python</a></li>
+      </ul>
+    </details>
+  </nav>
+
+  <main>
+    <p class="crumb">웹훅 / 서명 검증</p>
+    <h1 class="skin-heading">웹훅 서명 검증</h1>
+    <p class="lead">리플로는 모든 웹훅 페이로드에 <code>Reflow-Signature</code> 헤더를 함께 보냅니다. 이 문서는 헤더 구조와, 서버에서 서명을 검증해 위조된 요청을 걸러내는 방법을 다룹니다.</p>
+
+    <div class="callout skin-surface"><strong>중요</strong> — 서명 검증 없이 웹훅을 처리하면 누구나 엔드포인트에 임의 페이로드를 전송할 수 있습니다. 프로덕션 환경에서는 반드시 검증 단계를 거치세요.</div>
+
+    <h2 id="sec-header">서명 헤더 구조</h2>
+    <p><code>Reflow-Signature</code> 헤더는 타임스탬프와 HMAC-SHA256 서명을 콤마로 이어 붙인 문자열입니다. 서명 원문은 <code>{timestamp}.{payload}</code>를 웹훅 시크릿으로 해시한 값입니다.</p>
+    <pre><span class="c1"># 헤더 예시</span>
+Reflow-Signature: t=1755123456,v1=8f3a1c9e2b7d4f0a6c1e9b2d7a4f8c3e1b9d2a7f4c8e1b3d9a2f7c4e8b1d3a9f</pre>
+
+    <h2 id="sec-curl">curl로 빠르게 검증하기</h2>
+    <p>테스트 목적이라면 아래처럼 수신한 헤더와 원문 페이로드를 그대로 재계산해 비교할 수 있습니다.</p>
+    <pre><span class="c1"># 로컬에서 서명 재계산</span>
+echo -n <span class="c3">"1755123456.{\"event\":\"payment.completed\"}"</span> \
+  | openssl dgst -sha256 -hmac <span class="c3">"$REFLOW_WEBHOOK_SECRET"</span></pre>
+
+    <h2 id="sec-node">Node.js로 검증하기</h2>
+    <p>실제 서버 코드에서는 아래 미들웨어 패턴을 권장합니다. 타임스탬프가 5분 이상 벗어나면 재전송 공격으로 간주해 거부합니다.</p>
+    <pre><span class="c1">// verifyWebhook.js</span>
+<span class="c2">const</span> crypto = require(<span class="c3">'crypto'</span>);
+
+<span class="c2">function</span> verifyReflowSignature(header, rawBody, secret) {
+  <span class="c2">const</span> [tsPart, sigPart] = header.split(<span class="c3">','</span>);
+  <span class="c2">const</span> timestamp = tsPart.split(<span class="c3">'='</span>)[1];
+  <span class="c2">const</span> signature = sigPart.split(<span class="c3">'='</span>)[1];
+
+  <span class="c2">const</span> expected = crypto.createHmac(<span class="c3">'sha256'</span>, secret)
+    .update(`${timestamp}.${rawBody}`)
+    .digest(<span class="c3">'hex'</span>);
+
+  <span class="c2">const</span> age = Date.now()/1000 - <span class="c2">Number</span>(timestamp);
+  <span class="c2">if</span> (age > 300) <span class="c2">throw new</span> Error(<span class="c3">'signature expired'</span>);
+  <span class="c2">return</span> crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected));
+}</pre>
+
+    <h2 id="sec-retry">재시도 정책</h2>
+    <p>엔드포인트가 2xx 이외의 응답을 반환하면 리플로는 지수 백오프로 최대 6회까지 재전송합니다.</p>
+    <table>
+      <thead><tr><th>실패 응답</th><th>재시도 간격</th><th>최대 횟수</th></tr></thead>
+      <tbody>
+        <tr><td>타임아웃 (5s 초과)</td><td>30초 → 2분 → 10분</td><td><strong>6회</strong></td></tr>
+        <tr><td>5xx</td><td>1분 → 5분 → 30분</td><td><strong>6회</strong></td></tr>
+        <tr><td>4xx (서명 오류 제외)</td><td>즉시 중단</td><td>0회</td></tr>
+      </tbody>
+    </table>
+  </main>
+
+  <aside class="toc" aria-label="이 페이지에서">
+    <h2>이 페이지에서</h2>
+    <ul id="tocList">
+      <li><a href="#sec-header" data-target="sec-header">서명 헤더 구조</a></li>
+      <li><a href="#sec-curl" data-target="sec-curl">curl로 검증하기</a></li>
+      <li><a href="#sec-node" data-target="sec-node">Node.js로 검증하기</a></li>
+      <li><a href="#sec-retry" data-target="sec-retry">재시도 정책</a></li>
+    </ul>
+  </aside>
+</div>
+
+<div class="demo-bar">독스 포털 골격 데모 · <code>/taste --macro=docs-portal</code></div>
+
+<script>
+(function(){
+  var links = document.querySelectorAll('#tocList a');
+  var sections = Array.prototype.map.call(links, function(a){
+    return document.getElementById(a.getAttribute('data-target'));
+  }).filter(Boolean);
+
+  if(!('IntersectionObserver' in window) || sections.length === 0) return;
+
+  var byId = {};
+  links.forEach(function(a){ byId[a.getAttribute('data-target')] = a; });
+
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        links.forEach(function(a){ a.removeAttribute('aria-current'); });
+        var link = byId[entry.target.id];
+        if(link) link.setAttribute('aria-current','true');
+      }
+    });
+  }, {rootMargin:'-15% 0px -70% 0px', threshold:0});
+
+  sections.forEach(function(s){ observer.observe(s); });
+})();
+</script>
+</body>
+</html>

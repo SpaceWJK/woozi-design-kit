@@ -1,0 +1,192 @@
+<!doctype html>
+<!-- macro-demo: quote-led | 골격: 쿼트 리드 | design: macrostructure=quote-led preset=neutral-editorial | gate: WCAG ✓ AI-tell ✓ token ✓ | score: Philosophy5 Hierarchy4 Execution4 Specificity5 Restraint4 Variety5 -->
+<!-- design 근거: 히어로 전체를 카피 대신 실명·직함·회사가 붙은 인용문 1개가 차지하도록 배치 — "빌려온 신뢰"가 첫 화면 요소라는 골격 정의를 그대로 구현. 3-column 반복 hero를 피하고 단일 인용 블록 뒤에 프레스 스트립·통계·프로덕트 패널 순으로 신뢰를 층층이 쌓음. -->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>클레어리 옵스 — 고객 응대 자동화</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="macrostructure=quote-led 골격 데모 · 인용문이 히어로를 대신하는 페이지 구조">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;overflow-x:hidden;max-width:100%}
+:root{
+  --paper:#faf9f6;--paper-2:#f1efe9;--ink:#141414;--ink-soft:#3a3a3a;--mute:#5f5f5f;
+  --line:#e0dcd3;--accent:#35507a;--accent-2:#a8563a;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --font-serif:Georgia,"Times New Roman",serif;
+  --paper-rgb:250,249,246;--on-dark:#fff;--card-text:#2c2c2c;--status-mid:#c9a24a;--status-done:#4a7a5a;
+}
+body{font-family:var(--font);
+  color:var(--ink);background:var(--paper);word-break:keep-all;line-height:1.6;padding-bottom:46px}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px}
+
+header.top{padding:24px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);
+  position:sticky;top:0;background:rgba(var(--paper-rgb),.92);backdrop-filter:blur(6px);z-index:10}
+header.top .brand{font-weight:700;font-size:15px;letter-spacing:-.01em}
+header.top nav{display:flex;gap:24px;font-size:13px;color:var(--mute)}
+header.top nav a{transition:color .15s}
+header.top nav a:hover{color:var(--ink)}
+header.top .cta{background:var(--ink);color:var(--on-dark);padding:9px 18px;border-radius:6px;font-size:13px;font-weight:700}
+header.top .cta:hover{background:var(--accent)}
+
+.hero{padding:104px 0 80px;text-align:center}
+.hero .mark{font-size:68px;line-height:1;color:var(--accent-2);font-family:var(--font-serif);margin-bottom:4px}
+.hero blockquote{margin:0 auto;max-width:700px;font-size:clamp(23px,3.5vw,36px);font-weight:600;line-height:1.48;
+  letter-spacing:-.012em;color:var(--ink)}
+.hero blockquote em{font-style:normal;color:var(--accent)}
+.hero .attrib{margin-top:36px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.avatar{width:54px;height:54px;border-radius:50%;background:linear-gradient(155deg,var(--ink-soft),var(--ink));
+  display:flex;align-items:center;justify-content:center;color:var(--on-dark);font-size:16px;font-weight:700;
+  border:2px solid var(--paper);box-shadow:0 0 0 1px var(--line)}
+.attrib .name{font-size:14.5px;font-weight:700}
+.attrib .role{font-size:13px;color:var(--mute)}
+
+.proof{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:30px 0;background:var(--paper-2)}
+.proof .wrap{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;align-items:center}
+.proof .eyebrow{width:100%;text-align:center;font-size:11px;letter-spacing:.14em;color:var(--mute);text-transform:uppercase;margin-bottom:16px}
+.proof .badge{font-size:13.5px;font-weight:700;color:var(--ink-soft);letter-spacing:.02em;padding:8px 16px;
+  border:1px solid var(--line);border-radius:6px;background:var(--paper)}
+
+.stat-band{padding:64px 0;border-bottom:1px solid var(--line)}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.stat-item{text-align:center;padding:0 20px;border-left:1px solid var(--line)}
+.stat-item:first-child{border-left:none}
+.stat-item .big{font-size:clamp(30px,4vw,44px);font-weight:700;color:var(--ink)}
+.stat-item .big span{color:var(--accent-2)}
+.stat-item p{margin:8px 0 0;font-size:12.5px;color:var(--mute);line-height:1.6}
+
+.section-title{font-size:12px;color:var(--mute);letter-spacing:.14em;text-transform:uppercase;text-align:center;margin:80px 0 36px}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding-bottom:24px}
+.card{background:var(--paper-2);border:1px solid var(--line);border-radius:8px;padding:26px;transition:border-color .15s,transform .15s}
+.card:hover{border-color:var(--accent-2);transform:translateY(-2px)}
+.card .stars{color:var(--accent-2);font-size:13px;margin-bottom:12px;letter-spacing:2px}
+.card p{font-size:13.5px;line-height:1.7;color:var(--card-text);margin:0 0 18px}
+.card .who{font-size:12.5px;color:var(--mute);font-weight:600;border-top:1px solid var(--line);padding-top:12px}
+.card .who b{color:var(--ink)}
+
+.panel{margin:80px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--paper-2)}
+.panel-head{display:flex;justify-content:space-between;align-items:center;padding:16px 22px;border-bottom:1px solid var(--line)}
+.panel-head .dots{display:flex;gap:6px}
+.panel-head .dots span{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.panel-head .title{font-size:12.5px;color:var(--mute);font-weight:600}
+.panel-body{padding:22px}
+.ticket-row{display:grid;grid-template-columns:auto 1fr auto auto;gap:14px;align-items:center;padding:12px 14px;
+  border-radius:6px;font-size:13px;background:var(--paper)}
+.ticket-row + .ticket-row{margin-top:8px}
+.ticket-row .dot{width:8px;height:8px;border-radius:50%}
+.dot.urgent{background:var(--accent-2)}.dot.mid{background:var(--status-mid)}.dot.done{background:var(--status-done)}
+.ticket-row .subj{font-weight:600}
+.ticket-row .meta{color:var(--mute);font-size:12px}
+.ticket-row .sla{font-family:var(--mono);font-size:11.5px;color:var(--mute)}
+
+.cta-final{text-align:center;padding:72px 0 96px}
+.cta-final h2{font-size:clamp(22px,3vw,30px);margin:0 0 12px}
+.cta-final p{color:var(--mute);font-size:14px;margin:0 0 28px}
+.cta-final .btn{display:inline-block;background:var(--ink);color:var(--on-dark);padding:14px 32px;border-radius:8px;
+  font-weight:700;font-size:14.5px;transition:background .15s}
+.cta-final .btn:hover{background:var(--accent)}
+
+@media(max-width:760px){.grid{grid-template-columns:1fr}.stat-grid{grid-template-columns:1fr}.stat-item{border-left:none;
+  border-top:1px solid var(--line);padding-top:24px;margin-top:24px}.stat-item:first-child{border-top:none;margin-top:0;padding-top:0}
+  header.top nav{display:none}.ticket-row{grid-template-columns:auto 1fr;row-gap:4px}.ticket-row .sla,.ticket-row .meta{grid-column:2}}
+
+.demo-bar{position:fixed;left:0;right:0;bottom:0;z-index:999;background:rgba(var(--paper-rgb),.94);
+  backdrop-filter:blur(4px);border-top:1px solid var(--line);padding:9px 16px;font-size:11px;color:var(--mute);
+  text-align:center;font-family:var(--mono);letter-spacing:.02em}
+.demo-bar code{color:var(--accent-2);font-weight:600}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <span class="brand">클레어리 옵스</span>
+  <nav><a href="#">제품</a><a href="#">고객사례</a><a href="#">가격</a><a class="cta skin-cta" href="#">무료로 시작</a></nav>
+</header>
+
+<div class="hero wrap">
+  <div class="mark">"</div>
+  <blockquote class="skin-heading">도입 첫 주에 <em>티켓 처리 속도</em>가 눈에 띄게 달라졌습니다. 팀이 야근을 멈춘 건 이번이 처음이에요.</blockquote>
+  <div class="attrib">
+    <div class="avatar skin-frame">이</div>
+    <div class="name">이서윤</div>
+    <div class="role">운영팀 리드 · 파인베이커리 (가상 고객사)</div>
+  </div>
+</div>
+
+<div class="proof">
+  <div class="wrap">
+    <div class="eyebrow">이런 팀이 쓰고 있습니다</div>
+    <span class="badge skin-badge">파인베이커리</span>
+    <span class="badge skin-badge">노르마 물류</span>
+    <span class="badge skin-badge">헤이든웍스</span>
+    <span class="badge skin-badge">브릭스튜디오</span>
+    <span class="badge skin-badge">문도어패럴</span>
+  </div>
+</div>
+
+<div class="stat-band wrap">
+  <div class="stat-grid">
+    <div class="stat-item">
+      <!-- mockup: 데모용 플레이스홀더 수치 -->
+      <div class="big"><span>42%</span></div>
+      <p>도입 고객 34곳 평균 처리 시간 단축</p>
+    </div>
+    <div class="stat-item">
+      <div class="big"><span>3.1일</span></div>
+      <p>기존 대응 SLA에서 단축된 평균 일수</p>
+    </div>
+    <div class="stat-item">
+      <div class="big"><span>96%</span></div>
+      <p>도입 6개월 후 고객 재계약률</p>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="section-title">더 많은 이야기</div>
+  <div class="grid">
+    <div class="card skin-surface">
+      <div class="stars">★★★★★</div>
+      <p>온보딩 자료 없이도 하루 만에 팀 전체가 적응했습니다. 기존 스프레드시트 워크플로우를 그대로 옮겨온 느낌이었어요.</p>
+      <div class="who"><b>박도현</b> · 노르마 물류, 물류운영팀</div>
+    </div>
+    <div class="card skin-surface">
+      <div class="stars">★★★★★</div>
+      <p>알림 규칙을 우리 방식대로 바꿀 수 있어서 좋았습니다. 이전 도구는 규칙이 고정돼 있어 늘 돌아가야 했거든요.</p>
+      <div class="who"><b>김하은</b> · 헤이든웍스, CS팀장</div>
+    </div>
+    <div class="card skin-surface">
+      <div class="stars">★★★★☆</div>
+      <p>초기 마이그레이션만 나흘 걸렸고 이후는 문제 없었습니다. 기존 티켓 3,200건이 누락 없이 넘어온 게 가장 인상적이었어요.</p>
+      <div class="who"><b>정민준</b> · 브릭스튜디오, 오퍼레이션 매니저</div>
+    </div>
+  </div>
+
+  <div class="panel skin-surface">
+    <div class="panel-head">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <div class="title">클레어리 옵스 · 실시간 큐 (데모 화면)</div>
+    </div>
+    <div class="panel-body">
+      <div class="ticket-row"><span class="dot urgent"></span><span class="subj">환불 지연 문의 — 주문 #48213</span><span class="meta">파인베이커리</span><span class="sla">SLA 12분 남음</span></div>
+      <div class="ticket-row"><span class="dot mid"></span><span class="subj">배송지 변경 요청 — 주문 #48219</span><span class="meta">노르마 물류</span><span class="sla">SLA 2시간 남음</span></div>
+      <div class="ticket-row"><span class="dot done"></span><span class="subj">쿠폰 미적용 문의 — 주문 #48201</span><span class="meta">헤이든웍스</span><span class="sla">완료 · 4분 소요</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="cta-final">
+  <h2>지금 팀의 큐를 보여드릴게요</h2>
+  <p>가입 없이도 데모 계정으로 먼저 둘러볼 수 있습니다.</p>
+  <a class="btn skin-cta" href="#">데모 계정으로 둘러보기</a>
+</div>
+
+<div class="demo-bar">쿼트 리드 골격 데모 · <code>/taste --macro=quote-led</code></div>
+</body>
+</html>

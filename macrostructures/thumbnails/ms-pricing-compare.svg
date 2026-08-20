@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="300" height="200">
+  <rect x="0.0" y="0.0" width="300.0" height="200.0" fill="#fafafa"/>
+  <text x="14.0" y="24.0" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="#3f3f46" text-anchor="start">프라이싱 비교</text>
+  <text x="286.0" y="24.0" font-family="ui-monospace,monospace" font-size="8" font-weight="400" fill="#9a9aa2" text-anchor="end">pricing-compare</text>
+  <rect x="14.0" y="30.0" width="272.0" height="156.0" fill="none" stroke="#c9c9cf" stroke-width="1"/>
+  <rect x="14.0" y="30.0" width="86.0" height="40.0" fill="#e4e4e7"/>
+  <rect x="104.0" y="26.0" width="92.0" height="48.0" fill="#52525b"/>
+  <rect x="200.0" y="30.0" width="86.0" height="40.0" fill="#e4e4e7"/>
+  <rect x="24.0" y="40.0" width="30.0" height="6.0" fill="#a1a1aa"/>
+  <rect x="24.0" y="52.0" width="46.0" height="10.0" fill="#a1a1aa"/>
+  <rect x="120.0" y="36.0" width="30.0" height="6.0" fill="#fafafa"/>
+  <rect x="120.0" y="48.0" width="46.0" height="12.0" fill="#fafafa"/>
+  <rect x="210.0" y="40.0" width="30.0" height="6.0" fill="#a1a1aa"/>
+  <rect x="210.0" y="52.0" width="46.0" height="10.0" fill="#a1a1aa"/>
+  <line x1="14.0" y1="86.0" x2="286.0" y2="86.0" stroke="#e4e4e7" stroke-width="1"/>
+  <rect x="14.0" y="92.0" width="70.0" height="5.0" fill="#d4d4d8"/>
+  <circle cx="140.0" cy="94.0" r="4.0" fill="#52525b"/>
+  <circle cx="240.0" cy="94.0" r="4.0" fill="#a1a1aa"/>
+  <line x1="14.0" y1="106.0" x2="286.0" y2="106.0" stroke="#e4e4e7" stroke-width="1"/>
+  <rect x="14.0" y="112.0" width="70.0" height="5.0" fill="#d4d4d8"/>
+  <circle cx="140.0" cy="114.0" r="4.0" fill="#52525b"/>
+  <circle cx="240.0" cy="114.0" r="4.0" fill="none" stroke="#a1a1aa" stroke-width="1.2"/>
+  <line x1="14.0" y1="126.0" x2="286.0" y2="126.0" stroke="#e4e4e7" stroke-width="1"/>
+  <rect x="14.0" y="132.0" width="70.0" height="5.0" fill="#d4d4d8"/>
+  <circle cx="140.0" cy="134.0" r="4.0" fill="#52525b"/>
+  <circle cx="240.0" cy="134.0" r="4.0" fill="#a1a1aa"/>
+  <line x1="14.0" y1="150.0" x2="286.0" y2="150.0" stroke="#c9c9cf" stroke-width="1"/>
+  <rect x="14.0" y="156.0" width="180.0" height="9.0" fill="#a1a1aa"/>
+  <circle cx="276.0" cy="160.0" r="4.0" stroke="#71717a" stroke-width="1.4" fill="none"/>
+  <line x1="14.0" y1="174.0" x2="286.0" y2="174.0" stroke="#e4e4e7" stroke-width="1"/>
+  <rect x="14.0" y="177.0" width="150.0" height="8.0" fill="#a1a1aa"/>
+  <circle cx="276.0" cy="181.0" r="4.0" stroke="#71717a" stroke-width="1.4" fill="none"/>
+</svg>

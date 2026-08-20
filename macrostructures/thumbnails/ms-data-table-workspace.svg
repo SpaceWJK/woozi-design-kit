@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="300" height="200">
+  <rect x="0.0" y="0.0" width="300.0" height="200.0" fill="#fafafa"/>
+  <text x="14.0" y="24.0" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="#3f3f46" text-anchor="start">데이터 테이블 워크스페이스</text>
+  <text x="286.0" y="24.0" font-family="ui-monospace,monospace" font-size="8" font-weight="400" fill="#9a9aa2" text-anchor="end">data-table-workspace</text>
+  <rect x="14.0" y="30.0" width="272.0" height="156.0" fill="none" stroke="#c9c9cf" stroke-width="1"/>
+  <rect x="14.0" y="32.0" width="192.0" height="16.0" fill="#e4e4e7"/>
+  <rect x="20.0" y="36.0" width="36.0" height="8.0" fill="#a1a1aa"/>
+  <rect x="62.0" y="36.0" width="36.0" height="8.0" fill="#a1a1aa"/>
+  <rect x="104.0" y="36.0" width="36.0" height="8.0" fill="#a1a1aa"/>
+  <rect x="14.0" y="56.0" width="192.0" height="14.0" fill="#a1a1aa"/>
+  <rect x="14.0" y="72.0" width="192.0" height="14.0" fill="#e4e4e7"/>
+  <rect x="14.0" y="88.0" width="192.0" height="14.0" fill="none" stroke="#e4e4e7" stroke-width="1"/>
+  <rect x="14.0" y="104.0" width="192.0" height="14.0" fill="#e4e4e7"/>
+  <rect x="14.0" y="120.0" width="192.0" height="14.0" fill="none" stroke="#e4e4e7" stroke-width="1"/>
+  <rect x="14.0" y="136.0" width="192.0" height="14.0" fill="#e4e4e7"/>
+  <rect x="220.0" y="56.0" width="66.0" height="130.0" fill="#d4d4d8"/>
+  <rect x="228.0" y="64.0" width="50.0" height="10.0" fill="#a1a1aa"/>
+  <rect x="228.0" y="80.0" width="50.0" height="5.0" fill="#e4e4e7"/>
+  <rect x="228.0" y="90.0" width="50.0" height="5.0" fill="#e4e4e7"/>
+  <rect x="228.0" y="100.0" width="50.0" height="5.0" fill="#e4e4e7"/>
+  <rect x="228.0" y="166.0" width="50.0" height="12.0" fill="#52525b"/>
+</svg>

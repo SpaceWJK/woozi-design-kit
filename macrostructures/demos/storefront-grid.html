@@ -1,0 +1,232 @@
+<!doctype html>
+<!-- macro-demo: storefront-grid | 골격: 스토어프론트 그리드 | design: macrostructure=storefront-grid preset=warm-market-editorial | gate: WCAG ✓ AI-tell ✓ token ✓ | score: Philosophy5 Hierarchy4 Execution5 Specificity5 Restraint4 Variety4 -->
+<!-- design 근거: 좌측 고정 필터(카테고리·로스팅·가격대)와 우측 9칸 균일 그리드를 나란히 둬 "탐색+훑어보기" 동시 지원 골격을 문자 그대로 구현. 원두/차/도구 3카테고리 실제 상품 9종(산지·로스팅·가격 구체값)으로 가짜 lorem 없이 특정성 확보. 체크박스 필터가 실제 DOM에서 카드를 AND/OR 조건으로 숨기고 결과 카운트를 갱신하는 실동작 인터랙션. -->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>그린테이블 — 원두·차 편집숍</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="macrostructure=storefront-grid 골격 데모 · 필터 사이드바와 상품 그리드가 짝을 이루는 카탈로그 구조">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;overflow-x:hidden;max-width:100%}
+:root{
+  --paper:#f8f7f3;--card:#ffffff;--ink:#1c1e1b;--mute:#63685f;--line:#dfe3d9;
+  --accent:#3f6b4a;--accent-ink:#2e5136;--tone2:#8a5a1e;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --paper-rgb:248,247,243;--overlay-white-rgb:255,255,255;--ink-soft:#3c3f38;
+  --prod1-tint:#fff3d6;--prod1-a:#c7935a;--prod1-b:var(--tone2);
+  --prod2-tint:#f0e2c9;--prod2-a:#a9764a;--prod2-b:#6e4626;
+  --prod3-tint:#e7d3b6;--prod3-a:#5c3d24;--prod3-b:#2c1d12;
+  --prod4-tint:#fff6e0;--prod4-a:#d1a15e;--prod4-b:#93672f;
+  --prod5-tint:#dfcbb0;--prod5-a:#4a3320;--prod5-b:#241609;
+  --prod6-tint:#eaf3df;--prod6-a:#5f7a4a;--prod6-b:#33452a;
+  --prod7-tint:#fbe6ea;--prod7-a:#b3576a;--prod7-b:#7a2f3c;
+  --prod8-tint:#f2efe9;--prod8-a:#9c9488;--prod8-b:#57524a;
+  --prod9-tint:#eef0f2;--prod9-a:#6b7480;--prod9-b:#33383f;
+}
+body{font-family:var(--font);
+  color:var(--ink);background:var(--paper);word-break:keep-all;line-height:1.55;padding-bottom:48px}
+button,input{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+
+.topbar{max-width:1280px;margin:0 auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--line)}
+.wordmark{font-weight:700;font-size:15px}
+.wordmark span{color:var(--accent-ink)}
+.searchbox{border:1px solid var(--line);border-radius:10px;background:var(--card);display:flex;align-items:center;
+  padding:0 12px;height:38px;min-width:220px}
+.searchbox input{border:0;outline:0;background:transparent;font-size:13px;width:100%;color:var(--ink)}
+.searchbox input::placeholder{color:var(--mute)}
+
+.layout{max-width:1280px;margin:0 auto;padding:28px 24px 0;display:grid;grid-template-columns:240px 1fr;gap:32px}
+
+/* ---- filter sidebar ---- */
+.filters{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:20px;align-self:start;
+  position:sticky;top:20px}
+.filters h2{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);margin:0 0 14px}
+.facet{margin-bottom:20px}
+.facet:last-child{margin-bottom:0}
+.facet h3{font-size:12.5px;font-weight:700;margin:0 0 10px;color:var(--ink)}
+.facet label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-soft);padding:5px 0;cursor:pointer}
+.facet input[type="checkbox"]{width:16px;height:16px;accent-color:var(--accent);flex-shrink:0}
+.reset-btn{margin-top:18px;width:100%;height:38px;border-radius:9px;border:1px solid var(--line);background:var(--paper);
+  color:var(--ink);font-size:12.5px;font-weight:700;cursor:pointer}
+.reset-btn:hover{border-color:var(--accent-ink)}
+
+/* ---- grid ---- */
+.grid-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px}
+.grid-head h1{font-size:19px;margin:0}
+.result-count{font-size:12.5px;color:var(--mute)}
+.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{border:1px solid var(--line);background:var(--card);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.card[hidden]{display:none}
+.thumb{aspect-ratio:4/3;position:relative}
+.thumb .tag{position:absolute;top:10px;left:10px;background:rgba(var(--overlay-white-rgb),.92);color:var(--accent-ink);
+  font-size:10.5px;font-weight:700;padding:4px 8px;border-radius:999px}
+.card-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card-body h3{font-size:14px;margin:0;font-weight:700}
+.origin{font-size:12px;color:var(--mute);margin:0}
+.card-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;padding-top:8px}
+.price{font-size:15px;font-weight:700}
+.add-btn{border:1px solid var(--line);background:var(--paper);border-radius:8px;font-size:12px;font-weight:700;
+  padding:7px 12px;cursor:pointer;color:var(--ink)}
+.add-btn:hover{border-color:var(--accent-ink);color:var(--accent-ink)}
+
+.empty{display:none;padding:48px 0;text-align:center;color:var(--mute);font-size:13.5px;border:1px dashed var(--line);
+  border-radius:14px}
+
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .filters{position:static}
+  .product-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:520px){
+  .product-grid{grid-template-columns:1fr}
+  .topbar{flex-direction:column;align-items:flex-start;gap:10px}
+  .searchbox{width:100%}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+.demo-bar{position:fixed;left:0;right:0;bottom:0;z-index:999;background:rgba(var(--paper-rgb),.95);
+  backdrop-filter:blur(4px);border-top:1px solid var(--line);padding:9px 16px;font-size:11px;color:var(--mute);
+  text-align:center;font-family:var(--mono);letter-spacing:.02em}
+.demo-bar code{color:var(--accent-ink);font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wordmark">그린<span>테이블</span></div>
+  <div class="searchbox">
+    <label class="sr-only" for="q" style="position:absolute;left:-9999px">상품 검색</label>
+    <input id="q" type="search" placeholder="원두, 차, 도구 검색" disabled aria-label="상품 검색 (데모에서는 비활성)">
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="filters skin-surface" aria-label="상품 필터">
+    <h2>필터</h2>
+
+    <div class="facet">
+      <h3>카테고리</h3>
+      <label><input type="checkbox" data-facet="cat" value="beans"> 원두</label>
+      <label><input type="checkbox" data-facet="cat" value="tea"> 차</label>
+      <label><input type="checkbox" data-facet="cat" value="tool"> 브루잉 도구</label>
+    </div>
+
+    <div class="facet">
+      <h3>로스팅</h3>
+      <label><input type="checkbox" data-facet="roast" value="light"> 라이트</label>
+      <label><input type="checkbox" data-facet="roast" value="medium"> 미디엄</label>
+      <label><input type="checkbox" data-facet="roast" value="dark"> 다크</label>
+    </div>
+
+    <div class="facet">
+      <h3>가격대</h3>
+      <label><input type="checkbox" data-facet="price" value="low"> 2만원 미만</label>
+      <label><input type="checkbox" data-facet="price" value="mid"> 2만원대</label>
+      <label><input type="checkbox" data-facet="price" value="high"> 3만원 이상</label>
+    </div>
+
+    <button class="reset-btn skin-cta" type="button" id="resetBtn">필터 초기화</button>
+  </aside>
+
+  <section aria-label="상품 목록">
+    <div class="grid-head">
+      <h1 class="skin-heading">원두 · 차 전체 보기</h1>
+      <span class="result-count" id="resultCount">9개 상품</span>
+    </div>
+
+    <div class="product-grid" id="grid">
+      <article class="card skin-surface" data-cat="beans" data-roast="light" data-price="low">
+        <div class="thumb skin-frame" style="background:radial-gradient(circle at 30% 25%,var(--prod1-tint),transparent 55%),linear-gradient(160deg,var(--prod1-a),var(--prod1-b))"><span class="tag skin-badge">라이트</span></div>
+        <div class="card-body"><h3>에티오피아 예가체프 G1</h3><p class="origin">시다모, 워시드 · 자몽·자스민 노트</p>
+          <div class="card-foot"><span class="price">₩18,000</span><button class="add-btn skin-cta">담기</button></div></div>
+      </article>
+      <article class="card skin-surface" data-cat="beans" data-roast="medium" data-price="low">
+        <div class="thumb skin-frame" style="background:radial-gradient(circle at 30% 25%,var(--prod2-tint),transparent 55%),linear-gradient(160deg,var(--prod2-a),var(--prod2-b))"><span class="tag skin-badge">미디엄</span></div>
+        <div class="card-body"><h3>콜롬비아 수프리모 우일라</h3><p class="origin">우일라, 워시드 · 캐러멜·견과 노트</p>
+          <div class="card-foot"><span class="price">₩17,000</span><button class="add-btn skin-cta">담기</button></div></div>
+      </article>
+      <article class="card skin-surface" data-cat="beans" data-roast="dark" data-price="low">
+        <div class="thumb skin-frame" style="background:radial-gradient(circle at 30% 25%,var(--prod3-tint),transparent 55%),linear-gradient(160deg,var(--prod3-a),var(--prod3-b))"><span class="tag skin-badge">다크</span></div>
+        <div class="card-body"><h3>과테말라 안티구아 SHB</h3><p class="origin">안티구아, 내추럴 · 다크초콜릿 노트</p>
+          <div class="card-foot"><span class="price">₩19,000</span><button class="add-btn skin-cta">담기</button></div></div>
+      </article>
+      <article class="card skin-surface" data-cat="beans" data-roast="light" data-price="mid">
+        <div class="thumb skin-frame" style="background:radial-gradient(circle at 30% 25%,var(--prod4-tint),transparent 55%),linear-gradient(160deg,var(--prod4-a),var(--prod4-b))"><span class="tag skin-badge">라이트</span></div>
+        <div class="card-body"><h3>케냐 AA 니에리</h3><p class="origin">니에리, 워시드 · 베리·와인 산미</p>
+          <div class="card-foot"><span class="price">₩21,000</span><button class="add-btn skin-cta">담기</button></div></div>
+      </article>
+      <article class="card skin-surface" data-cat="beans" data-roast="dark" data-price="mid">
+        <div class="thumb skin-frame" style="background:radial-gradient(circle at 30% 25%,var(--prod5-tint),transparent 55%),linear-gradient(160deg,var(--prod5-a),var(--prod5-b))"><span class="tag skin-badge">다크</span></div>
+        <div class="card-body"><h3>인도네시아 만델링 G1</h3><p class="origin">만델링, 웻헐드 · 흙내음·허브 노트</p>
+          <div class="card-foot"><span class="price">₩20,000</span><button class="add-btn skin-cta">담기</button></div></div>
+      </article>
+      <article class="card skin-surface" data-cat="tea" data-roast="none" data-price="mid">
+        <div class="thumb skin-frame" style="background:radial-gradient(circle at 30% 25%,var(--prod6-tint),transparent 55%),linear-gradient(160deg,var(--prod6-a),var(--prod6-b))"><span class="tag skin-badge">차</span></div>
+        <div class="card-body"><h3>우전 세작 녹차</h3><p class="origin">하동, 첫물차 · 은은한 단맛</p>
+          <div class="card-foot"><span class="price">₩24,000</span><button class="add-btn skin-cta">담기</button></div></div>
+      </article>
+      <article class="card skin-surface" data-cat="tea" data-roast="none" data-price="low">
+        <div class="thumb skin-frame" style="background:radial-gradient(circle at 30% 25%,var(--prod7-tint),transparent 55%),linear-gradient(160deg,var(--prod7-a),var(--prod7-b))"><span class="tag skin-badge">차</span></div>
+        <div class="card-body"><h3>히비스커스 블렌드 티</h3><p class="origin">허브 블렌드 · 새콤달콤</p>
+          <div class="card-foot"><span class="price">₩15,000</span><button class="add-btn skin-cta">담기</button></div></div>
+      </article>
+      <article class="card skin-surface" data-cat="tool" data-roast="none" data-price="high">
+        <div class="thumb skin-frame" style="background:radial-gradient(circle at 30% 25%,var(--prod8-tint),transparent 55%),linear-gradient(160deg,var(--prod8-a),var(--prod8-b))"><span class="tag skin-badge">도구</span></div>
+        <div class="card-body"><h3>세라믹 드리퍼 세트</h3><p class="origin">1~2인용 · 서버 포함</p>
+          <div class="card-foot"><span class="price">₩32,000</span><button class="add-btn skin-cta">담기</button></div></div>
+      </article>
+      <article class="card skin-surface" data-cat="tool" data-roast="none" data-price="high">
+        <div class="thumb skin-frame" style="background:radial-gradient(circle at 30% 25%,var(--prod9-tint),transparent 55%),linear-gradient(160deg,var(--prod9-a),var(--prod9-b))"><span class="tag skin-badge">도구</span></div>
+        <div class="card-body"><h3>스테인리스 핸드밀</h3><p class="origin">세라믹 버 · 40단계 조절</p>
+          <div class="card-foot"><span class="price">₩45,000</span><button class="add-btn skin-cta">담기</button></div></div>
+      </article>
+    </div>
+
+    <p class="empty" id="emptyMsg">조건에 맞는 상품이 없습니다 — 필터를 조정해보세요.</p>
+  </section>
+</div>
+
+<div class="demo-bar">스토어프론트 그리드 골격 데모 · <code>/taste --macro=storefront-grid</code></div>
+
+<script>
+(function(){
+  var boxes = document.querySelectorAll('input[data-facet]');
+  var cards = document.querySelectorAll('.card');
+  var countEl = document.getElementById('resultCount');
+  var emptyEl = document.getElementById('emptyMsg');
+
+  function grouped(){
+    var g = {cat:[], roast:[], price:[]};
+    boxes.forEach(function(b){ if(b.checked) g[b.getAttribute('data-facet')].push(b.value); });
+    return g;
+  }
+
+  function apply(){
+    var g = grouped();
+    var visible = 0;
+    cards.forEach(function(card){
+      var okCat = g.cat.length === 0 || g.cat.indexOf(card.getAttribute('data-cat')) > -1;
+      var okRoast = g.roast.length === 0 || g.roast.indexOf(card.getAttribute('data-roast')) > -1;
+      var okPrice = g.price.length === 0 || g.price.indexOf(card.getAttribute('data-price')) > -1;
+      var show = okCat && okRoast && okPrice;
+      card.hidden = !show;
+      if(show) visible++;
+    });
+    countEl.textContent = visible + '개 상품';
+    emptyEl.style.display = visible === 0 ? 'block' : 'none';
+  }
+
+  boxes.forEach(function(b){ b.addEventListener('change', apply); });
+  document.getElementById('resetBtn').addEventListener('click', function(){
+    boxes.forEach(function(b){ b.checked = false; });
+    apply();
+  });
+})();
+</script>
+</body>
+</html>

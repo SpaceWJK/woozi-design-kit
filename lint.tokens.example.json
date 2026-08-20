@@ -1,0 +1,8 @@
+{
+  "$comment": "Copy this file to lint.tokens.json (already listed in .gitignore) and replace the examples below with your own organization's internal-only identifiers — internal project codename, internal ticket-ID scheme, internal usernames, internal repo path fragments, etc. scripts/lint-designkit.mjs loads lint.tokens.json automatically if it exists at the repo root; this example file itself is never loaded.",
+  "patterns": [
+    { "name": "example: internal project codename", "pattern": "example-internal-codename", "flags": "i" },
+    { "name": "example: internal ticket-ID scheme", "pattern": "EXAMPLE-\\d{3,}", "flags": "" },
+    { "name": "example: internal username", "pattern": "example-internal-user", "flags": "i" }
+  ]
+}

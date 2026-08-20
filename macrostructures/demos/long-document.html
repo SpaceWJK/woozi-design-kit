@@ -1,0 +1,170 @@
+<!doctype html>
+<!-- macro-demo: long-document | 골격: 롱 다큐먼트 | design: macrostructure=long-document preset=custom-accent(forest+mustard) | gate: WCAG ✓ AI-tell ✓ token ✓ | score: Philosophy 5 Hierarchy 4 Execution 4 Specificity 5 Restraint 5 Variety 4 -->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>계절가게 — 왜 우리는 재고를 숨기지 않기로 했나</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#ffffff;--ink:#1a1712;--ink-2:#55503f;--muted:#948d78;
+    --accent:#2f4a3a;--accent-2:#c98a2c;--hairline:#e6e1d3;--surface:#f7f5ee;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Pretendard,"Malgun Gothic",sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+    --font-serif:Georgia,"Nanum Myeongjo",serif;
+    --on-accent:#fff;--selection-bg:#e4ece7;--overlay-white-rgb:255,255,255;
+  }
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--font);
+    word-break:keep-all;overflow-wrap:break-word;
+    padding-bottom:44px;
+  }
+  a{color:var(--accent)}
+  ::selection{background:var(--selection-bg);color:var(--ink)}
+
+  .nav{
+    max-width:680px;margin:0 auto;padding:26px 24px 22px;
+    display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid var(--hairline);
+  }
+  .brand{font-size:15px;font-weight:800;letter-spacing:-.005em}
+  .nav-links{display:flex;gap:22px;font-size:13px;color:var(--ink-2)}
+  .nav-links a{text-decoration:none;border-bottom:1px solid transparent}
+  .nav-links a:hover,.nav-links a:focus-visible{border-bottom-color:var(--accent);color:var(--ink)}
+  .nav-links a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+  @media (max-width:480px){ .nav-links a:nth-child(3){display:none} }
+
+  .wrap{max-width:680px;margin:0 auto;padding:72px 24px 100px}
+  .issue-tag{
+    display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;
+    letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin-bottom:22px;
+  }
+  .issue-tag::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent-2)}
+  .kicker{font-size:12.5px;font-weight:700;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;margin-bottom:16px}
+  h1{font-size:clamp(27px,4.3vw,38px);font-weight:800;letter-spacing:-.015em;line-height:1.3;margin-bottom:24px}
+  .dek{font-size:16.5px;color:var(--ink-2);line-height:1.7;max-width:56ch;margin-bottom:36px}
+  .byline{
+    display:flex;align-items:center;gap:12px;font-size:13px;color:var(--muted);
+    margin-bottom:56px;padding-bottom:26px;border-bottom:1px solid var(--hairline);
+  }
+  .byline .avatar{width:32px;height:32px;border-radius:50%;background:var(--surface);border:1px solid var(--hairline);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--accent)}
+
+  article p{font-size:16.5px;line-height:1.95;color:var(--ink-2);margin-bottom:27px}
+  article p:first-of-type::first-letter{
+    font-family:var(--font-serif);
+    font-size:46px;line-height:1;font-weight:700;color:var(--accent);
+    float:left;padding-right:9px;padding-top:5px;
+  }
+  .inline-h{
+    display:block;font-size:12.5px;font-weight:800;letter-spacing:.07em;
+    color:var(--accent);text-transform:uppercase;margin:56px 0 20px;
+  }
+  article p strong{color:var(--ink);font-weight:700}
+  article p sup{font-size:11px;color:var(--accent-2);font-weight:700;margin-left:1px}
+
+  blockquote{
+    margin:38px 0;padding-left:22px;border-left:3px solid var(--accent-2);
+    font-family:var(--font-serif);
+    font-size:19px;line-height:1.6;color:var(--ink);font-style:italic;
+  }
+
+  .footnote{
+    margin-top:52px;padding-top:20px;border-top:1px solid var(--hairline);
+    font-size:12.5px;line-height:1.8;color:var(--muted);
+  }
+  .footnote b{color:var(--ink-2);font-weight:700}
+
+  .signoff{
+    margin-top:56px;padding:28px 26px;background:var(--surface);border-radius:14px;
+    display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  }
+  .signoff p{font-size:14.5px;color:var(--ink-2);margin:0;max-width:34ch}
+  .subscribe{
+    display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:var(--on-accent);
+    border:none;border-radius:999px;padding:12px 20px;font-size:13.5px;font-weight:700;
+    text-decoration:none;min-height:44px;white-space:nowrap;
+  }
+  .subscribe:hover{background:var(--accent)}
+  .subscribe:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+  footer.site{
+    max-width:680px;margin:64px auto 0;padding:24px 24px 0;border-top:1px solid var(--hairline);
+    display:flex;justify-content:space-between;font-size:12px;color:var(--muted);flex-wrap:wrap;gap:8px;
+  }
+  footer.site a{color:var(--muted);text-decoration:none}
+  footer.site a:hover{color:var(--accent)}
+
+  .demo-bar{
+    position:fixed;left:0;right:0;bottom:0;height:40px;background:var(--ink);color:var(--on-accent);
+    display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;letter-spacing:.01em;z-index:50;
+  }
+  .demo-bar code{font-family:var(--mono);background:rgba(var(--overlay-white-rgb),.14);padding:2px 8px;border-radius:6px}
+
+  @media (max-width:520px){
+    .wrap{padding:56px 20px 90px}
+    article p:first-of-type::first-letter{font-size:36px}
+    .signoff{flex-direction:column;align-items:flex-start}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.001ms !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="brand">계절가게</div>
+  <div class="nav-links"><a href="#">읽을거리</a><a href="#">매장 안내</a><a href="#">소식 구독</a></div>
+</nav>
+
+<div class="wrap">
+  <p class="issue-tag skin-badge">읽을거리 · 제 14호</p>
+  <p class="kicker">창업자의 글</p>
+  <h1 class="skin-heading">왜 우리는 재고를 "숨기지 않기"로 했나</h1>
+  <p class="dek">작은 식료품 가게 하나를 3년째 운영하며 배운 것을, 마케팅 문구로 다듬지 않고 그대로 적어본다.</p>
+  <div class="byline">
+    <div class="avatar skin-frame">다</div>
+    <span>최다인 · 계절가게 대표 — 2026년 여름에 씀 · 읽는 데 6분</span>
+  </div>
+
+  <article>
+    <p>이 글은 광고가 아니다. 처음 재고관리 서비스를 만들겠다고 했을 때, 주변에서는 다들 "재고는 어차피 다 비슷하다"고 했다. 틀린 말은 아니었다. 다만 우리가 정말 바꾸고 싶었던 건 재고 그 자체가 아니라, <strong>재고를 숨기는 습관</strong>이었다.</p>
+
+    <p>작은 사업장일수록 재고 데이터는 감춰진다. 부족한 걸 들키기 싫어서, 남는 걸 설명하기 귀찮아서. 그렇게 숫자는 엑셀 어딘가에 묻히고, 다음 발주는 감으로 나간다. 계절가게도 처음 1년은 그랬다.<sup>1</sup> 우리는 이 악순환을 끊는 것부터 시작하기로 했다.</p>
+
+    <span class="inline-h">첫 번째 결정 — 숫자를 먼저 보여준다</span>
+    <p>매대 앞 태블릿에 가장 먼저 보이는 화면은 판매 순위가 아니라 오늘의 재고 현황이어야 한다고 정했다. 문을 열자마자 부족한 품목과 유통기한이 임박한 품목이 나란히 보인다. 불편할 수 있다. 하지만 불편함을 감추는 것보다, 불편함을 인정하고 마주 보게 하는 편이 결국 더 오래가는 신뢰를 만든다고 믿었다.</p>
+
+    <p>이 결정을 두고 내부에서도 의견이 갈렸다. "손님이 재고 부족 화면을 보면 불안해하지 않을까"라는 우려가 있었다. 실제로 초반 몇 주는 직원들도 이 화면을 어색해했다. 그러나 석 달이 지나자 발주 실수로 인한 폐기량이 눈에 띄게 줄었다 — 숨기지 않으니 미루지 않게 됐다는 뜻이다.</p>
+
+    <blockquote>숨긴 재고는 사라지지 않는다. 다음 달, 더 큰 폐기량이 되어 돌아올 뿐이다.</blockquote>
+
+    <span class="inline-h">두 번째 결정 — 발주 제안은 이유를 함께 적는다</span>
+    <p>자동 발주 제안 기능을 만들 때도 같은 원칙을 지켰다. "이 품목을 40개 주문하세요"라고만 말하지 않는다. "지난 4주 평균 판매 속도와 산지 배송 리드타임을 기준으로 40개"라고, 근거를 함께 적는다. 근거 없는 숫자는 신뢰를 얻지 못한다는 걸, 우리 스스로도 매대를 채우며 배웠다.</p>
+
+    <p>이 원칙은 지금도 매주 화요일 운영 회의의 첫 질문이다. "이 화면은 이유를 설명하고 있는가." 아니라면, 아무리 깔끔해 보여도 다시 만든다.</p>
+
+    <span class="inline-h">지금, 그리고 다음</span>
+    <p>3년이 지난 지금, 계절가게는 여전히 매장이 두 곳뿐이다. 다만 폐기율은 처음 해보다 눈에 띄게 낮아졌다.<sup>2</sup> 정확한 숫자를 자랑처럼 내걸고 싶지는 않다. 그보다는, 다음 계절에도 같은 질문을 스스로에게 던지고 싶다 — "이 화면은 이유를 설명하고 있는가."</p>
+  </article>
+
+  <div class="footnote">
+    <p><b>1.</b> 정확히는 2023년 9월부터 2024년 6월까지, 발주는 전적으로 점장의 경험에 의존했다.</p>
+    <p><b>2.</b> 내부 집계 기준이며 외부 감사를 거치지 않았다 — 이 자체도 앞으로 고쳐야 할 부분이라 생각한다.</p>
+  </div>
+
+  <div class="signoff skin-surface">
+    <p>다음 글도 이렇게, 광고 없이 보내드립니다. 한 달에 한 번, 많지 않게.</p>
+    <a class="subscribe skin-cta" href="#" onclick="return false">소식 구독하기 →</a>
+  </div>
+
+  <footer class="site">
+    <span>&copy; 2026 계절가게</span>
+    <span><a href="#">이전 글 보기</a> · <a href="#">매장 안내</a></span>
+  </footer>
+</div>
+
+<div class="demo-bar">롱 다큐먼트 골격 데모 · <code>/taste --macro=long-document</code></div>
+</body>
+</html>

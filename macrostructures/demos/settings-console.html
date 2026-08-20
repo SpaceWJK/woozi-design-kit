@@ -1,0 +1,232 @@
+<!-- macro-demo: settings-console | 골격: 설정 콘솔 | design: macrostructure=settings-console preset=neutral-navy(custom) | 근거: SaaS 조직 관리자 설정 시나리오 — 좌측 섹션 내비+우측 폼 그룹 스택, 한 번에 한 섹션만 노출해 압도 방지 | gate: WCAG ✓ AI-tell ✓ token ✓ | score: Philosophy 4 Hierarchy 5 Execution 4 Specificity 4 Restraint 5 Variety 4 -->
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>Norio — 조직 설정 콘솔 골격 데모</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --bg:#f4f5f7; --card:#ffffff; --ink:#151a22; --mute:#5b6373; --faint:#8c93a3;
+    --line:#e2e5ea; --accent:#2d4a6b; --accent-tint:#e7edf3; --accent-bright:#39597e;
+    --danger:#a13a34; --danger-tint:#fbe9e8; --ok:#1f7a4f; --ok-tint:#e3f5ea;
+    --dark:#151a22;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Consolas,"Liberation Mono",monospace;
+    --ease:cubic-bezier(.4,0,.2,1);
+    --on-dark:#fff;
+    --shadow-rgb:21,26,34; --switch-shadow-rgb:0,0,0;
+    --bar-fg:#e2e4ea; --dark-line:#262b34;
+    --skin-intensity:0.5;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:var(--font);color:var(--ink);background:var(--bg);line-height:1.55;word-break:keep-all;overflow-x:hidden;font-size:14px}
+  ::selection{background:var(--accent);color:var(--on-dark)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  button,input,select,textarea{font-family:inherit}
+
+  header.top{background:var(--card);border-bottom:1px solid var(--line);padding:16px 24px;display:flex;align-items:center;gap:10px}
+  .wordmark{font-weight:800;font-size:15px;display:flex;align-items:center;gap:8px}
+  .wordmark .dot{width:9px;height:9px;border-radius:3px;background:var(--accent)}
+  .crumb{font-size:12.5px;color:var(--mute)}
+  .crumb b{color:var(--ink)}
+
+  .shell{max-width:1100px;margin:0 auto;padding:28px 24px 100px;display:grid;grid-template-columns:236px minmax(0,1fr);gap:28px;align-items:start}
+  @media (max-width:820px){.shell{grid-template-columns:1fr;gap:16px}}
+
+  nav.side-nav{position:sticky;top:24px;display:flex;flex-direction:column;gap:2px}
+  @media (max-width:820px){nav.side-nav{position:static;flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:4px}}
+  .side-nav .grp{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);padding:14px 12px 6px}
+  @media (max-width:820px){.side-nav .grp{display:none}}
+  .snav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;color:var(--mute);text-decoration:none;font-size:13px;font-weight:600;background:none;border:none;cursor:pointer;text-align:left;white-space:nowrap}
+  .snav-item svg{flex:none}
+  .snav-item:hover{background:var(--card);color:var(--ink)}
+  .snav-item.on{background:var(--accent-tint);color:var(--accent);font-weight:800}
+
+  .panel h1{font-size:19px;font-weight:800;letter-spacing:-.01em}
+  .panel > p.lead{font-size:12.5px;color:var(--mute);margin-top:5px;margin-bottom:22px}
+
+  .grp-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:16px;box-shadow:0 1px 3px rgba(var(--shadow-rgb),.03)}
+  .grp-card h2{font-size:14.5px;font-weight:800}
+  .grp-card .gc-sub{font-size:12px;color:var(--mute);margin-top:4px;margin-bottom:18px}
+
+  .field{display:grid;grid-template-columns:180px minmax(0,1fr);gap:16px;padding:14px 0;border-top:1px solid var(--line)}
+  .grp-card .field:first-of-type{border-top:none;padding-top:0}
+  @media (max-width:640px){.field{grid-template-columns:1fr;gap:6px}}
+  .field label{font-size:12.5px;font-weight:700;color:var(--ink);padding-top:9px}
+  .field .hint{font-size:11.5px;color:var(--faint);margin-top:5px}
+  .field input[type=text],.field input[type=email],.field select,.field textarea{
+    width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--ink);background:var(--bg);min-height:38px;transition:border-color .15s var(--ease)
+  }
+  .field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{border-color:var(--accent);background:var(--card)}
+  .field textarea{min-height:76px;resize:vertical}
+
+  .switch-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 0;border-top:1px solid var(--line)}
+  .grp-card .switch-row:first-of-type{border-top:none;padding-top:0}
+  .switch-row .sw-l{font-size:13px;font-weight:700}
+  .switch-row .sw-d{font-size:11.5px;color:var(--mute);margin-top:3px}
+  .switch{position:relative;width:42px;height:24px;flex:none}
+  .switch input{opacity:0;width:100%;height:100%;position:absolute;margin:0;cursor:pointer}
+  .switch .track{position:absolute;inset:0;background:var(--line);border-radius:999px;transition:background .18s var(--ease)}
+  .switch .thumb{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--card);box-shadow:0 1px 2px rgba(var(--switch-shadow-rgb),.2);transition:transform .18s var(--ease)}
+  .switch input:checked + .track{background:var(--accent)}
+  .switch input:checked + .track + .thumb{transform:translateX(18px)}
+  .switch input:focus-visible + .track{outline:2px solid var(--accent);outline-offset:2px}
+
+  .gc-foot{display:flex;justify-content:flex-end;gap:10px;padding-top:16px;border-top:1px solid var(--line);margin-top:4px}
+  .btn{font-weight:700;cursor:pointer;border-radius:8px;font-size:12.5px;padding:9px 18px;min-height:38px;border:1px solid transparent}
+  .btn-primary{background:var(--accent);color:var(--on-dark)}
+  .btn-primary:hover{background:var(--accent-bright)}
+  .btn-outline{background:var(--card);border-color:var(--line);color:var(--ink)}
+  .btn-outline:hover{border-color:var(--accent)}
+  .btn-danger-outline{background:var(--card);border-color:var(--danger-tint);color:var(--danger)}
+  .btn-danger-outline:hover{background:var(--danger-tint)}
+
+  .danger-card{border-color:var(--danger-tint)}
+  .danger-card h2{color:var(--danger)}
+
+  .saved-toast{position:fixed;left:50%;bottom:56px;transform:translate(-50%,10px);background:var(--dark);color:var(--on-dark);font-size:12.5px;font-weight:700;padding:10px 18px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .2s var(--ease),transform .2s var(--ease);z-index:80;display:flex;align-items:center;gap:7px}
+  .saved-toast.show{opacity:1;transform:translate(-50%,0)}
+  .saved-toast svg{color:var(--ok)}
+
+  .demo-bar{position:fixed;left:0;right:0;bottom:0;background:var(--dark);color:var(--bar-fg);font-size:11px;letter-spacing:.04em;padding:9px 16px;text-align:center;z-index:70;border-top:1px solid var(--dark-line)}
+  .demo-bar code{color:var(--accent-bright)}
+  .section{display:none}
+  .section.on{display:block}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wordmark"><span class="dot"></span>NORIO</div>
+  <span class="crumb">/ <b>조직 설정</b></span>
+</header>
+
+<div class="shell">
+  <nav class="side-nav" aria-label="설정 섹션">
+    <div class="grp">계정</div>
+    <button class="snav-item on" data-s="profile"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>프로필</button>
+    <button class="snav-item" data-s="security"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>보안</button>
+    <div class="grp">조직</div>
+    <button class="snav-item" data-s="members"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M2 20c0-3 3-5 7-5s7 2 7 5"/><circle cx="18" cy="9" r="2.4"/><path d="M22 20c0-2.2-1.8-3.8-4-4.3"/></svg>구성원</button>
+    <button class="snav-item" data-s="billing"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20"/></svg>결제</button>
+    <div class="grp">알림</div>
+    <button class="snav-item" data-s="notif"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>알림 채널</button>
+  </nav>
+
+  <div class="panel">
+
+    <section class="section on" id="sec-profile">
+      <h1>프로필</h1>
+      <p class="lead">조직 내에서 다른 구성원에게 표시되는 기본 정보입니다.</p>
+      <div class="grp-card skin-surface">
+        <h2>기본 정보</h2>
+        <p class="gc-sub">이름과 이메일은 SSO 연동 계정일 경우 IdP에서만 변경 가능합니다.</p>
+        <div class="field"><label for="f-name">표시 이름</label><div><input id="f-name" type="text" value="한지민"><div class="hint">동료에게 보이는 이름입니다.</div></div></div>
+        <div class="field"><label for="f-email">이메일</label><div><input id="f-email" type="email" value="jimin.han@norio-corp.io" disabled></div></div>
+        <div class="field"><label for="f-role">직무</label><div><input id="f-role" type="text" value="백엔드 엔지니어"></div></div>
+        <div class="field"><label for="f-tz">시간대</label><div>
+          <select id="f-tz">
+            <option>(UTC+09:00) 서울</option>
+            <option>(UTC+00:00) 런던</option>
+            <option>(UTC-08:00) 로스앤젤레스</option>
+          </select>
+        </div></div>
+        <div class="gc-foot"><button class="btn btn-outline skin-cta">취소</button><button class="btn btn-primary skin-cta" id="saveBtn1">저장</button></div>
+      </div>
+      <div class="grp-card skin-surface">
+        <h2>자기소개</h2>
+        <p class="gc-sub">팀 디렉토리에 표시되는 짧은 소개입니다.</p>
+        <div class="field"><label for="f-bio">소개</label><div><textarea id="f-bio">결제 인프라 팀에서 정산 시스템을 담당하고 있습니다.</textarea></div></div>
+        <div class="gc-foot"><button class="btn btn-outline skin-cta">취소</button><button class="btn btn-primary skin-cta" id="saveBtn2">저장</button></div>
+      </div>
+    </section>
+
+    <section class="section" id="sec-security">
+      <h1>보안</h1>
+      <p class="lead">계정 접근 방식과 세션을 관리합니다.</p>
+      <div class="grp-card skin-surface">
+        <h2>2단계 인증</h2>
+        <p class="gc-sub">로그인 시 추가 인증 수단을 요구합니다.</p>
+        <div class="switch-row"><div><div class="sw-l">앱 기반 OTP</div><div class="sw-d">Google Authenticator, Authy 등</div></div><label class="switch"><input type="checkbox" checked><span class="track"></span><span class="thumb"></span></label></div>
+        <div class="switch-row"><div><div class="sw-l">SMS 인증</div><div class="sw-d">국내 번호만 지원, 해외 로밍 시 지연 가능</div></div><label class="switch"><input type="checkbox"><span class="track"></span><span class="thumb"></span></label></div>
+        <div class="switch-row"><div><div class="sw-l">보안키 (FIDO2)</div><div class="sw-d">YubiKey 등 하드웨어 키 등록</div></div><label class="switch"><input type="checkbox"><span class="track"></span><span class="thumb"></span></label></div>
+      </div>
+      <div class="grp-card skin-surface">
+        <h2>활성 세션</h2>
+        <p class="gc-sub">현재 로그인된 기기 2개</p>
+        <div class="field"><label>MacBook Pro</label><div style="font-size:12.5px;color:var(--mute)">서울 · Chrome 128 · 방금 활성</div></div>
+        <div class="field"><label>iPhone 15</label><div style="font-size:12.5px;color:var(--mute)">서울 · 앱 v4.2.0 · 3시간 전</div></div>
+        <div class="gc-foot"><button class="btn btn-outline skin-cta">모든 세션 로그아웃</button></div>
+      </div>
+    </section>
+
+    <section class="section" id="sec-members">
+      <h1>구성원</h1>
+      <p class="lead">조직에 소속된 구성원과 권한을 관리합니다.</p>
+      <div class="grp-card skin-surface">
+        <h2>구성원 12명</h2>
+        <p class="gc-sub">초대 대기 2건</p>
+        <div class="field"><label>한지민</label><div style="font-size:12.5px;color:var(--mute)">Owner · 결제 인프라팀</div></div>
+        <div class="field"><label>오세훈</label><div style="font-size:12.5px;color:var(--mute)">Admin · 플랫폼팀</div></div>
+        <div class="field"><label>배수지</label><div style="font-size:12.5px;color:var(--mute)">Member · 프론트엔드팀</div></div>
+        <div class="gc-foot"><button class="btn btn-primary skin-cta">+ 구성원 초대</button></div>
+      </div>
+    </section>
+
+    <section class="section" id="sec-billing">
+      <h1>결제</h1>
+      <p class="lead">요금제와 결제 수단을 관리합니다.</p>
+      <div class="grp-card skin-surface">
+        <h2>현재 요금제</h2>
+        <p class="gc-sub">Business 플랜 · 다음 결제일 2026-09-01</p>
+        <div class="field"><label>월 청구액</label><div style="font-size:13px;font-weight:800">₩1,240,000 <span style="color:var(--faint);font-weight:600;font-size:12px">/ 좌석 31개 기준</span></div></div>
+        <div class="field"><label>결제 수단</label><div style="font-size:12.5px;color:var(--mute)">신한카드 •••• 4821</div></div>
+        <div class="gc-foot"><button class="btn btn-outline skin-cta">인보이스 내역</button><button class="btn btn-primary skin-cta">플랜 변경</button></div>
+      </div>
+    </section>
+
+    <section class="section" id="sec-notif">
+      <h1>알림 채널</h1>
+      <p class="lead">각 이벤트를 어떤 채널로 받을지 설정합니다.</p>
+      <div class="grp-card skin-surface">
+        <h2>업무 알림</h2>
+        <div class="switch-row"><div><div class="sw-l">멘션 알림</div><div class="sw-d">댓글·이슈에서 언급될 때</div></div><label class="switch"><input type="checkbox" checked><span class="track"></span><span class="thumb"></span></label></div>
+        <div class="switch-row"><div><div class="sw-l">주간 요약 이메일</div><div class="sw-d">매주 월요일 오전 9시 발송</div></div><label class="switch"><input type="checkbox" checked><span class="track"></span><span class="thumb"></span></label></div>
+        <div class="switch-row"><div><div class="sw-l">마케팅 소식</div><div class="sw-d">신규 기능·이벤트 안내</div></div><label class="switch"><input type="checkbox"><span class="track"></span><span class="thumb"></span></label></div>
+      </div>
+      <div class="grp-card danger-card skin-surface">
+        <h2>계정 삭제</h2>
+        <p class="gc-sub">조직 전체 데이터가 영구적으로 삭제되며 되돌릴 수 없습니다.</p>
+        <div class="gc-foot"><button class="btn btn-danger-outline skin-cta">조직 삭제 요청</button></div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<div class="saved-toast" id="toast"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg>변경사항이 저장되었습니다</div>
+<div class="demo-bar">설정 콘솔 골격 데모 · <code>/taste --macro=settings-console</code></div>
+
+<script>
+(function(){
+  var navItems=document.querySelectorAll('.snav-item');
+  navItems.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      navItems.forEach(function(b){b.classList.remove('on')});
+      btn.classList.add('on');
+      document.querySelectorAll('.section').forEach(function(s){s.classList.remove('on')});
+      document.getElementById('sec-'+btn.getAttribute('data-s')).classList.add('on');
+    });
+  });
+  var toast=document.getElementById('toast');
+  function flash(){ toast.classList.add('show'); clearTimeout(window.__t); window.__t=setTimeout(function(){toast.classList.remove('show')},1800); }
+  ['saveBtn1','saveBtn2'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el) el.addEventListener('click',flash);
+  });
+})();
+</script>
+</body>
+</html>

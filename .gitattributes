@@ -1,0 +1,8 @@
+# Normalize line endings to LF regardless of the checkout platform or the
+# cloning user's local `core.autocrlf` setting. Without this, Windows users
+# who clone with Git's own default (`core.autocrlf=true`) get CRLF line
+# endings in every text file, which can break parsers that assume LF or
+# anchor regexes on end-of-line. This file is the first line of defense;
+# the second is that scripts/lint-designkit.mjs normalizes `\r\n` -> `\n`
+# after reading, as defense in depth.
+* text=auto eol=lf

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="300" height="200">
+  <rect x="0.0" y="0.0" width="300.0" height="200.0" fill="#fafafa"/>
+  <text x="14.0" y="24.0" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="#3f3f46" text-anchor="start">포트폴리오 그리드</text>
+  <text x="286.0" y="24.0" font-family="ui-monospace,monospace" font-size="8" font-weight="400" fill="#9a9aa2" text-anchor="end">portfolio-grid</text>
+  <rect x="14.0" y="30.0" width="272.0" height="156.0" fill="none" stroke="#c9c9cf" stroke-width="1"/>
+  <rect x="14.0" y="30.0" width="30.0" height="12.0" fill="#a1a1aa" rx="6"/>
+  <rect x="50.0" y="30.0" width="30.0" height="12.0" fill="#e4e4e7" rx="6"/>
+  <rect x="86.0" y="30.0" width="30.0" height="12.0" fill="#e4e4e7" rx="6"/>
+  <rect x="122.0" y="30.0" width="30.0" height="12.0" fill="#e4e4e7" rx="6"/>
+  <rect x="14.0" y="52.0" width="85.3" height="49.1" fill="#d4d4d8"/>
+  <rect x="14.0" y="105.1" width="59.7" height="4.0" fill="#e4e4e7"/>
+  <rect x="107.3" y="52.0" width="85.3" height="49.1" fill="#d4d4d8"/>
+  <rect x="107.3" y="105.1" width="59.7" height="4.0" fill="#e4e4e7"/>
+  <rect x="200.7" y="52.0" width="85.3" height="49.1" fill="#d4d4d8"/>
+  <rect x="200.7" y="105.1" width="59.7" height="4.0" fill="#e4e4e7"/>
+  <rect x="14.0" y="123.0" width="85.3" height="49.1" fill="#d4d4d8"/>
+  <rect x="14.0" y="176.1" width="59.7" height="4.0" fill="#e4e4e7"/>
+  <rect x="107.3" y="123.0" width="85.3" height="49.1" fill="#d4d4d8"/>
+  <rect x="107.3" y="176.1" width="59.7" height="4.0" fill="#e4e4e7"/>
+  <rect x="200.7" y="123.0" width="85.3" height="49.1" fill="#d4d4d8"/>
+  <rect x="200.7" y="176.1" width="59.7" height="4.0" fill="#e4e4e7"/>
+</svg>

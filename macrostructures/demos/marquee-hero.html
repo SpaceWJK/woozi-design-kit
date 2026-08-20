@@ -1,0 +1,139 @@
+<!doctype html>
+<!-- macro-demo: marquee-hero | 골격: 마퀴 히어로 | design: macrostructure=marquee-hero preset=custom-accent(dark+amber) | gate: WCAG ✓ AI-tell ✓ token ✓ | score: Philosophy 4 Hierarchy 5 Execution 4 Specificity 4 Restraint 4 Variety 4 -->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>마퀴 히어로 골격 데모 — 하루문방구 2026 가을 컬렉션</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#121210;--surface:#1c1b17;--hairline:#332f27;
+    --ink:#f5f3ee;--ink-2:#c9c4b8;--muted:#8b8577;
+    --accent:#d99a2b;--accent-ink:#1a1610;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Pretendard,"Malgun Gothic",sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+    --accent-hover:#e8ad45;--overlay-white-rgb:255,255,255;
+  }
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--font);
+    word-break:keep-all;overflow-wrap:break-word;
+    display:flex;flex-direction:column;
+  }
+  ::selection{background:var(--accent);color:var(--accent-ink)}
+
+  .nav{
+    max-width:1080px;width:100%;margin:0 auto;padding:26px 24px;
+    display:flex;align-items:center;justify-content:space-between;position:relative;z-index:2;
+  }
+  .brand{font-size:15px;font-weight:800;letter-spacing:.02em}
+  .brand em{color:var(--accent);font-style:normal}
+  .nav-links{display:flex;align-items:center;gap:26px;font-size:13.5px;color:var(--ink-2)}
+  .nav-links a{text-decoration:none;border-bottom:1px solid transparent;padding-bottom:2px}
+  .nav-links a:hover{color:var(--ink);border-bottom-color:var(--accent)}
+  .nav-links a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  @media (max-width:600px){ .nav-links{display:none} }
+
+  .stage{
+    flex:1;min-height:calc(100dvh - 84px);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:32px 24px 64px;position:relative;
+  }
+  .tag{
+    font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:26px;display:inline-flex;align-items:center;gap:8px;
+  }
+  .tag::before,.tag::after{content:"";width:16px;height:1px;background:var(--accent);opacity:.6}
+  h1{
+    font-size:clamp(38px,8.6vw,104px);font-weight:800;letter-spacing:-.03em;line-height:1.03;
+    max-width:15ch;
+  }
+  h1 .em{color:var(--accent)}
+  .sub{margin-top:26px;font-size:clamp(15px,1.6vw,18.5px);color:var(--ink-2);max-width:44ch;line-height:1.65}
+  .cta-row{margin-top:40px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:center}
+  .cta{
+    display:inline-flex;align-items:center;gap:9px;background:var(--accent);color:var(--accent-ink);
+    border:none;border-radius:999px;padding:16px 28px;font-size:15px;font-weight:800;
+    text-decoration:none;min-height:44px;
+  }
+  .cta:hover{background:var(--accent-hover)}
+  .cta:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+  .cta-ghost{
+    font-size:14px;font-weight:700;color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--hairline);
+    padding-bottom:3px;min-height:44px;display:inline-flex;align-items:center;
+  }
+  .cta-ghost:hover{color:var(--ink);border-bottom-color:var(--accent)}
+  .cta-ghost:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+  .meta-row{margin-top:52px;display:flex;justify-content:center;gap:36px;font-size:12px;color:var(--muted);letter-spacing:.03em;flex-wrap:wrap}
+  .meta-row span{white-space:nowrap;display:inline-flex;align-items:center;gap:7px}
+  .meta-row span::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent)}
+
+  /* below-fold: static press-mention strip (no motion, avoids reduced-motion / SR complexity of a scrolling marquee) */
+  .press{border-top:1px solid var(--hairline);padding:26px 24px;text-align:center}
+  .press-label{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+  .press-row{display:flex;justify-content:center;gap:34px;flex-wrap:wrap;font-size:14px;font-weight:700;color:var(--ink-2);letter-spacing:.01em}
+
+  .strip{border-top:1px solid var(--hairline);display:grid;grid-template-columns:repeat(3,1fr)}
+  .strip-item{padding:28px 24px;border-left:1px solid var(--hairline);text-align:center}
+  .strip-item:first-child{border-left:none}
+  .strip-item .k{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px}
+  .strip-item .v{font-size:12.5px;color:var(--muted)}
+  @media (max-width:640px){
+    .strip{grid-template-columns:1fr}
+    .strip-item{border-left:none;border-top:1px solid var(--hairline)}
+    .strip-item:first-child{border-top:none}
+  }
+
+  .demo-bar{
+    height:40px;background:var(--surface);color:var(--ink-2);border-top:1px solid var(--hairline);
+    display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;letter-spacing:.01em;flex-shrink:0;
+  }
+  .demo-bar code{font-family:var(--mono);background:rgba(var(--overlay-white-rgb),.08);padding:2px 8px;border-radius:6px}
+
+  @media (max-width:520px){
+    .meta-row{flex-direction:column;align-items:center;gap:10px}
+    .press-row{gap:18px 26px}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.001ms !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
+  }
+</style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="brand">하루<em>문방구</em></div>
+    <div class="nav-links"><a href="#">컬렉션</a><a href="#">매장 찾기</a><a href="#">장바구니</a></div>
+  </nav>
+
+  <main class="stage">
+    <p class="tag skin-badge">2026 가을 컬렉션</p>
+    <h1 class="skin-heading">가을, <span class="em">나만의 문구함</span>을<br>채우는 시간</h1>
+    <p class="sub">잉크 색 하나까지 계절을 담았습니다. 스크롤 없이도 오늘 우리가 뭘 선보이는지 이 화면 하나로 충분합니다.</p>
+    <div class="cta-row">
+      <a class="cta skin-cta" href="#" onclick="return false">컬렉션 예약 구매 →</a>
+      <a class="cta-ghost skin-cta" href="#" onclick="return false">룩북 먼저 보기</a>
+    </div>
+    <div class="meta-row">
+      <span><!-- mockup: 데모용 플레이스홀더 수치 -->누적 판매 214,000개+</span>
+      <span>5만원 이상 무료 배송</span>
+      <span>한정 수량 소진 임박</span>
+    </div>
+  </main>
+
+  <section class="press">
+    <p class="press-label">이렇게 소개됐습니다</p>
+    <div class="press-row"><span>월간 문구라이프</span><span>굿즈레터</span><span>오늘의집 매거진</span><span>디자인프레스</span></div>
+  </section>
+
+  <section class="strip">
+    <div class="strip-item skin-surface"><div class="k">재생지 92%</div><div class="v">친환경 소재로 제작한 본문 용지</div></div>
+    <div class="strip-item skin-surface"><div class="k">전 색상 6종</div><div class="v">가을 한정 잉크 컬러 공개</div></div>
+    <div class="strip-item skin-surface"><div class="k">30일 교환</div><div class="v">색이 마음에 안 들면 그대로 교환</div></div>
+  </section>
+
+  <div class="demo-bar">마퀴 히어로 골격 데모 · <code>/taste --macro=marquee-hero</code></div>
+</body>
+</html>

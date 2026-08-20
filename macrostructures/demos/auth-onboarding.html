@@ -1,0 +1,196 @@
+<!doctype html>
+<!-- macro-demo: auth-onboarding | 골격: 인증 온보딩 | design: macrostructure=auth-onboarding preset=focused-signup-indigo | gate: WCAG ✓ AI-tell ✓ token ✓ | score: Philosophy5 Hierarchy5 Execution5 Specificity4 Restraint5 Variety4 -->
+<!-- design 근거: 내비/사이드바 없이 화면 중앙 고정폭 카드 하나에 스텝 인디케이터+폼+CTA만 쌓아 "완료해야 할 단 하나의 동작"에 집중시키는 골격을 그대로 구현. 가상 팀 협업툴 "스퀘어노트"의 3단계 가입 플로우(계정→팀 정보→완료)로 구체 시나리오 확보. 실제 페이지 이동 없이 JS로 스텝을 전환하고, 진행 인디케이터·입력 검증(빈 값 방지)이 실동작하는 인터랙션. -->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>스퀘어노트 — 시작하기</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="macrostructure=auth-onboarding 골격 데모 · 중앙 고정폭 카드에 스텝과 폼만 남긴 온보딩 구조">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;overflow-x:hidden;max-width:100%}
+:root{
+  --paper:#f5f6f8;--card:#ffffff;--ink:#1a1c22;--mute:#666b76;--line:#e1e4ea;
+  --accent:#4a54e1;--accent-ink:#363fc4;--ok:#1e7a4f;--err:#b3261e;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --accent-glow:#eef0ff;--shadow-rgb:20,20,40;--ink-soft:#33363d;--on-accent:#fff;--ok-tint:#e7f6ee;--paper-rgb:245,246,248;
+}
+body{min-height:100dvh;margin:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--font);
+  color:var(--ink);background:radial-gradient(circle at 20% 15%,var(--accent-glow) 0%,var(--paper) 45%);word-break:keep-all;
+  padding:32px 16px}
+button,input,select{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+
+.wrap{width:100%;max-width:420px}
+.brand{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:22px;font-weight:700;font-size:14.5px}
+.brand .dot{width:9px;height:9px;border-radius:3px;background:var(--accent);display:inline-block}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:32px 30px;
+  box-shadow:0 12px 32px -18px rgba(var(--shadow-rgb),.18)}
+
+.steps{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:26px}
+.step-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;
+  justify-content:center;font-size:12px;font-weight:700;color:var(--mute);background:var(--card);flex-shrink:0}
+.step-line{width:36px;height:2px;background:var(--line)}
+.step-dot[data-state="active"]{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-glow)}
+.step-dot[data-state="done"]{border-color:var(--ok);background:var(--ok);color:var(--on-accent)}
+.step-line[data-state="done"]{background:var(--ok)}
+
+.panel{display:none}
+.panel[data-active="true"]{display:block}
+
+h1{font-size:20px;margin:0 0 6px;text-align:center;letter-spacing:-.01em}
+.sub{font-size:13px;color:var(--mute);text-align:center;margin:0 0 24px}
+
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12.5px;font-weight:700;color:var(--ink-soft);margin-bottom:6px}
+.field input,.field select{width:100%;height:44px;border:1px solid var(--line);border-radius:9px;padding:0 12px;
+  font-size:14px;color:var(--ink);background:var(--card)}
+.field input:focus,.field select:focus{border-color:var(--accent)}
+.hint{font-size:11.5px;color:var(--mute);margin-top:5px}
+.error-msg{font-size:12px;color:var(--err);margin-top:5px;min-height:14px}
+
+.btn{width:100%;height:46px;border-radius:10px;border:0;font-size:14.5px;font-weight:700;cursor:pointer;
+  background:var(--accent);color:var(--on-accent);transition:background .15s ease}
+.btn:hover{background:var(--accent-ink)}
+.btn:active{transform:translateY(1px)}
+.btn-link{background:none;border:0;color:var(--mute);font-size:12.5px;cursor:pointer;padding:12px 0 0;width:100%;text-align:center}
+.btn-link:hover{color:var(--ink)}
+
+.done-icon{width:52px;height:52px;border-radius:50%;background:var(--ok-tint);color:var(--ok);display:flex;
+  align-items:center;justify-content:center;font-size:26px;margin:0 auto 16px}
+.checklist{list-style:none;margin:20px 0 26px;padding:0;font-size:13px;color:var(--ink-soft)}
+.checklist li{display:flex;gap:8px;padding:6px 0}
+.checklist li::before{content:"✓";color:var(--ok);font-weight:700}
+
+.foot-note{text-align:center;font-size:11.5px;color:var(--mute);margin-top:18px}
+.live-status{position:absolute;left:-9999px}
+
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+.demo-bar{position:fixed;left:0;right:0;bottom:0;z-index:999;background:rgba(var(--paper-rgb),.95);
+  backdrop-filter:blur(4px);border-top:1px solid var(--line);padding:9px 16px;font-size:11px;color:var(--mute);
+  text-align:center;font-family:var(--mono);letter-spacing:.02em}
+.demo-bar code{color:var(--accent-ink);font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="brand"><span class="dot" aria-hidden="true"></span>스퀘어노트</div>
+
+  <div class="card skin-surface">
+    <div class="steps" role="list" aria-label="가입 진행 단계">
+      <span class="step-dot" data-state="active" id="dot1" role="listitem">1</span>
+      <span class="step-line" id="line1"></span>
+      <span class="step-dot" id="dot2" role="listitem">2</span>
+      <span class="step-line" id="line2"></span>
+      <span class="step-dot" id="dot3" role="listitem">3</span>
+    </div>
+
+    <form id="form1" class="panel" data-active="true" novalidate>
+      <h1 class="skin-heading">계정 만들기</h1>
+      <p class="sub">팀을 초대하기 전에 관리자 계정을 먼저 생성합니다</p>
+      <div class="field">
+        <label for="email">업무 이메일</label>
+        <input id="email" type="email" placeholder="you@company.com" autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="pw">비밀번호</label>
+        <input id="pw" type="password" placeholder="8자 이상" autocomplete="new-password">
+        <p class="hint">영문, 숫자를 포함해 8자 이상 입력하세요</p>
+      </div>
+      <p class="error-msg" id="err1" role="alert"></p>
+      <button type="submit" class="btn skin-cta">다음</button>
+    </form>
+
+    <form id="form2" class="panel" novalidate>
+      <h1 class="skin-heading">팀 정보 입력</h1>
+      <p class="sub">워크스페이스를 설정하는 데 사용됩니다</p>
+      <div class="field">
+        <label for="teamName">팀 이름</label>
+        <input id="teamName" type="text" placeholder="예: 그로스마케팅팀">
+      </div>
+      <div class="field">
+        <label for="teamSize">팀 규모</label>
+        <select id="teamSize">
+          <option>1~5명</option>
+          <option>6~20명</option>
+          <option>21~50명</option>
+          <option>51명 이상</option>
+        </select>
+      </div>
+      <p class="error-msg" id="err2" role="alert"></p>
+      <button type="submit" class="btn skin-cta">다음</button>
+      <button type="button" class="btn-link skin-cta" id="back2">이전으로</button>
+    </form>
+
+    <div class="panel" id="panel3">
+      <div class="done-icon" aria-hidden="true">✓</div>
+      <h1 class="skin-heading">준비가 끝났습니다</h1>
+      <p class="sub">워크스페이스가 생성되었어요</p>
+      <ul class="checklist">
+        <li>관리자 계정 생성 완료</li>
+        <li>팀 워크스페이스 준비 완료</li>
+        <li>팀원 초대 링크 발급 완료</li>
+      </ul>
+      <button type="button" class="btn skin-cta" id="finishBtn">워크스페이스로 이동</button>
+    </div>
+  </div>
+
+  <p class="foot-note">이미 계정이 있으신가요? <a href="#" style="color:var(--accent-ink);font-weight:700;text-decoration:none">로그인</a></p>
+  <p class="live-status" role="status" id="liveStatus"></p>
+</div>
+
+<div class="demo-bar">인증 온보딩 골격 데모 · <code>/taste --macro=auth-onboarding</code></div>
+
+<script>
+(function(){
+  var panels = {1: document.getElementById('form1'), 2: document.getElementById('form2'), 3: document.getElementById('panel3')};
+  var dots = {1: document.getElementById('dot1'), 2: document.getElementById('dot2'), 3: document.getElementById('dot3')};
+  var lines = {1: document.getElementById('line1'), 2: document.getElementById('line2')};
+  var live = document.getElementById('liveStatus');
+
+  function goTo(step){
+    [1,2,3].forEach(function(n){
+      panels[n].setAttribute('data-active', String(n === step));
+      if(n < step){ dots[n].setAttribute('data-state','done'); dots[n].textContent = '✓'; }
+      else if(n === step){ dots[n].setAttribute('data-state','active'); dots[n].textContent = String(n); }
+      else { dots[n].removeAttribute('data-state'); dots[n].textContent = String(n); }
+    });
+    if(lines[1]) lines[1].setAttribute('data-state', step > 1 ? 'done' : '');
+    if(lines[2]) lines[2].setAttribute('data-state', step > 2 ? 'done' : '');
+    live.textContent = step + '단계로 이동';
+  }
+
+  document.getElementById('form1').addEventListener('submit', function(e){
+    e.preventDefault();
+    var email = document.getElementById('email').value.trim();
+    var pw = document.getElementById('pw').value;
+    var err = document.getElementById('err1');
+    if(!email || email.indexOf('@') === -1){ err.textContent = '올바른 이메일을 입력하세요.'; return; }
+    if(pw.length < 8){ err.textContent = '비밀번호는 8자 이상이어야 합니다.'; return; }
+    err.textContent = '';
+    goTo(2);
+  });
+
+  document.getElementById('form2').addEventListener('submit', function(e){
+    e.preventDefault();
+    var teamName = document.getElementById('teamName').value.trim();
+    var err = document.getElementById('err2');
+    if(!teamName){ err.textContent = '팀 이름을 입력하세요.'; return; }
+    err.textContent = '';
+    goTo(3);
+  });
+
+  document.getElementById('back2').addEventListener('click', function(){ goTo(1); });
+  document.getElementById('finishBtn').addEventListener('click', function(){
+    live.textContent = '데모입니다 — 실제 이동은 발생하지 않습니다';
+  });
+})();
+</script>
+</body>
+</html>

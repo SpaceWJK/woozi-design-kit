@@ -1,0 +1,298 @@
+<!doctype html>
+<!-- macro-demo: bento-grid | 골격: 벤토 그리드 | design: macrostructure=bento-grid preset=custom-accent(terracotta) | gate: WCAG ✓ AI-tell ✓ token ✓ | score: Philosophy 4 Hierarchy 4 Execution 4 Specificity 4 Restraint 4 Variety 4 -->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>벤토 그리드 골격 데모 — 소보로웍스</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#fbfaf7;--surface:#f2efe8;--surface-2:#ece7dd;--hairline:#e2ddd0;
+    --ink:#17140f;--ink-2:#4a443c;--muted:#8c8477;
+    --accent:#b5502e;--accent-ink:#fdf3ee;--accent-tint:#f4e3da;
+    --gold:#9c7a3f;--gold-tint:#f1e6d2;
+    --radius:18px;--gap:18px;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Pretendard,"Malgun Gothic",sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+    --on-accent:#fff;--shadow-rgb:23,20,15;--gold-ink:#5a4522;--overlay-white-rgb:255,255,255;
+  }
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--font);
+    word-break:keep-all;overflow-wrap:break-word;line-height:1.6;
+    padding-bottom:44px;
+  }
+  a{color:inherit}
+  ::selection{background:var(--accent-tint);color:var(--ink)}
+
+  /* ---- top nav ---- */
+  .nav{
+    max-width:1180px;margin:0 auto;padding:22px 24px;
+    display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid var(--hairline);
+  }
+  .brand{font-size:17px;font-weight:800;letter-spacing:-.01em}
+  .brand span{color:var(--accent)}
+  .nav-links{display:flex;align-items:center;gap:30px;font-size:14px;color:var(--ink-2)}
+  .nav-links a{text-decoration:none;position:relative;padding:6px 0}
+  .nav-links a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;background:var(--accent);transition:right .18s ease}
+  .nav-links a:hover::after,.nav-links a:focus-visible::after{right:0}
+  .nav-links a:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:2px}
+  .nav-cta{
+    background:var(--ink);color:var(--on-accent);border:none;border-radius:999px;
+    padding:11px 20px;font-size:13.5px;font-weight:700;text-decoration:none;
+    min-height:40px;display:inline-flex;align-items:center;
+  }
+  .nav-cta:hover{background:var(--accent)}
+  .nav-cta:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  @media (max-width:640px){ .nav-links{display:none} }
+
+  .wrap{max-width:1180px;margin:0 auto;padding:64px 24px 96px}
+
+  /* ---- hero intro ---- */
+  header.hero{margin-bottom:52px;max-width:660px}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--accent);text-transform:uppercase;margin-bottom:16px}
+  h1{font-size:clamp(30px,4.4vw,46px);font-weight:800;letter-spacing:-.02em;line-height:1.22;margin-bottom:18px}
+  .lead{font-size:16.5px;color:var(--ink-2);max-width:52ch;margin-bottom:24px}
+  .proof-row{display:flex;align-items:center;gap:14px}
+  .avatars{display:flex}
+  .avatars span{
+    width:30px;height:30px;border-radius:50%;background:var(--surface-2);border:2px solid var(--bg);
+    margin-left:-9px;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;color:var(--ink-2);
+  }
+  .avatars span:first-child{margin-left:0}
+  .proof-text{font-size:13px;color:var(--muted);font-weight:600}
+  .proof-text b{color:var(--ink)}
+
+  /* ---- bento grid: uneven tile sizes, identity of this macrostructure ---- */
+  .bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:132px;gap:var(--gap)}
+  .tile{
+    background:var(--surface);border-radius:var(--radius);
+    padding:24px;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;
+    box-shadow:0 1px 2px rgba(var(--shadow-rgb),.04);position:relative;overflow:hidden;
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .tile:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(var(--shadow-rgb),.09)}
+  .tile.accent{background:var(--accent);color:var(--accent-ink)}
+  .tile.accent .tile-sub{color:var(--accent-ink);opacity:.88}
+  .tile.tint{background:var(--accent-tint)}
+  .tile-tag{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);order:-1}
+  .tile.accent .tile-tag{color:var(--accent-ink);opacity:.75}
+  .tile-title{font-size:18.5px;font-weight:800;letter-spacing:-.01em}
+  .tile-sub{font-size:13px;color:var(--ink-2);max-width:34ch}
+  .tile-num{font-size:36px;font-weight:800;letter-spacing:-.02em;line-height:1}
+  .tile-num sup{font-size:15px;font-weight:700;margin-left:3px}
+  .badge-new{
+    position:absolute;top:20px;right:20px;background:var(--gold-tint);color:var(--gold-ink);
+    font-size:10.5px;font-weight:800;letter-spacing:.05em;padding:4px 9px;border-radius:999px;
+  }
+
+  /* mini in-tile UI mock — makes the tile read as a real product screen, not an icon card */
+  .mini-ui{display:flex;flex-direction:column;gap:7px;margin-bottom:auto;padding-top:2px}
+  .mini-row{height:9px;border-radius:4px;background:rgba(var(--overlay-white-rgb),.32)}
+  .mini-row.a{width:78%}
+  .mini-row.b{width:52%}
+  .tile:not(.accent) .mini-row{background:var(--surface-2)}
+  .mini-bar{height:6px;border-radius:3px;background:rgba(var(--overlay-white-rgb),.28);overflow:hidden;width:100%;margin-top:4px}
+  .tile:not(.accent) .mini-bar{background:var(--hairline)}
+  .mini-bar i{display:block;height:100%;background:var(--accent-ink);width:64%}
+  .tile:not(.accent) .mini-bar i{background:var(--accent)}
+
+  .stars{display:flex;gap:3px;color:var(--gold);font-size:15px;margin-bottom:2px}
+
+  .quote-tile{background:var(--surface);}
+  .quote-tile blockquote{font-size:16.5px;line-height:1.6;color:var(--ink);font-weight:600;letter-spacing:-.005em;max-width:38ch;margin-bottom:10px}
+  .quote-tile cite{font-style:normal;font-size:12.5px;color:var(--muted);font-weight:600}
+
+  .price-tile{display:flex;flex-direction:column;justify-content:center;gap:10px}
+  .price-cta{
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    background:var(--ink);color:var(--on-accent);border:none;border-radius:10px;
+    padding:12px 16px;font-size:14px;font-weight:700;text-decoration:none;min-height:44px;width:fit-content;
+  }
+  .price-cta:hover{background:var(--accent)}
+  .price-cta:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  .price-note{font-size:11.5px;color:var(--muted)}
+
+  .icon{width:32px;height:32px;border-radius:9px;background:rgba(var(--shadow-rgb),.06);display:flex;align-items:center;justify-content:center;margin-bottom:4px}
+  .tile.accent .icon{background:rgba(var(--overlay-white-rgb),.18)}
+  .icon svg{width:17px;height:17px}
+
+  .t1{grid-column:span 2;grid-row:span 2}
+  .t2{grid-column:span 1}
+  .t3{grid-column:span 1}
+  .t4{grid-column:span 2;grid-row:span 2}
+  .t5{grid-column:span 1}
+  .t6{grid-column:span 1}
+  .t7{grid-column:span 2}
+  .t8{grid-column:span 2;grid-row:span 2}
+  .t9{grid-column:span 1}
+  .t10{grid-column:span 1}
+  .t11{grid-column:span 2}
+  .t12{grid-column:span 2;grid-row:span 2}
+  .t13{grid-column:span 2}
+
+  @media (max-width:900px){
+    .bento{grid-template-columns:repeat(2,1fr)}
+    .t1,.t4,.t8,.t12{grid-column:span 2}
+  }
+  @media (max-width:560px){
+    .bento{grid-template-columns:1fr;grid-auto-rows:auto}
+    .tile{grid-column:span 1 !important;grid-row:span 1 !important;min-height:118px}
+  }
+
+  /* ---- footer ---- */
+  footer.site{border-top:1px solid var(--hairline);margin-top:72px;padding-top:44px}
+  .foot-grid{display:grid;grid-template-columns:2fr repeat(3,1fr);gap:24px;margin-bottom:36px}
+  .foot-brand p{font-size:13px;color:var(--muted);max-width:32ch;margin-top:10px}
+  .foot-col h4{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+  .foot-col a{display:block;font-size:13.5px;color:var(--ink-2);text-decoration:none;margin-bottom:10px;width:fit-content}
+  .foot-col a:hover{color:var(--accent)}
+  .foot-col a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .foot-bottom{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);padding-top:22px;border-top:1px solid var(--hairline);flex-wrap:wrap;gap:8px}
+  @media (max-width:700px){ .foot-grid{grid-template-columns:1fr 1fr} }
+
+  .demo-bar{
+    position:fixed;left:0;right:0;bottom:0;height:40px;background:var(--ink);color:var(--on-accent);
+    display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;letter-spacing:.01em;z-index:50;
+  }
+  .demo-bar code{font-family:var(--mono);background:rgba(var(--overlay-white-rgb),.14);padding:2px 8px;border-radius:6px}
+
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.001ms !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="brand">소보로<span>웍스</span></div>
+  <div class="nav-links">
+    <a href="#">기능</a><a href="#">요금제</a><a href="#">도입 사례</a><a href="#">로그인</a>
+  </div>
+  <a class="nav-cta skin-cta" href="#" onclick="return false">무료로 시작</a>
+</nav>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">Soboro Works · 스튜디오 운영 올인원</p>
+    <h1 class="skin-heading">견적부터 정산까지, 스튜디오 살림을 한 곳에서</h1>
+    <p class="lead">디자인·영상·사진 스튜디오가 프로젝트 관리와 청구서 발행을 따로 하지 않도록 만들었습니다. 아래 기능들은 실제 화면 그대로, 쓰임의 무게만큼 크기를 다르게 배치했습니다.</p>
+    <div class="proof-row">
+      <div class="avatars skin-frame"><span>P</span><span>K</span><span>M</span><span>+</span></div>
+      <p class="proof-text"><!-- mockup: 데모용 플레이스홀더 수치 --><b>212개</b> 스튜디오가 이번 달에도 정산했습니다</p>
+    </div>
+  </header>
+
+  <section class="bento" aria-label="기능 요약 그리드">
+    <div class="tile t1 accent skin-surface">
+      <div class="icon skin-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 10h16M10 4v16"/></svg></div>
+      <div class="mini-ui"><div class="mini-row a"></div><div class="mini-row b"></div><div class="mini-bar"><i></i></div></div>
+      <div class="tile-tag skin-badge">핵심 기능</div>
+      <div class="tile-title">실시간 프로젝트 보드</div>
+      <div class="tile-sub">촬영·수정·납품 단계가 한 화면에서 움직입니다. 팀원 전체가 동시에 봐도 어긋나지 않습니다.</div>
+    </div>
+
+    <div class="tile t2 skin-surface">
+      <div class="tile-tag skin-badge">이번 달 처리액</div>
+      <div class="tile-num">3.4<sup>억원</sup></div>
+      <div class="tile-sub"><!-- mockup: 데모용 플레이스홀더 수치 -->소보로웍스로 발행된 청구서 합계</div>
+    </div>
+
+    <div class="tile t3 tint skin-surface">
+      <div class="tile-tag skin-badge">자동화</div>
+      <div class="tile-title">계약금 알림</div>
+      <div class="tile-sub">입금 확인되면 담당자에게 즉시 전달</div>
+    </div>
+
+    <div class="tile t4 skin-surface">
+      <div class="tile-tag skin-badge">클라이언트 포털</div>
+      <div class="tile-title">시안 검토는 링크 하나로</div>
+      <div class="mini-ui" style="margin-top:8px"><div class="mini-row a"></div><div class="mini-row b"></div></div>
+      <div class="tile-sub">클라이언트가 로그인 없이 시안을 보고, 수정 요청을 남깁니다. 메일함을 뒤질 필요가 없습니다.</div>
+    </div>
+
+    <div class="tile t5 skin-surface">
+      <div class="tile-tag skin-badge">연동</div>
+      <div class="tile-title">카카오톡 · 슬랙 알림</div>
+      <div class="tile-sub">일정 변경을 채팅으로 바로 받습니다</div>
+    </div>
+
+    <div class="tile t6 tint skin-surface">
+      <div class="stars">★★★★★</div>
+      <div class="tile-num">4.8</div>
+      <div class="tile-sub"><!-- mockup: 데모용 플레이스홀더 수치 -->도입 스튜디오 평균 만족도 (응답 340건)</div>
+    </div>
+
+    <div class="tile t7 skin-surface">
+      <div class="tile-tag skin-badge">모바일</div>
+      <div class="tile-title">현장에서 바로 촬영본 업로드, 오프라인이어도 임시 저장 후 자동 동기화</div>
+    </div>
+
+    <div class="tile t8 accent skin-surface">
+      <span class="badge-new skin-badge">신규</span>
+      <div class="tile-tag skin-badge">베타 오픈</div>
+      <div class="tile-title">AI 견적서 초안 작성</div>
+      <div class="tile-sub">촬영 유형·시간·인원을 입력하면 과거 견적 이력을 참고해 초안을 만들어 드립니다. 최종 확정은 언제나 담당자 몫입니다.</div>
+    </div>
+
+    <div class="tile t9 skin-surface">
+      <div class="tile-tag skin-badge">지원</div>
+      <div class="tile-title">평일 24시간 응대</div>
+      <div class="tile-sub">평균 응답 9분 이내</div>
+    </div>
+
+    <div class="tile t10 tint skin-surface">
+      <div class="tile-tag skin-badge">권한</div>
+      <div class="tile-title">역할별 접근 제어</div>
+      <div class="tile-sub">외주 스태프에게 정산 화면은 숨깁니다</div>
+    </div>
+
+    <div class="tile t11 skin-surface">
+      <div class="tile-tag skin-badge">도입 효과</div>
+      <div class="tile-num">-38<sup>%</sup></div>
+      <div class="tile-sub"><!-- mockup: 데모용 플레이스홀더 수치 -->도입 스튜디오 기준 청구서 발행 지연 감소폭</div>
+    </div>
+
+    <div class="tile t12 quote-tile skin-surface">
+      <blockquote>"견적서 만드느라 밤새던 게 없어졌어요. 그 시간에 촬영 하나 더 잡습니다."</blockquote>
+      <cite>— 이한나, 스튜디오 온새 대표</cite>
+    </div>
+
+    <div class="tile t13 price-tile tint skin-surface">
+      <div class="tile-title">1인 스튜디오는 평생 무료</div>
+      <a class="price-cta skin-cta" href="#" onclick="return false">무료로 시작하기 →</a>
+      <p class="price-note">카드 등록 없이 바로 시작, 팀 요금제는 3인부터</p>
+    </div>
+  </section>
+
+  <footer class="site">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="brand">소보로<span>웍스</span></div>
+        <p>작은 스튜디오의 살림을 위한 프로젝트·정산 툴. 2023년부터 만들고 있습니다.</p>
+      </div>
+      <div class="foot-col">
+        <h4>제품</h4>
+        <a href="#">기능</a><a href="#">요금제</a><a href="#">변경 이력</a>
+      </div>
+      <div class="foot-col">
+        <h4>회사</h4>
+        <a href="#">소개</a><a href="#">채용</a><a href="#">도입 사례</a>
+      </div>
+      <div class="foot-col">
+        <h4>지원</h4>
+        <a href="#">고객센터</a><a href="#">이용약관</a><a href="#">개인정보처리방침</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>&copy; 2026 Soboro Works Inc.</span>
+      <span>서울 마포구 · 사업자등록번호 000-00-00000</span>
+    </div>
+  </footer>
+</div>
+
+<div class="demo-bar">벤토 그리드 골격 데모 · <code>/taste --macro=bento-grid</code></div>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!-- macro-demo: kanban-board | 골격: 칸반 보드 | design: macrostructure=kanban-board preset=neutral-rust(custom) | 근거: 스프린트 보드 시나리오 — 4컬럼 드래그 가능 카드, 러스트 톤 단일 포인트로 라벨만 구분 | gate: WCAG ✓ AI-tell ✓ token ✓ | score: Philosophy 4 Hierarchy 4 Execution 5 Specificity 4 Restraint 4 Variety 4 -->
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>Flowboard — 스프린트 칸반 골격 데모</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --bg:#f4f4f2; --card:#ffffff; --ink:#1c1917; --mute:#615c58; --faint:#948e88;
+    --line:#e6e2dd; --accent:#9c3f19; --accent-tint:#fbe9e1; --accent-bright:#b5541f;
+    --danger:#a13a34; --danger-tint:#fbe9e8; --warn:#8a5c12; --warn-tint:#fdf1de; --ok:#1f7a4f; --ok-tint:#e3f5ea; --info:#2d5f8a; --info-tint:#e6f0f7;
+    --dark:#1c1917;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Consolas,monospace;
+    --ease:cubic-bezier(.4,0,.2,1);
+    --on-dark:#fff;
+    --bg-rgb:244,244,242; --shadow-rgb:28,25,23;
+    --card-hover-line:#d8d2ca; --chore-tint:#eef0f0;
+    --bar-fg:#eee9e4; --dark-line:#34302b;
+    --skin-intensity:0.5;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:var(--font);color:var(--ink);background:var(--bg);line-height:1.5;word-break:keep-all;overflow-x:hidden;font-size:14px}
+  ::selection{background:var(--accent);color:var(--on-dark)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  button,input{font-family:inherit}
+
+  header.top{position:sticky;top:0;z-index:30;background:rgba(var(--bg-rgb),.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding:16px 24px}
+  .top-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .wordmark{font-weight:800;font-size:15px;display:flex;align-items:center;gap:8px}
+  .wordmark .dot{width:9px;height:9px;border-radius:3px;background:var(--accent)}
+  .breadcrumb{font-size:12.5px;color:var(--mute)}
+  .breadcrumb b{color:var(--ink)}
+  .top-spacer{flex:1}
+  .avatars{display:flex}
+  .avatars .av{width:26px;height:26px;border-radius:7px;background:var(--accent-tint);color:var(--accent);font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg);margin-left:-8px}
+  .avatars .av:first-child{margin-left:0}
+  .btn{font-weight:700;cursor:pointer;border-radius:8px;font-size:12.5px;padding:9px 16px;min-height:38px;border:1px solid transparent;transition:background .15s var(--ease)}
+  .btn-primary{background:var(--accent);color:var(--on-dark)}
+  .btn-primary:hover{background:var(--accent-bright)}
+  .sprint-meta{display:flex;gap:18px;margin-top:12px;font-size:12px;color:var(--mute);flex-wrap:wrap}
+  .sprint-meta b{color:var(--ink)}
+  .sprint-bar{width:120px;height:6px;background:var(--line);border-radius:999px;overflow:hidden;display:inline-block;vertical-align:middle;margin-left:6px}
+  .sprint-bar i{display:block;height:100%;background:var(--accent);width:58%}
+
+  .board-wrap{padding:20px 24px 100px;overflow-x:auto}
+  .board{display:grid;grid-template-columns:repeat(4,272px);gap:16px;align-items:start;min-width:max-content}
+  @media (max-width:900px){.board{grid-template-columns:repeat(4,240px)}}
+
+  .col{background:transparent;display:flex;flex-direction:column;min-height:60px}
+  .col.dragover{outline:2px dashed var(--accent);outline-offset:4px;border-radius:12px}
+  .col-head{display:flex;align-items:center;gap:8px;padding:4px 6px 12px;position:sticky;top:112px}
+  .col-head .cdot{width:8px;height:8px;border-radius:50%}
+  .col-head h3{font-size:13px;font-weight:800}
+  .col-head .cnt{font-size:11.5px;color:var(--faint);font-weight:700;margin-left:auto;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:2px 8px}
+  .cdot.backlog{background:var(--faint)}
+  .cdot.progress{background:var(--info)}
+  .cdot.review{background:var(--warn)}
+  .cdot.done{background:var(--ok)}
+
+  .cardlist{display:flex;flex-direction:column;gap:10px;min-height:40px}
+  .kcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;cursor:grab;box-shadow:0 1px 2px rgba(var(--shadow-rgb),.04);transition:box-shadow .15s var(--ease),transform .15s var(--ease),border-color .15s var(--ease)}
+  .kcard:hover{box-shadow:0 4px 12px rgba(var(--shadow-rgb),.08);transform:translateY(-2px);border-color:var(--card-hover-line)}
+  .kcard.dragging{opacity:.4}
+  .kcard .k-tag{display:inline-flex;font-size:10px;font-weight:800;letter-spacing:.03em;padding:2px 7px;border-radius:5px;margin-bottom:8px}
+  .k-tag.bug{background:var(--danger-tint);color:var(--danger)}
+  .k-tag.feat{background:var(--info-tint);color:var(--info)}
+  .k-tag.chore{background:var(--chore-tint);color:var(--mute)}
+  .k-tag.design{background:var(--accent-tint);color:var(--accent)}
+  .kcard .k-title{font-size:13px;font-weight:700;line-height:1.5}
+  .kcard .k-sub{font-size:11.5px;color:var(--mute);margin-top:6px;line-height:1.55}
+  .kcard .k-foot{display:flex;align-items:center;justify-content:space-between;margin-top:11px;padding-top:10px;border-top:1px solid var(--line)}
+  .kcard .k-id{font-size:10.5px;color:var(--faint);font-family:var(--mono)}
+  .kcard .k-meta{display:flex;align-items:center;gap:8px}
+  .kcard .k-av{width:20px;height:20px;border-radius:6px;background:var(--accent-tint);color:var(--accent);font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center}
+  .kcard .k-pts{font-size:10.5px;font-weight:800;color:var(--mute);background:var(--bg);border-radius:5px;padding:2px 6px}
+  .kcard .k-prio{width:6px;height:6px;border-radius:50%;flex:none}
+  .k-prio.high{background:var(--danger)}
+  .k-prio.mid{background:var(--warn)}
+  .k-prio.low{background:var(--faint)}
+
+  .addcard{border:1.5px dashed var(--line);border-radius:12px;padding:10px 12px;font-size:12px;color:var(--faint);font-weight:700;text-align:center;cursor:pointer;background:transparent}
+  .addcard:hover{border-color:var(--accent);color:var(--accent)}
+
+  .demo-bar{position:fixed;left:0;right:0;bottom:0;background:var(--dark);color:var(--bar-fg);font-size:11px;letter-spacing:.04em;padding:9px 16px;text-align:center;z-index:70;border-top:1px solid var(--dark-line)}
+  .demo-bar code{color:var(--accent-bright)}
+  @media (max-width:640px){.top-row{gap:10px} .sprint-meta{gap:12px}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-row">
+    <div class="wordmark"><span class="dot"></span>FLOWBOARD</div>
+    <div class="breadcrumb">프로젝트 <b>모바일 결제 SDK 2.0</b></div>
+    <div class="top-spacer"></div>
+    <div class="avatars">
+      <span class="av skin-frame">유</span><span class="av skin-frame">준</span><span class="av skin-frame">하</span><span class="av skin-frame">지</span>
+    </div>
+    <button class="btn btn-primary skin-cta">+ 작업 추가</button>
+  </div>
+  <div class="sprint-meta">
+    <span>스프린트 <b>14차 (08-11 ~ 08-24)</b></span>
+    <span>완료율 <b>58%</b><span class="sprint-bar"><i></i></span></span>
+    <span>남은 스토리포인트 <b>21pt</b></span>
+  </div>
+</header>
+
+<div class="board-wrap">
+  <div class="board" id="board">
+
+    <div class="col" data-col="backlog">
+      <div class="col-head"><span class="cdot backlog"></span><h3>백로그</h3><span class="cnt" id="cnt-backlog">3</span></div>
+      <div class="cardlist" data-list="backlog">
+        <div class="kcard skin-surface" draggable="true" data-id="FB-341">
+          <span class="k-tag chore skin-badge">CHORE</span>
+          <div class="k-title">SDK 버전 태깅 규칙 문서화</div>
+          <div class="k-sub">semver 적용 기준과 릴리스 노트 템플릿 정리</div>
+          <div class="k-foot"><span class="k-id">FB-341</span><div class="k-meta"><span class="k-pts">2pt</span><span class="k-av skin-frame">지</span></div></div>
+        </div>
+        <div class="kcard skin-surface" draggable="true" data-id="FB-338">
+          <span class="k-tag feat skin-badge">FEAT</span>
+          <div class="k-title">Apple Pay 연동 사전 조사</div>
+          <div class="k-sub">iOS 팀과 PassKit 연동 범위 협의 필요</div>
+          <div class="k-foot"><span class="k-id">FB-338</span><div class="k-meta"><span class="k-prio mid" title="보통"></span><span class="k-pts">5pt</span><span class="k-av skin-frame">하</span></div></div>
+        </div>
+        <div class="kcard skin-surface" draggable="true" data-id="FB-336">
+          <span class="k-tag design skin-badge">DESIGN</span>
+          <div class="k-title">결제 실패 화면 재디자인 논의</div>
+          <div class="k-sub">에러코드별 안내 문구 매핑표 초안</div>
+          <div class="k-foot"><span class="k-id">FB-336</span><div class="k-meta"><span class="k-pts">3pt</span><span class="k-av skin-frame">준</span></div></div>
+        </div>
+        <button class="addcard skin-cta">+ 카드 추가</button>
+      </div>
+    </div>
+
+    <div class="col" data-col="progress">
+      <div class="col-head"><span class="cdot progress"></span><h3>진행중</h3><span class="cnt" id="cnt-progress">4</span></div>
+      <div class="cardlist" data-list="progress">
+        <div class="kcard skin-surface" draggable="true" data-id="FB-329">
+          <span class="k-tag bug skin-badge">BUG</span>
+          <div class="k-title">환불 처리 중복 요청 시 정합성 깨짐</div>
+          <div class="k-sub">동시성 이슈 — 락 처리 로직 추가 작업 중</div>
+          <div class="k-foot"><span class="k-id">FB-329</span><div class="k-meta"><span class="k-prio high" title="긴급"></span><span class="k-pts">8pt</span><span class="k-av skin-frame">유</span></div></div>
+        </div>
+        <div class="kcard skin-surface" draggable="true" data-id="FB-330">
+          <span class="k-tag feat skin-badge">FEAT</span>
+          <div class="k-title">정기결제 재시도 스케줄러 구현</div>
+          <div class="k-sub">3회 실패 후 7일 유예 로직, 알림 발송 포함</div>
+          <div class="k-foot"><span class="k-id">FB-330</span><div class="k-meta"><span class="k-prio mid" title="보통"></span><span class="k-pts">5pt</span><span class="k-av skin-frame">준</span></div></div>
+        </div>
+        <div class="kcard skin-surface" draggable="true" data-id="FB-333">
+          <span class="k-tag chore skin-badge">CHORE</span>
+          <div class="k-title">SDK 샘플 앱 Kotlin 마이그레이션</div>
+          <div class="k-sub">Java 레거시 모듈 3개 남음</div>
+          <div class="k-foot"><span class="k-id">FB-333</span><div class="k-meta"><span class="k-pts">3pt</span><span class="k-av skin-frame">하</span></div></div>
+        </div>
+        <div class="kcard skin-surface" draggable="true" data-id="FB-334">
+          <span class="k-tag feat skin-badge">FEAT</span>
+          <div class="k-title">가맹점 대시보드 정산 내역 CSV export</div>
+          <div class="k-sub">100만건 이상 대용량 export 성능 확인 필요</div>
+          <div class="k-foot"><span class="k-id">FB-334</span><div class="k-meta"><span class="k-prio low" title="낮음"></span><span class="k-pts">2pt</span><span class="k-av skin-frame">지</span></div></div>
+        </div>
+        <button class="addcard skin-cta">+ 카드 추가</button>
+      </div>
+    </div>
+
+    <div class="col" data-col="review">
+      <div class="col-head"><span class="cdot review"></span><h3>검토</h3><span class="cnt" id="cnt-review">2</span></div>
+      <div class="cardlist" data-list="review">
+        <div class="kcard skin-surface" draggable="true" data-id="FB-320">
+          <span class="k-tag bug skin-badge">BUG</span>
+          <div class="k-title">웹훅 재전송 시 서명 검증 실패</div>
+          <div class="k-sub">타임스탬프 오차 5초 초과 시 거부 — PR #482 리뷰중</div>
+          <div class="k-foot"><span class="k-id">FB-320</span><div class="k-meta"><span class="k-prio high" title="긴급"></span><span class="k-pts">3pt</span><span class="k-av skin-frame">유</span></div></div>
+        </div>
+        <div class="kcard skin-surface" draggable="true" data-id="FB-318">
+          <span class="k-tag feat skin-badge">FEAT</span>
+          <div class="k-title">3D Secure 2.0 인증 플로우 QA 검증</div>
+          <div class="k-sub">발급사 5곳 시나리오 완료, 최종 승인 대기</div>
+          <div class="k-foot"><span class="k-id">FB-318</span><div class="k-meta"><span class="k-prio mid" title="보통"></span><span class="k-pts">8pt</span><span class="k-av skin-frame">하</span></div></div>
+        </div>
+        <button class="addcard skin-cta">+ 카드 추가</button>
+      </div>
+    </div>
+
+    <div class="col" data-col="done">
+      <div class="col-head"><span class="cdot done"></span><h3>완료</h3><span class="cnt" id="cnt-done">3</span></div>
+      <div class="cardlist" data-list="done">
+        <div class="kcard skin-surface" draggable="true" data-id="FB-305">
+          <span class="k-tag feat skin-badge">FEAT</span>
+          <div class="k-title">간편결제 4종 로고 배지 업데이트</div>
+          <div class="k-sub">디자인 QA 통과, 프로덕션 배포 완료</div>
+          <div class="k-foot"><span class="k-id">FB-305</span><div class="k-meta"><span class="k-pts">1pt</span><span class="k-av skin-frame">준</span></div></div>
+        </div>
+        <div class="kcard skin-surface" draggable="true" data-id="FB-298">
+          <span class="k-tag bug skin-badge">BUG</span>
+          <div class="k-title">iOS 저사양 기기 결제창 렌더링 지연</div>
+          <div class="k-sub">이미지 프리로드 적용으로 해결, 배포 완료</div>
+          <div class="k-foot"><span class="k-id">FB-298</span><div class="k-meta"><span class="k-pts">3pt</span><span class="k-av skin-frame">지</span></div></div>
+        </div>
+        <div class="kcard skin-surface" draggable="true" data-id="FB-291">
+          <span class="k-tag chore skin-badge">CHORE</span>
+          <div class="k-title">API 레이트리밋 응답 헤더 표준화</div>
+          <div class="k-sub">RFC 표준 헤더명으로 통일, 문서 갱신 완료</div>
+          <div class="k-foot"><span class="k-id">FB-291</span><div class="k-meta"><span class="k-pts">2pt</span><span class="k-av skin-frame">유</span></div></div>
+        </div>
+        <button class="addcard skin-cta">+ 카드 추가</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="demo-bar">칸반 보드 골격 데모 · <code>/taste --macro=kanban-board</code></div>
+
+<script>
+(function(){
+  var dragged=null;
+  function updateCounts(){
+    ['backlog','progress','review','done'].forEach(function(c){
+      var n=document.querySelectorAll('[data-list="'+c+'"] .kcard').length;
+      document.getElementById('cnt-'+c).textContent=n;
+    });
+  }
+  document.querySelectorAll('.kcard').forEach(function(card){
+    card.addEventListener('dragstart',function(e){ dragged=card; card.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; });
+    card.addEventListener('dragend',function(){ card.classList.remove('dragging'); dragged=null; document.querySelectorAll('.col').forEach(function(c){c.classList.remove('dragover')}); });
+  });
+  document.querySelectorAll('.col').forEach(function(col){
+    col.addEventListener('dragover',function(e){
+      e.preventDefault();
+      col.classList.add('dragover');
+      var list=col.querySelector('.cardlist');
+      var addBtn=list.querySelector('.addcard');
+      if(dragged && addBtn) list.insertBefore(dragged, addBtn);
+    });
+    col.addEventListener('dragleave',function(e){ if(!col.contains(e.relatedTarget)) col.classList.remove('dragover'); });
+    col.addEventListener('drop',function(e){ e.preventDefault(); col.classList.remove('dragover'); updateCounts(); });
+  });
+})();
+</script>
+</body>
+</html>

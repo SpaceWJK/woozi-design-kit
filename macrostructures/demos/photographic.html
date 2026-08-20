@@ -1,0 +1,228 @@
+<!doctype html>
+<!-- macro-demo: photographic | 골격: 포토그래픽 | design: macrostructure=photographic preset=neutral-duotone | gate: WCAG ✓ AI-tell ✓ token ✓ | score: Philosophy5 Hierarchy4 Execution5 Specificity5 Restraint4 Variety5 -->
+<!-- design 근거: 전 폴드를 흑백 베이스 + 러스트 스플릿톤(--accent-2)의 듀오톤 그래디언트로 "실사진에 가까운 밀도"를 CSS만으로 구현. 텍스트는 각 폴드 하단 코너의 캡션 한 단락으로 제한해 "이미지가 지배하고 텍스트는 주석"이라는 골격 정의를 지킴. 가상 브랜드 '소요 리트리트'의 구체적 동선(도착→아침→물가→밤→예약)으로 실서비스 톤을 확보. -->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>소요 리트리트 — 강원 인제</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="macrostructure=photographic 골격 데모 · 풀블리드 듀오톤 이미지 주도형 페이지">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;overflow-x:hidden;max-width:100%}
+:root{
+  --paper:#faf9f6;--paper-2:#f1efe9;--ink:#141414;--ink-soft:#3a3a3a;--mute:#5f5f5f;
+  --line:#e0dcd3;--accent:#35507a;--accent-2:#a8563a;
+  --fs-display:clamp(42px,7vw,84px);--fs-h2:clamp(26px,3.6vw,40px);--fs-body:15.5px;--fs-cap:12.5px;--fs-micro:11px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --font-serif:Georgia,"Noto Serif KR",serif;
+  --paper-rgb:250,249,246;--accent-rgb:53,80,122;--accent-2-rgb:168,86,58;--black-rgb:0,0,0;
+  --on-dark:#fff;--link-accent:#f1a98c;--caption-text:#f6f4ef;
+  --fold1-a:#565248;--fold1-b:#3d3a33;--fold1-c:#0f0e0c;--fold1-d:#2b2925;--fold1-e:#181613;
+  --fold2-a:#221f1a;--fold2-b:#24221d;--fold2-c:#0c0b09;
+  --fold3-a:#5a564c;--fold3-b:#3a372f;--fold3-c:#1c1a16;--fold3-d:#050504;
+  --fold4-a:#ddd;--fold4-b:#ccc;--fold4-c:#0c0b0a;
+  --footer-text:#efece5;--footer-text-2:#b9b5aa;--footer-label:#8b8778;--footer-link:#d8d4c9;
+  --footer-border:#33312b;--footer-meta:#7c7869;
+}
+body{
+  font-family:var(--font);
+  color:var(--ink);background:var(--paper);word-break:keep-all;line-height:1.6;
+}
+a{color:inherit;text-decoration:none}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent-2);outline-offset:3px;border-radius:2px}
+
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;
+  padding:22px 32px;color:var(--on-dark);mix-blend-mode:difference}
+.nav .brand{font-weight:700;font-size:14px;letter-spacing:.06em}
+.nav .menu{display:flex;gap:26px;font-size:12.5px}
+.nav .menu a{position:relative;padding-bottom:3px}
+.nav .menu a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:currentColor;transition:width .2s}
+.nav .menu a:hover::after{width:100%}
+.reserve-fab{position:fixed;right:24px;bottom:24px;z-index:60;background:var(--accent-2);color:var(--on-dark);
+  font-size:13px;font-weight:700;padding:13px 20px;border-radius:999px;box-shadow:0 6px 20px rgba(var(--black-rgb),.22);
+  transition:transform .15s}
+.reserve-fab:hover{transform:translateY(-2px)}
+
+.fold{position:relative;min-height:94vh;display:flex;align-items:flex-end;padding:0;overflow:hidden}
+.fold::before{content:"";position:absolute;inset:0;z-index:0}
+.fold::after{content:"";position:absolute;inset:0;z-index:0;
+  background:radial-gradient(ellipse 120% 90% at 50% 100%, rgba(var(--black-rgb),.55) 0%, transparent 55%);}
+
+.fold-1::before{background:
+  radial-gradient(ellipse 60% 50% at 25% 15%, rgba(var(--accent-2-rgb),.16) 0%, transparent 55%),
+  radial-gradient(ellipse 70% 60% at 78% 78%, var(--fold1-a) 0%, transparent 55%),
+  radial-gradient(ellipse 50% 45% at 60% 30%, var(--fold1-b) 0%, transparent 60%),
+  linear-gradient(160deg,var(--fold1-c) 0%,var(--fold1-d) 40%,var(--fold1-e) 100%);}
+.fold-2::before{background:
+  repeating-linear-gradient(96deg,var(--fold1-b) 0px,var(--fold1-b) 1.5px,var(--fold2-a) 1.5px,var(--fold2-a) 34px),
+  radial-gradient(ellipse 45% 40% at 70% 25%, rgba(var(--accent-2-rgb),.12) 0%, transparent 60%),
+  linear-gradient(205deg,var(--fold2-b) 0%,var(--fold2-c) 100%);}
+.fold-3::before{background:
+  radial-gradient(circle at 50% 28%, var(--fold3-a) 0%, transparent 45%),
+  radial-gradient(circle at 82% 82%, var(--fold3-b) 0%, transparent 50%),
+  radial-gradient(ellipse 40% 30% at 20% 70%, rgba(var(--accent-rgb),.14) 0%, transparent 60%),
+  linear-gradient(180deg,var(--fold3-c) 0%,var(--fold3-d) 100%);}
+.fold-4::before{background:
+  radial-gradient(1.4px 1.4px at 14% 22%, var(--on-dark) 99%, transparent),
+  radial-gradient(1px 1px at 38% 58%, var(--fold4-a) 99%, transparent),
+  radial-gradient(1.4px 1.4px at 68% 18%, var(--on-dark) 99%, transparent),
+  radial-gradient(1px 1px at 84% 72%, var(--fold4-b) 99%, transparent),
+  radial-gradient(1.4px 1.4px at 52% 84%, var(--on-dark) 99%, transparent),
+  radial-gradient(1px 1px at 26% 78%, var(--fold4-b) 99%, transparent),
+  radial-gradient(ellipse 55% 40% at 50% 90%, rgba(var(--accent-2-rgb),.10) 0%, transparent 60%),
+  linear-gradient(200deg,var(--fold4-c) 0%,rgb(var(--black-rgb)) 100%);}
+
+.caption{position:relative;z-index:1;color:var(--caption-text);max-width:600px;padding:0 32px 64px}
+.caption .idx{font-size:var(--fs-micro);letter-spacing:.2em;opacity:.75;margin-bottom:12px;font-weight:600}
+.caption h2{font-family:var(--font-serif);font-size:var(--fs-h2);font-weight:400;line-height:1.28;
+  margin:0 0 12px;letter-spacing:-.005em}
+.caption p{font-size:var(--fs-body);line-height:1.75;opacity:.88;margin:0;max-width:460px}
+.caption .stat{margin-top:18px;font-size:13px;opacity:.92;display:flex;gap:10px;align-items:baseline}
+.caption .stat b{font-size:22px;font-weight:700;color:var(--accent-2)}
+
+.fold-1 .caption{padding-top:0}
+
+.intro-line{max-width:640px;margin:0 auto;padding:88px 32px 64px;text-align:center}
+.intro-line .eyebrow{font-size:var(--fs-micro);letter-spacing:.18em;color:var(--mute);text-transform:uppercase;margin-bottom:18px}
+.intro-line p{font-size:18px;line-height:1.8;color:var(--ink-soft);font-weight:500}
+.intro-line p b{color:var(--ink);font-weight:700}
+
+.rooms{max-width:1080px;margin:0 auto;padding:0 32px 96px}
+.rooms h3{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);border-bottom:1px solid var(--line);
+  padding-bottom:16px;margin-bottom:32px}
+.room-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.room{border:1px solid var(--line);border-radius:2px;background:var(--paper-2);padding:24px;transition:border-color .15s}
+.room:hover{border-color:var(--accent-2)}
+.room .rname{font-family:var(--font-serif);font-size:21px;margin-bottom:6px}
+.room .rtag{font-size:var(--fs-cap);color:var(--accent-2);font-weight:700;letter-spacing:.03em;margin-bottom:14px}
+.room p{font-size:13.5px;color:var(--mute);line-height:1.7;margin:0 0 18px;min-height:58px}
+.room .rfoot{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--line);padding-top:14px}
+.room .price{font-size:16px;font-weight:700}
+.room .price small{font-size:11px;color:var(--mute);font-weight:400}
+.room .cap{font-size:12px;color:var(--mute)}
+
+footer{background:var(--ink);color:var(--footer-text);padding:64px 32px 40px}
+.f-wrap{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px}
+.f-wrap h4{font-size:16px;margin:0 0 14px;font-family:var(--font-serif)}
+.f-wrap p{font-size:13px;color:var(--footer-text-2);line-height:1.8;margin:0}
+.f-col h5{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--footer-label);margin:0 0 14px}
+.f-col a{display:block;font-size:13px;color:var(--footer-link);margin-bottom:10px}
+.f-col a:hover{color:var(--on-dark)}
+.f-bottom{max-width:1080px;margin:48px auto 0;border-top:1px solid var(--footer-border);padding-top:20px;font-size:11.5px;
+  color:var(--footer-meta);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+@media(max-width:900px){.room-grid{grid-template-columns:1fr 1fr}.f-wrap{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){
+  .nav .menu{display:none}
+  .room-grid{grid-template-columns:1fr}
+  .f-wrap{grid-template-columns:1fr}
+  .caption{padding:0 20px 48px}
+  .rooms{padding:0 20px 72px}
+}
+.demo-bar{position:fixed;left:0;right:0;bottom:0;z-index:999;background:rgba(var(--paper-rgb),.94);
+  backdrop-filter:blur(4px);border-top:1px solid var(--line);padding:9px 16px;font-size:11px;color:var(--mute);
+  text-align:center;font-family:var(--mono);letter-spacing:.02em}
+.demo-bar code{color:var(--accent-2);font-weight:600}
+body{padding-bottom:46px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <span class="brand">SOYO 소요 리트리트</span>
+  <span class="menu"><a href="#rooms">숙소</a><a href="#">프로그램</a><a class="skin-cta" href="#" style="color:var(--link-accent)">예약 문의</a></span>
+</nav>
+
+<section class="fold fold-1 skin-frame" data-skin-nopseudo>
+  <div class="caption">
+    <div class="idx">01 — 도착 · 강원 인제</div>
+    <h2 class="skin-heading">도시에서 세 시간,<br>완전히 다른 속도.</h2>
+    <p>내린천을 따라 30분을 더 들어가야 나오는 자작나무숲 옆, 다섯 채뿐인 리트리트입니다.</p>
+  </div>
+</section>
+
+<section class="fold fold-2 skin-frame" data-skin-nopseudo>
+  <div class="caption">
+    <div class="idx">02 — 아침 · 6:40</div>
+    <h2 class="skin-heading">안개가 걷히는<br>순서를 압니다.</h2>
+    <p>숲안개는 늘 물가 쪽부터 걷힙니다. 이 순서를 아는 사람만 그 시간에 마당에 있습니다.</p>
+    <!-- mockup: 데모용 플레이스홀더 수치 -->
+    <div class="stat">부지 면적 <b>3,300평</b> · 객실 <b>5동</b></div>
+  </div>
+</section>
+
+<section class="fold fold-3 skin-frame" data-skin-nopseudo>
+  <div class="caption">
+    <div class="idx">03 — 물가 · 내린천 지류</div>
+    <h2 class="skin-heading">물소리 말고는<br>아무 소리도 없다.</h2>
+    <p>객실 다섯 채 모두 창을 열면 물소리가 먼저 들어오도록 배치했습니다.</p>
+  </div>
+</section>
+
+<section class="fold fold-4 skin-frame" data-skin-nopseudo>
+  <div class="caption">
+    <div class="idx">04 — 밤 · 인공조명 없음</div>
+    <h2 class="skin-heading">은하수를 본 적 있다면,<br>여기서 다시 보게 됩니다.</h2>
+    <p>마당 조명은 취침 시간 이후 전부 끕니다. 별을 가리는 건 늘 우리가 켜둔 불빛이었으니까요.</p>
+  </div>
+</section>
+
+<div class="intro-line">
+  <div class="eyebrow">머무는 법</div>
+  <p><b>체크인 15시, 체크아웃 12시.</b> 그 사이엔 일정을 만들지 않습니다 — 정해진 프로그램 없이, 필요하면 스태프에게 물어보는 방식으로 운영합니다.</p>
+</div>
+
+<div class="rooms" id="rooms">
+  <h3>객실 5동</h3>
+  <div class="room-grid">
+    <div class="room skin-surface">
+      <div class="rname">그늘동</div>
+      <div class="rtag skin-badge">숲 전망 · 1인실</div>
+      <p>참나무 숲을 정면으로 두는 가장 조용한 동. 창이 가장 큽니다.</p>
+      <div class="rfoot"><span class="price">₩198,000<small> /박</small></span><span class="cap">최대 2인</span></div>
+    </div>
+    <div class="room skin-surface">
+      <div class="rname">물가동</div>
+      <div class="rtag skin-badge">지류 전망 · 2인실</div>
+      <p>내린천 지류와 가장 가까운 동. 창을 열면 물소리가 방을 채웁니다.</p>
+      <div class="rfoot"><span class="price">₩232,000<small> /박</small></span><span class="cap">최대 3인</span></div>
+    </div>
+    <div class="room skin-surface">
+      <div class="rname">볕뜰동</div>
+      <div class="rtag skin-badge">마당 전망 · 가족실</div>
+      <p>아침 해가 가장 먼저 드는 동. 마당과 바로 연결됩니다.</p>
+      <div class="rfoot"><span class="price">₩276,000<small> /박</small></span><span class="cap">최대 4인</span></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="f-wrap">
+    <div>
+      <h4>소요 리트리트</h4>
+      <p>강원도 인제군 내린천로 어딘가 (가상 주소, 데모용) · 전 객실 사전 예약제, 워크인 불가</p>
+    </div>
+    <div class="f-col">
+      <h5>바로가기</h5>
+      <a href="#">객실 안내</a>
+      <a href="#">오시는 길</a>
+      <a href="#">이용 수칙</a>
+    </div>
+    <div class="f-col">
+      <h5>문의</h5>
+      <a href="#">예약 상담 (가상 연락처)</a>
+      <a href="#">단체 대관 문의</a>
+    </div>
+  </div>
+  <div class="f-bottom">
+    <span>© 2026 소요 리트리트. 데모용 가상 브랜드.</span>
+    <span>매주 화요일 휴무</span>
+  </div>
+</footer>
+
+<div class="demo-bar">포토그래픽 골격 데모 · <code>/taste --macro=photographic</code></div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+node_modules/
+__pycache__/
+*.pyc
+*.log
+.DS_Store
+Thumbs.db
+.taste-variants/
+
+# Org-specific lint extension (see lint.tokens.example.json) — each fork's own
+# internal names/ticket scheme, not meant to be committed to this public repo.
+lint.tokens.json

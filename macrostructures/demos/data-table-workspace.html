@@ -1,0 +1,249 @@
+<!-- macro-demo: data-table-workspace | 골격: 데이터 테이블 워크스페이스 | design: macrostructure=data-table-workspace preset=neutral-indigo(custom) | 근거: SaaS 티켓 트래커 시나리오(가상 데이터) — 대형 테이블+행 클릭 상세 드로어, 인디고 단일 포인트로 상태 배지 구분 | gate: WCAG ✓ AI-tell ✓ token ✓ | score: Philosophy 4 Hierarchy 4 Execution 4 Specificity 5 Restraint 4 Variety 4 -->
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>Trackly — 이슈 트래커 골격 데모</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --bg:#f4f5f7; --card:#ffffff; --ink:#14161d; --mute:#5c6072; --faint:#8b8fa0;
+    --line:#e4e5ec; --accent:#3d4f91; --accent-tint:#e8eaf6; --accent-bright:#4d61ac;
+    --danger:#a13a34; --danger-tint:#fbe9e8; --warn:#8a5c12; --warn-tint:#fdf1de; --ok:#1f7a4f; --ok-tint:#e3f5ea;
+    --dark:#14161d;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Consolas,"Liberation Mono",monospace;
+    --ease:cubic-bezier(.4,0,.2,1);
+    --on-dark:#fff;
+    --card-rgb:255,255,255; --tbl-shadow-rgb:20,22,26; --shadow-rgb:20,22,29;
+    --hold-tint:#eef0f4;
+    --bar-fg:#e2e2ea; --dark-line:#262832;
+    --skin-intensity:0.5;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:var(--font);color:var(--ink);background:var(--bg);line-height:1.55;word-break:keep-all;overflow-x:hidden;font-size:14px}
+  ::selection{background:var(--accent);color:var(--on-dark)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  button,input,select{font-family:inherit}
+
+  header.top{position:sticky;top:0;z-index:30;background:rgba(var(--card-rgb),.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding:14px 24px}
+  .top-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .wordmark{font-weight:800;font-size:15px;display:flex;align-items:center;gap:8px}
+  .wordmark .dot{width:9px;height:9px;border-radius:3px;background:var(--accent)}
+  .searchbox{flex:1;min-width:180px;max-width:340px;display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:8px 12px;color:var(--faint)}
+  .searchbox input{border:none;background:none;outline:none;width:100%;color:var(--ink);font-size:13px}
+  .btn{font-weight:700;cursor:pointer;border-radius:8px;font-size:12.5px;padding:9px 16px;min-height:38px;border:1px solid transparent;transition:background .15s var(--ease),border-color .15s var(--ease)}
+  .btn-primary{background:var(--accent);color:var(--on-dark)}
+  .btn-primary:hover{background:var(--accent-bright)}
+  .btn-outline{background:var(--card);border-color:var(--line);color:var(--ink)}
+  .btn-outline:hover{border-color:var(--accent)}
+
+  .tabs{display:flex;gap:4px;margin-top:14px;border-bottom:1px solid var(--line);overflow-x:auto}
+  .tab{border:none;background:none;font-size:13px;font-weight:700;color:var(--mute);padding:9px 14px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;min-height:38px}
+  .tab.on{color:var(--accent);border-color:var(--accent)}
+  .tab .cnt{color:var(--faint);font-weight:600;margin-left:4px}
+  .tab.on .cnt{color:var(--accent)}
+
+  .wrap{max-width:1280px;margin:0 auto;padding:20px 24px 100px;display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+
+  .toolbar{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  .chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--mute);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer}
+  .chip svg{width:12px;height:12px}
+  .toolbar .count{margin-left:auto;font-size:12px;color:var(--faint)}
+
+  .tblcard{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(var(--tbl-shadow-rgb),.04)}
+  .tbl-scroll{overflow-x:auto}
+  table.data{width:100%;border-collapse:collapse;font-size:13px;min-width:900px}
+  table.data th{text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);padding:11px 14px;border-bottom:1px solid var(--line);background:var(--bg);white-space:nowrap;position:sticky;top:0}
+  table.data td{padding:12px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+  table.data tbody tr{cursor:pointer;transition:background .12s var(--ease)}
+  table.data tbody tr:hover{background:var(--bg)}
+  table.data tbody tr.sel{background:var(--accent-tint)}
+  table.data tbody tr:last-child td{border-bottom:none}
+  .mono{font-family:var(--mono);font-size:11.5px;color:var(--mute)}
+  .ttl{font-weight:700;max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
+  .pill.open{background:var(--accent-tint);color:var(--accent)}
+  .pill.progress{background:var(--warn-tint);color:var(--warn)}
+  .pill.done{background:var(--ok-tint);color:var(--ok)}
+  .pill.hold{background:var(--hold-tint);color:var(--faint)}
+  .prio{font-weight:800;font-size:11.5px}
+  .prio.high{color:var(--danger)}
+  .prio.mid{color:var(--warn)}
+  .prio.low{color:var(--faint)}
+  .assignee{display:flex;align-items:center;gap:7px}
+  .av{width:22px;height:22px;border-radius:6px;background:var(--accent-tint);color:var(--accent);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+
+  /* detail drawer */
+  .scrim{display:none;position:fixed;inset:0;background:rgba(var(--shadow-rgb),.32);z-index:50}
+  .scrim.show{display:block}
+  .drawer{position:fixed;top:0;right:-420px;width:min(420px,92vw);height:100vh;background:var(--card);z-index:60;box-shadow:-8px 0 24px rgba(var(--shadow-rgb),.12);transition:right .24s var(--ease);display:flex;flex-direction:column;overflow-y:auto}
+  .drawer.open{right:0}
+  .dr-head{padding:20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .dr-head .dr-id{font-family:var(--mono);font-size:11.5px;color:var(--mute)}
+  .dr-head h3{font-size:16px;font-weight:800;margin-top:6px;line-height:1.4}
+  .dr-close{background:none;border:none;cursor:pointer;color:var(--mute);width:32px;height:32px;border-radius:8px;flex:none}
+  .dr-close:hover{background:var(--bg);color:var(--ink)}
+  .dr-body{padding:20px;display:flex;flex-direction:column;gap:18px}
+  .dr-row{display:flex;justify-content:space-between;align-items:center;font-size:12.5px}
+  .dr-row .rl{color:var(--mute)}
+  .dr-desc{font-size:13px;color:var(--ink);line-height:1.7;background:var(--bg);border-radius:10px;padding:14px}
+  .dr-comments{display:flex;flex-direction:column;gap:12px}
+  .cm{font-size:12.5px}
+  .cm b{font-weight:700}
+  .cm .cm-meta{font-size:11px;color:var(--faint);margin-top:2px}
+  .cm .cm-body{margin-top:4px;color:var(--ink)}
+
+  .demo-bar{position:fixed;left:0;right:0;bottom:0;background:var(--dark);color:var(--bar-fg);font-size:11px;letter-spacing:.04em;padding:9px 16px;text-align:center;z-index:70;border-top:1px solid var(--dark-line)}
+  .demo-bar code{color:var(--accent-bright)}
+  @media (max-width:640px){.wrap{padding:16px 14px 100px}.top-row{gap:10px}.searchbox{order:3;flex-basis:100%;max-width:none}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-row">
+    <div class="wordmark"><span class="dot"></span>TRACKLY</div>
+    <div class="searchbox"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="이슈 검색 (제목, ID, 담당자)" aria-label="이슈 검색"></div>
+    <button class="btn btn-outline skin-cta">필터 저장</button>
+    <button class="btn btn-primary skin-cta">+ 새 이슈</button>
+  </div>
+  <div class="tabs" role="tablist" aria-label="이슈 상태 필터">
+    <button class="tab on" data-f="all" role="tab" aria-selected="true">전체<span class="cnt">32</span></button>
+    <button class="tab" data-f="open" role="tab" aria-selected="false">열림<span class="cnt">14</span></button>
+    <button class="tab" data-f="progress" role="tab" aria-selected="false">진행중<span class="cnt">9</span></button>
+    <button class="tab" data-f="done" role="tab" aria-selected="false">완료<span class="cnt">7</span></button>
+    <button class="tab" data-f="hold" role="tab" aria-selected="false">보류<span class="cnt">2</span></button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="toolbar">
+    <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M4 6h16M8 12h8M11 18h2"/></svg>프로젝트: Northwind</span>
+    <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>최근 30일</span>
+    <span class="count">32건 중 12건 표시</span>
+  </div>
+
+  <div class="tblcard skin-surface">
+    <div class="tbl-scroll">
+      <table class="data" id="tbl">
+        <thead><tr><th>ID</th><th>제목</th><th>상태</th><th>우선순위</th><th>담당자</th><th>등록일</th></tr></thead>
+        <tbody id="tbody">
+          <tr data-status="open" data-id="TCK-1012" data-title="온보딩 위저드 3단계 진입 시 로딩 무한 반복" data-desc="특정 플랜 구성(참여자 5인 초과, 연동 앱 3개 이상)에서 3단계 설정 화면 진입 시 로딩이 해제되지 않고 화면이 멈춤. 재현율 약 40%." data-prio="긴급" data-assignee="하늘" data-reporter="QA팀" data-created="2026-08-12">
+            <td class="mono">TCK-1012</td><td class="ttl">온보딩 위저드 3단계 진입 시 로딩 무한 반복</td><td><span class="pill open skin-badge">열림</span></td><td class="prio high skin-badge">긴급</td><td class="assignee"><span class="av skin-frame">하</span>하늘</td><td>08-12</td>
+          </tr>
+          <tr data-status="progress" data-id="TCK-1011" data-title="청구 대시보드 잔액 표기 자릿수 오버플로" data-desc="누적 크레딧 10억 이상 시 대시보드 상단 잔액 표기가 카드 밖으로 밀려나 다른 요소와 겹침. 1920px 이하 해상도에서 재현." data-prio="보통" data-assignee="노을" data-reporter="운영팀" data-created="2026-08-11">
+            <td class="mono">TCK-1011</td><td class="ttl">청구 대시보드 잔액 표기 자릿수 오버플로</td><td><span class="pill progress skin-badge">진행중</span></td><td class="prio mid skin-badge">보통</td><td class="assignee"><span class="av skin-frame">노</span>노을</td><td>08-11</td>
+          </tr>
+          <tr data-status="open" data-id="TCK-1010" data-title="팀 리더보드 갱신 지연 (최대 6시간)" data-desc="주간 초기화 직후 집계 배치가 지연되어 실제 순위와 화면 표기가 최대 6시간 어긋남. 로그 상 배치 큐 적체 확인." data-prio="긴급" data-assignee="여름" data-reporter="운영팀" data-created="2026-08-11">
+            <td class="mono">TCK-1010</td><td class="ttl">팀 리더보드 갱신 지연 (최대 6시간)</td><td><span class="pill open skin-badge">열림</span></td><td class="prio high skin-badge">긴급</td><td class="assignee"><span class="av skin-frame">여</span>여름</td><td>08-11</td>
+          </tr>
+          <tr data-status="done" data-id="TCK-1009" data-title="결제 재시도 시 카드 이중 청구" data-desc="결제 실패 연출 중 네트워크 재시도가 발생하면 카드가 두 번 청구되는 결제 정합성 버그. 핫픽스 배포 완료, 회귀 검증 필요." data-prio="긴급" data-assignee="다솜" data-reporter="QA팀" data-created="2026-08-09">
+            <td class="mono">TCK-1009</td><td class="ttl">결제 재시도 시 카드 이중 청구</td><td><span class="pill done skin-badge">완료</span></td><td class="prio high skin-badge">긴급</td><td class="assignee"><span class="av skin-frame">다</span>다솜</td><td>08-09</td>
+          </tr>
+          <tr data-status="progress" data-id="TCK-1008" data-title="번역 누락 — 베트남어 튜토리얼 3번 스텝" data-desc="온보딩 튜토리얼 3번 스텝의 안내 문구가 베트남어 로케일에서 영어 원문으로 노출됨. 현지화팀 확인 요청." data-prio="낮음" data-assignee="보람" data-reporter="현지화팀" data-created="2026-08-08">
+            <td class="mono">TCK-1008</td><td class="ttl">번역 누락 — 베트남어 튜토리얼 3번 스텝</td><td><span class="pill progress skin-badge">진행중</span></td><td class="prio low skin-badge">낮음</td><td class="assignee"><span class="av skin-frame">보</span>보람</td><td>08-08</td>
+          </tr>
+          <tr data-status="open" data-id="TCK-1007" data-title="추천 보상 중복 지급 가능 (어뷰징)" data-desc="동일 기기에서 계정을 반복 재가입하면 추천 보상을 무제한 수령 가능. 어뷰징 리스크 높음, 정책팀 공유 완료." data-prio="긴급" data-assignee="하늘" data-reporter="보안팀" data-created="2026-08-07">
+            <td class="mono">TCK-1007</td><td class="ttl">추천 보상 중복 지급 가능 (어뷰징)</td><td><span class="pill open skin-badge">열림</span></td><td class="prio high skin-badge">긴급</td><td class="assignee"><span class="av skin-frame">하</span>하늘</td><td>08-07</td>
+          </tr>
+          <tr data-status="hold" data-id="TCK-1006" data-title="프로모션 배너 클릭 영역 오차" data-desc="배너 이미지와 실제 터치 영역이 8px가량 어긋남. 다음 캠페인 배너 전면 교체 예정으로 우선순위 보류." data-prio="낮음" data-assignee="노을" data-reporter="운영팀" data-created="2026-08-05">
+            <td class="mono">TCK-1006</td><td class="ttl">프로모션 배너 클릭 영역 오차</td><td><span class="pill hold skin-badge">보류</span></td><td class="prio low skin-badge">낮음</td><td class="assignee"><span class="av skin-frame">노</span>노을</td><td>08-05</td>
+          </tr>
+          <tr data-status="done" data-id="TCK-1005" data-title="우선순위 큐 배정 알고리즘 오류 (SLA 역전)" data-desc="낮은 우선순위 티켓이 높은 우선순위보다 먼저 배정되는 사례 12건 보고. 가중치 계수 오류로 확인, 패치 배포 완료." data-prio="보통" data-assignee="여름" data-reporter="QA팀" data-created="2026-08-04">
+            <td class="mono">TCK-1005</td><td class="ttl">우선순위 큐 배정 알고리즘 오류 (SLA 역전)</td><td><span class="pill done skin-badge">완료</span></td><td class="prio mid skin-badge">보통</td><td class="assignee"><span class="av skin-frame">여</span>여름</td><td>08-04</td>
+          </tr>
+          <tr data-status="progress" data-id="TCK-1004" data-title="인보이스 다운로드 버튼 더블탭 시 앱 크래시" data-desc="저사양 단말(RAM 3GB 이하)에서 다운로드 버튼을 빠르게 두 번 탭하면 앱이 강제 종료됨. 재현율 22%." data-prio="보통" data-assignee="다솜" data-reporter="운영팀" data-created="2026-08-03">
+            <td class="mono">TCK-1004</td><td class="ttl">인보이스 다운로드 버튼 더블탭 시 앱 크래시</td><td><span class="pill progress skin-badge">진행중</span></td><td class="prio mid skin-badge">보통</td><td class="assignee"><span class="av skin-frame">다</span>다솜</td><td>08-03</td>
+          </tr>
+          <tr data-status="open" data-id="TCK-1003" data-title="공지 팝업 '오늘 하루 보지 않기' 미저장" data-desc="팝업 체크박스 선택 후 앱을 재시작하면 옵션이 초기화되어 팝업이 재노출됨. 로컬 저장 로직 확인 필요." data-prio="보통" data-assignee="보람" data-reporter="운영팀" data-created="2026-08-02">
+            <td class="mono">TCK-1003</td><td class="ttl">공지 팝업 '오늘 하루 보지 않기' 미저장</td><td><span class="pill open skin-badge">열림</span></td><td class="prio mid skin-badge">보통</td><td class="assignee"><span class="av skin-frame">보</span>보람</td><td>08-02</td>
+          </tr>
+          <tr data-status="done" data-id="TCK-1002" data-title="댓글 이모지 렌더링 깨짐 (iOS 17)" data-desc="iOS 17 신규 이모지 유니코드가 댓글 영역에서 네모(□)로 표기됨. 폰트 폴백 추가로 해결." data-prio="낮음" data-assignee="하늘" data-reporter="QA팀" data-created="2026-07-30">
+            <td class="mono">TCK-1002</td><td class="ttl">댓글 이모지 렌더링 깨짐 (iOS 17)</td><td><span class="pill done skin-badge">완료</span></td><td class="prio low skin-badge">낮음</td><td class="assignee"><span class="av skin-frame">하</span>하늘</td><td>07-30</td>
+          </tr>
+          <tr data-status="hold" data-id="TCK-1001" data-title="정렬 옵션 '인기순' 기준 불명확" data-desc="'인기순' 정렬이 실제 사용량 기준인지 조회수 기준인지 정의 불명확. 기획팀 확정 대기로 보류." data-prio="낮음" data-assignee="노을" data-reporter="기획팀" data-created="2026-07-29">
+            <td class="mono">TCK-1001</td><td class="ttl">정렬 옵션 '인기순' 기준 불명확</td><td><span class="pill hold skin-badge">보류</span></td><td class="prio low skin-badge">낮음</td><td class="assignee"><span class="av skin-frame">노</span>노을</td><td>07-29</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer skin-surface" id="drawer" aria-hidden="true">
+  <div class="dr-head">
+    <div><div class="dr-id" id="dr-id">TCK-1012</div><h3 id="dr-title">온보딩 위저드 3단계 진입 시 로딩 무한 반복</h3></div>
+    <button class="dr-close" id="drClose" aria-label="닫기">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="dr-body">
+    <div class="dr-row"><span class="rl">상태</span><span class="pill open skin-badge" id="dr-status">열림</span></div>
+    <div class="dr-row"><span class="rl">우선순위</span><span class="prio high skin-badge" id="dr-prio">긴급</span></div>
+    <div class="dr-row"><span class="rl">담당자</span><span id="dr-assignee">하늘</span></div>
+    <div class="dr-row"><span class="rl">보고자</span><span id="dr-reporter">QA팀</span></div>
+    <div class="dr-row"><span class="rl">등록일</span><span id="dr-created">2026-08-12</span></div>
+    <div>
+      <div style="font-size:11.5px;color:var(--mute);font-weight:700;margin-bottom:8px">상세 설명</div>
+      <div class="dr-desc" id="dr-desc">특정 플랜 구성에서 3단계 설정 화면 진입 시 로딩이 해제되지 않음.</div>
+    </div>
+    <div>
+      <div style="font-size:11.5px;color:var(--mute);font-weight:700;margin-bottom:10px">댓글 3</div>
+      <div class="dr-comments">
+        <div class="cm"><b>하늘</b> <span class="cm-meta">· 2시간 전</span><div class="cm-body">연동 앱 3개 이상 조건 재확인 중입니다.</div></div>
+        <div class="cm"><b>노을</b> <span class="cm-meta">· 어제</span><div class="cm-body">서버 로그에서 동일 타이밍에 인스턴스 생성 실패 확인했습니다.</div></div>
+        <div class="cm"><b>여름</b> <span class="cm-meta">· 2일 전</span><div class="cm-body">재현 조건 정리해서 개발팀 공유 완료.</div></div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<div class="demo-bar">데이터 테이블 워크스페이스 골격 데모 · <code>/taste --macro=data-table-workspace</code></div>
+
+<script>
+(function(){
+  var rows=document.querySelectorAll('#tbody tr');
+  var drawer=document.getElementById('drawer'), scrim=document.getElementById('scrim');
+  function openDrawer(tr){
+    rows.forEach(function(r){r.classList.remove('sel')});
+    tr.classList.add('sel');
+    document.getElementById('dr-id').textContent=tr.dataset.id;
+    document.getElementById('dr-title').textContent=tr.dataset.title;
+    document.getElementById('dr-assignee').textContent=tr.dataset.assignee;
+    document.getElementById('dr-reporter').textContent=tr.dataset.reporter;
+    document.getElementById('dr-created').textContent=tr.dataset.created;
+    document.getElementById('dr-desc').textContent=tr.dataset.desc;
+    document.getElementById('dr-prio').textContent=tr.dataset.prio;
+    document.getElementById('dr-prio').className='prio skin-badge '+(tr.dataset.prio==='긴급'?'high':tr.dataset.prio==='보통'?'mid':'low');
+    var statusMap={open:'열림',progress:'진행중',done:'완료',hold:'보류'};
+    var st=tr.dataset.status;
+    document.getElementById('dr-status').textContent=statusMap[st];
+    document.getElementById('dr-status').className='pill skin-badge '+st;
+    drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false');
+    scrim.classList.add('show');
+  }
+  function closeDrawer(){ drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); scrim.classList.remove('show'); }
+  rows.forEach(function(tr){
+    tr.addEventListener('click',function(){openDrawer(tr)});
+    tr.setAttribute('tabindex','0');
+    tr.addEventListener('keydown',function(e){ if(e.key==='Enter') openDrawer(tr); });
+  });
+  document.getElementById('drClose').addEventListener('click',closeDrawer);
+  scrim.addEventListener('click',closeDrawer);
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeDrawer(); });
+
+  document.querySelectorAll('.tab').forEach(function(tab){
+    tab.addEventListener('click',function(){
+      document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on');t.setAttribute('aria-selected','false')});
+      tab.classList.add('on'); tab.setAttribute('aria-selected','true');
+      var f=tab.getAttribute('data-f');
+      rows.forEach(function(r){ r.style.display=(f==='all'||r.dataset.status===f)?'':'none'; });
+    });
+  });
+})();
+</script>
+</body>
+</html>

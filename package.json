@@ -1,0 +1,13 @@
+{
+  "name": "woozi-design-kit",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Claude Code skill + design-skeleton gallery: pick a structural macrostructure from 31 static demos, then generate AI-tell-free UI with the taste skill.",
+  "license": "MIT",
+  "scripts": {
+    "test": "node scripts/lint-designkit.mjs"
+  },
+  "engines": {
+    "node": ">=14.18.0"
+  }
+}

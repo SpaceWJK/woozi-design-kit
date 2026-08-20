@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="300" height="200">
+  <rect x="0.0" y="0.0" width="300.0" height="200.0" fill="#fafafa"/>
+  <text x="14.0" y="24.0" font-family="system-ui,-apple-system,sans-serif" font-size="12" font-weight="700" fill="#3f3f46" text-anchor="start">스페시먼</text>
+  <text x="286.0" y="24.0" font-family="ui-monospace,monospace" font-size="8" font-weight="400" fill="#9a9aa2" text-anchor="end">specimen</text>
+  <rect x="14.0" y="30.0" width="272.0" height="156.0" fill="none" stroke="#c9c9cf" stroke-width="1"/>
+  <rect x="14.0" y="30.0" width="22.0" height="156.0" fill="none"/>
+  <text x="14.0" y="44.0" font-family="system-ui,-apple-system,sans-serif" font-size="10" font-weight="700" fill="#71717a" text-anchor="start">01</text>
+  <line x1="14.0" y1="52.0" x2="36.0" y2="52.0" stroke="#c9c9cf" stroke-width="1"/>
+  <rect x="48.0" y="30.0" width="149.6" height="60.0" fill="#a1a1aa"/>
+  <rect x="211.6" y="38.0" width="74.4" height="5.0" fill="#e4e4e7"/>
+  <rect x="211.6" y="54.0" width="52.1" height="5.0" fill="#e4e4e7"/>
+  <line x1="48.0" y1="102.0" x2="286.0" y2="102.0" stroke="#c9c9cf" stroke-width="1"/>
+  <rect x="48.0" y="114.0" width="210.8" height="5.0" fill="#e4e4e7"/>
+  <rect x="48.0" y="130.0" width="129.2" height="5.0" fill="#e4e4e7"/>
+  <text x="286.0" y="182.0" font-family="system-ui,-apple-system,sans-serif" font-size="14" font-weight="400" fill="#71717a" text-anchor="end">→</text>
+</svg>

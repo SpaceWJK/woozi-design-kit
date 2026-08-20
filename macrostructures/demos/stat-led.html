@@ -1,0 +1,167 @@
+<!doctype html>
+<!-- macro-demo: stat-led | 골격: 스탯 리드 | design: macrostructure=stat-led preset=custom-accent(navy+gold) | gate: WCAG ✓ AI-tell ✓ token ✓ | score: Philosophy 4 Hierarchy 5 Execution 4 Specificity 5 Restraint 4 Variety 4 -->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>스탯 리드 골격 데모 — 라인베이스 2026 상반기 임팩트 리포트</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#ffffff;--surface:#f5f6f8;--hairline:#dfe2e8;
+    --ink:#12161c;--ink-2:#4a5160;--muted:#8b909c;
+    --accent:#1d3557;--accent-tint:#e9edf3;--gold:#c9a961;--gold-tint:#f4eedb;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Pretendard,"Malgun Gothic",sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+    --on-accent:#fff;--gold-ink:#241c0c;--gold-hover:#dcc180;--overlay-white-rgb:255,255,255;
+  }
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--font);
+    word-break:keep-all;overflow-wrap:break-word;line-height:1.6;
+    padding-bottom:44px;
+  }
+  ::selection{background:var(--accent-tint);color:var(--ink)}
+
+  .nav{
+    max-width:920px;margin:0 auto;padding:24px;display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid var(--hairline);
+  }
+  .masthead{display:flex;align-items:center;gap:12px}
+  .mark{width:28px;height:28px;border-radius:7px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:var(--on-accent);font-size:12px;font-weight:800}
+  .brand{font-size:15px;font-weight:800;letter-spacing:-.005em}
+  .issue-meta{font-size:12px;color:var(--muted)}
+  .nav-cta{font-size:13px;font-weight:700;color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
+  .nav-cta:hover{border-bottom-color:var(--accent)}
+  .nav-cta:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+  .wrap{max-width:920px;margin:0 auto;padding:64px 24px 100px}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.09em;color:var(--muted);text-transform:uppercase;margin-bottom:20px;text-align:center}
+
+  .hero-stat{text-align:center;padding-bottom:36px;margin-bottom:20px}
+  .stat-num{font-size:clamp(64px,13vw,140px);font-weight:800;letter-spacing:-.03em;line-height:.95;color:var(--ink)}
+  .stat-num .unit{font-size:.36em;font-weight:700;color:var(--accent);margin-left:6px}
+  .stat-caption{font-size:17px;color:var(--ink-2);max-width:52ch;margin:22px auto 0;line-height:1.7}
+  .stat-source{font-size:12.5px;color:var(--muted);margin-top:16px}
+
+  /* mini trend sparkline — supports the lead stat, doesn't compete with it */
+  .trend{display:flex;justify-content:center;align-items:flex-end;gap:8px;height:56px;margin:34px 0 44px}
+  .trend i{display:block;width:20px;border-radius:4px 4px 0 0;background:var(--accent-tint)}
+  .trend i.now{background:var(--accent)}
+  .trend-wrap{padding-bottom:36px;margin-bottom:36px;border-bottom:1px solid var(--hairline)}
+  .trend-label{text-align:center;font-size:11.5px;color:var(--muted);letter-spacing:.04em;margin-top:6px}
+
+  .support-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:56px}
+  .support-card{background:var(--surface);border-radius:14px;padding:24px}
+  .support-num{font-size:30px;font-weight:800;letter-spacing:-.02em;color:var(--ink)}
+  .support-num .u{font-size:16px;color:var(--accent);margin-left:2px;font-weight:700}
+  .support-label{font-size:13px;color:var(--ink-2);margin-top:8px;line-height:1.5}
+  .support-bar{height:5px;border-radius:3px;background:var(--hairline);overflow:hidden;margin-top:14px}
+  .support-bar i{display:block;height:100%;background:var(--gold)}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:56px}
+  .panel{padding:26px;border-radius:14px;border:1px solid var(--hairline)}
+  .panel h2{font-size:15.5px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .panel h2 .dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  .panel.caveat h2 .dot{background:var(--gold)}
+  .panel p{font-size:14px;color:var(--ink-2);line-height:1.7}
+  .panel p+p{margin-top:10px}
+  @media (max-width:760px){ .two-col,.support-grid{grid-template-columns:1fr} }
+
+  .cta-band{
+    background:var(--accent);color:var(--on-accent);border-radius:18px;padding:36px 32px;
+    display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  }
+  .cta-band h3{font-size:18px;font-weight:800;margin-bottom:6px}
+  .cta-band p{font-size:13.5px;color:rgba(var(--overlay-white-rgb),.78)}
+  .cta-btn{
+    background:var(--gold);color:var(--gold-ink);border:none;border-radius:999px;padding:13px 22px;
+    font-size:14px;font-weight:800;text-decoration:none;min-height:44px;display:inline-flex;align-items:center;white-space:nowrap;
+  }
+  .cta-btn:hover{background:var(--gold-hover)}
+  .cta-btn:focus-visible{outline:3px solid var(--on-accent);outline-offset:2px}
+
+  footer.site{max-width:920px;margin:56px auto 0;padding:22px 24px 0;border-top:1px solid var(--hairline);display:flex;justify-content:space-between;font-size:12px;color:var(--muted);flex-wrap:wrap;gap:8px}
+
+  .demo-bar{
+    position:fixed;left:0;right:0;bottom:0;height:40px;background:var(--ink);color:var(--on-accent);
+    display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;letter-spacing:.01em;z-index:50;
+  }
+  .demo-bar code{font-family:var(--mono);background:rgba(var(--overlay-white-rgb),.14);padding:2px 8px;border-radius:6px}
+
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.001ms !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="masthead">
+    <div class="mark">LB</div>
+    <div><div class="brand">라인베이스</div><div class="issue-meta">2026 상반기 임팩트 리포트</div></div>
+  </div>
+  <a class="nav-cta skin-cta" href="#" onclick="return false">전체 리포트 PDF ↓</a>
+</nav>
+
+<div class="wrap">
+  <p class="eyebrow">재고관리 도입 효과 · 143개 기업 집계</p>
+
+  <section class="hero-stat">
+    <div class="stat-num skin-heading"><!-- mockup: 데모용 플레이스홀더 수치 -->41<span class="unit">%</span></div>
+    <p class="stat-caption">도입 기업의 재고 폐기 비용이 평균 41% 줄었습니다 — 지난 12개월, 실사용 143개 기업 데이터를 집계한 수치입니다.</p>
+    <p class="stat-source">산출 기준: 도입 전 6개월 대비 도입 후 6개월 평균 폐기 비용 (자체 집계, 외부 감사 미실시)</p>
+  </section>
+
+  <div class="trend-wrap">
+    <div class="trend" aria-hidden="true">
+      <i style="height:38%"></i><i style="height:44%"></i><i style="height:40%"></i>
+      <i style="height:52%"></i><i style="height:61%"></i><i class="now" style="height:100%"></i>
+    </div>
+    <p class="trend-label"><!-- mockup: 데모용 플레이스홀더 수치 -->2025년 1월 → 2026년 6월, 분기별 폐기 비용 절감폭 추이</p>
+  </div>
+
+  <section class="support-grid" aria-label="세부 지표">
+    <div class="support-card skin-surface">
+      <div class="support-num">143<span class="u">개사</span></div>
+      <div class="support-label"><!-- mockup: 데모용 플레이스홀더 수치 -->집계에 포함된 도입 기업 수</div>
+      <div class="support-bar"><i style="width:71%"></i></div>
+    </div>
+    <div class="support-card skin-surface">
+      <div class="support-num">7.2<span class="u">개월</span></div>
+      <div class="support-label"><!-- mockup: 데모용 플레이스홀더 수치 -->효과가 유의미하게 나타나기 시작한 평균 시점</div>
+      <div class="support-bar"><i style="width:48%"></i></div>
+    </div>
+    <div class="support-card skin-surface">
+      <div class="support-num">92<span class="u">%</span></div>
+      <div class="support-label"><!-- mockup: 데모용 플레이스홀더 수치 -->1년 이상 재계약을 유지한 고객사 비율</div>
+      <div class="support-bar"><i style="width:92%"></i></div>
+    </div>
+  </section>
+
+  <div class="two-col">
+    <div class="panel skin-surface">
+      <h2><span class="dot"></span>이 숫자가 방어 가능한 이유</h2>
+      <p>41%는 마케팅을 위해 만든 숫자가 아닙니다. 도입 전후 6개월씩, 같은 계절 요인을 피하기 위해 동일 분기 데이터로만 비교했습니다.</p>
+      <p>표본에서 이상치 상위·하위 5%는 제외했고, 원본 산출 로그는 요청 시 감사 목적으로 공유합니다.</p>
+    </div>
+    <div class="panel caveat skin-surface">
+      <h2><span class="dot"></span>솔직한 한계</h2>
+      <p>모든 사업장이 41%를 그대로 재현하지는 않습니다. 폐기 비용 구조가 이미 최적화된 사업장에서는 개선폭이 더 작았습니다.</p>
+      <p>외부 회계 감사를 거치지 않은 자체 집계이며, 방어할 수 없는 조건에서는 이 수치를 인용하지 말아 주십시오.</p>
+    </div>
+  </div>
+
+  <div class="cta-band">
+    <div><h3>전체 방법론과 기업별 데이터를 확인하세요</h3><p>28페이지 전체 리포트, 로그인 없이 바로 다운로드</p></div>
+    <a class="cta-btn skin-cta" href="#" onclick="return false">PDF 다운로드 →</a>
+  </div>
+
+  <footer class="site">
+    <span>&copy; 2026 라인베이스 · 발행일 2026-07-01</span>
+    <span>문의 <a href="#" style="color:inherit">report@linebase.example</a></span>
+  </footer>
+</div>
+
+<div class="demo-bar">스탯 리드 골격 데모 · <code>/taste --macro=stat-led</code></div>
+</body>
+</html>

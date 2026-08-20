@@ -1,0 +1,166 @@
+<!-- macro-demo: type-specimen | 골격: 타입 스페시먼 | design: macrostructure=type-specimen preset=neutral-editorial+bronze | gate: WCAG ✓ AI-tell ✓ token ✓ | score: Philosophy 4 Hierarchy 5 Execution 4 Specificity 4 Restraint 4 Variety 4 -->
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>그레인 타입 — Type Specimen 골격 데모</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --bg:#faf7f1; --ink:#161310; --mute:#7a7269; --line:#e3ddd0;
+    --accent:#8a5f14; --accent-bright:#c98a2c; --accent-tint:#f1e6d0;
+    --dark:#161310;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+    --ease:cubic-bezier(.4,0,.2,1);
+    --accent-ink:#fff; --card-bg:#fff;
+    --band-fg:#f1ece2; --band-mute:#c7bfae;
+    --accent-bright-hover:#e0ac5c;
+    --bar-fg:#d8d0c2; --bar-line:#2c2620;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:var(--font);color:var(--ink);background:var(--bg);line-height:1.55;word-break:keep-all;overflow-x:hidden;font-size:15px}
+  ::selection{background:var(--accent);color:var(--accent-ink)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px 120px}
+  header.top{padding:22px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);flex-wrap:wrap;gap:8px}
+  header.top .wordmark{font-weight:800;font-size:15px;letter-spacing:.02em}
+  header.top .wordmark::before{content:'●';color:var(--accent);margin-right:8px;font-size:10px}
+  header.top .meta{font-size:11.5px;color:var(--mute);letter-spacing:.04em}
+
+  .giant{padding:68px 0 28px;border-bottom:1px solid var(--line)}
+  .giant .eyebrow{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:800;margin-bottom:10px}
+  .giant .display{font-size:clamp(96px,20vw,270px);font-weight:800;letter-spacing:-.035em;line-height:.86;color:var(--ink)}
+  .giant .display .accent-ch{color:var(--accent)}
+  .giant .sub{margin-top:20px;color:var(--mute);font-size:14px;max-width:58ch}
+  .giant .meta-row{display:flex;gap:28px;margin-top:22px;flex-wrap:wrap}
+  .giant .meta-row .mi{font-size:11px;color:var(--mute)}
+  .giant .meta-row .mi b{display:block;font-size:14px;color:var(--ink);font-weight:700;margin-bottom:2px}
+
+  .section{padding:56px 0;border-bottom:1px solid var(--line)}
+  .section .label{display:flex;align-items:baseline;gap:10px;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);font-weight:700;margin-bottom:30px}
+  .section .label .no{color:var(--accent);font-variant-numeric:tabular-nums}
+
+  .weight-row{display:flex;flex-direction:column}
+  .weight-item{display:grid;grid-template-columns:56px 1fr;align-items:baseline;gap:20px;padding:16px 0;border-bottom:1px dashed var(--line);min-width:0}
+  .weight-item:last-child{border-bottom:none}
+  .weight-item .num{font-size:11.5px;color:var(--mute);font-variant-numeric:tabular-nums}
+  .weight-item .sample{font-size:clamp(28px,4.4vw,54px);letter-spacing:-.015em}
+
+  .ramp{display:flex;flex-direction:column;gap:24px}
+  .ramp-row{display:flex;align-items:baseline;gap:20px;flex-wrap:wrap;min-width:0}
+  .ramp-row .tag{font-size:10.5px;color:var(--mute);width:60px;flex-shrink:0;letter-spacing:.06em;text-transform:uppercase}
+  .ramp-row .txt{letter-spacing:-.01em;max-width:44ch}
+  .r-1{font-size:clamp(28px,4.2vw,46px);font-weight:800}
+  .r-2{font-size:clamp(20px,3vw,31px);font-weight:700}
+  .r-3{font-size:20px;font-weight:600}
+  .r-4{font-size:16px;font-weight:500;color:var(--ink)}
+  .r-5{font-size:13.5px;font-weight:400;color:var(--mute)}
+
+  .glyphs{display:grid;grid-template-columns:repeat(auto-fill,minmax(58px,1fr));gap:2px;background:var(--line);border:1px solid var(--line)}
+  .glyph{background:var(--bg);aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:23px;color:var(--ink);transition:background .15s var(--ease),color .15s var(--ease)}
+  .glyph:hover{background:var(--accent);color:var(--accent-ink)}
+
+  .pairing{display:grid;grid-template-columns:1fr;gap:32px}
+  @media(min-width:800px){.pairing{grid-template-columns:1fr 1fr}}
+  .pair-card{border:1px solid var(--line);border-radius:12px;padding:30px;background:var(--card-bg);min-width:0}
+  .pair-card .h{font-size:25px;font-weight:800;margin-bottom:10px;letter-spacing:-.01em}
+  .pair-card .b{font-size:13.5px;color:var(--mute);line-height:1.7}
+  .pair-card .meta{margin-top:16px;font-size:11px;color:var(--accent);font-weight:700;font-variant-numeric:tabular-nums;padding-top:12px;border-top:1px solid var(--line)}
+
+  .license-band{background:var(--ink);color:var(--band-fg);border-radius:14px;padding:36px 32px;display:flex;flex-direction:column;gap:18px}
+  @media(min-width:700px){.license-band{flex-direction:row;justify-content:space-between;align-items:center}}
+  .license-band .lt{font-size:19px;font-weight:800}
+  .license-band .ld{font-size:13px;color:var(--band-mute);max-width:44ch;margin-top:6px}
+  .license-band .lb{background:var(--accent-bright);color:var(--dark);font-weight:800;font-size:13px;padding:12px 22px;border-radius:999px;text-decoration:none;white-space:nowrap;transition:background .18s var(--ease)}
+  .license-band .lb:hover{background:var(--accent-bright-hover)}
+
+  footer.site-foot{padding:44px 0 100px;text-align:center}
+  footer.site-foot p{font-size:12px;color:var(--mute)}
+  .demo-bar{position:fixed;left:0;right:0;bottom:0;background:var(--dark);color:var(--bar-fg);font-size:11px;letter-spacing:.04em;padding:9px 16px;text-align:center;z-index:50;border-top:1px solid var(--bar-line)}
+  .demo-bar code{color:var(--accent-bright)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wordmark">GRAIN TYPE CO.</div>
+  <div class="meta">SPECIMEN No. 07 · A/W 2026</div>
+</header>
+
+<main class="wrap">
+  <section class="giant">
+    <div class="eyebrow">신작 서체 — 그레인 산스</div>
+    <div class="display skin-heading">가<span class="accent-ch">A</span>g</div>
+    <p class="sub">한글과 라틴 알파벳이 같은 리듬으로 호흡하도록 설계했습니다. 넓은 어퍼처와 낮은 대비로 작은 크기에서도 눈이 편안합니다. 이 데모는 시스템 폰트 스택으로 골격만 재현한 것으로, 실제 서체 파일은 포함하지 않습니다.</p>
+    <div class="meta-row">
+      <!-- mockup: 데모용 플레이스홀더 수치 -->
+      <div class="mi"><b>9</b>웨이트</div>
+      <div class="mi"><b>2년</b>개발 기간</div>
+      <div class="mi"><b>1,428자</b>한글 글리프</div>
+      <div class="mi"><b>4곳</b>이미 채택한 브랜드</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="label"><span class="no">01</span>웨이트 스케일</div>
+    <div class="weight-row">
+      <div class="weight-item"><span class="num">200</span><span class="sample" style="font-weight:200">그레인 산스</span></div>
+      <div class="weight-item"><span class="num">400</span><span class="sample" style="font-weight:400">그레인 산스</span></div>
+      <div class="weight-item"><span class="num">600</span><span class="sample" style="font-weight:600">그레인 산스</span></div>
+      <div class="weight-item"><span class="num">800</span><span class="sample" style="font-weight:800">그레인 산스</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="label"><span class="no">02</span>타입 램프 — 헤드라인에서 캡션까지</div>
+    <div class="ramp">
+      <div class="ramp-row"><span class="tag skin-badge">H1</span><span class="txt r-1">타이포그래피가 브랜드다</span></div>
+      <div class="ramp-row"><span class="tag skin-badge">H2</span><span class="txt r-2">숫자와 문장이 같은 격자에 놓인다</span></div>
+      <div class="ramp-row"><span class="tag skin-badge">H3</span><span class="txt r-3">본문을 위한 중간 굵기</span></div>
+      <div class="ramp-row"><span class="tag skin-badge">Body</span><span class="txt r-4">읽는 속도를 늦추지 않도록 자간과 행간을 낮은 대비로 설계했습니다</span></div>
+      <div class="ramp-row"><span class="tag skin-badge">Caption</span><span class="txt r-5">각주와 메타 정보를 위한 낮은 대비 · 11px부터 사용 권장</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="label"><span class="no">03</span>글리프 세트 — 한글 · 라틴 · 숫자 <span style="font-weight:400;text-transform:none;letter-spacing:0">(마우스를 올려보세요)</span></div>
+    <div class="glyphs" role="img" aria-label="한글 자모, 라틴 대소문자, 숫자 글리프 견본 그리드">
+      <div class="glyph skin-frame">가</div><div class="glyph skin-frame">나</div><div class="glyph skin-frame">다</div><div class="glyph skin-frame">라</div><div class="glyph skin-frame">마</div><div class="glyph skin-frame">바</div>
+      <div class="glyph skin-frame">A</div><div class="glyph skin-frame">B</div><div class="glyph skin-frame">G</div><div class="glyph skin-frame">R</div><div class="glyph skin-frame">a</div><div class="glyph skin-frame">g</div>
+      <div class="glyph skin-frame">0</div><div class="glyph skin-frame">1</div><div class="glyph skin-frame">2</div><div class="glyph skin-frame">5</div><div class="glyph skin-frame">8</div><div class="glyph skin-frame">9</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="label"><span class="no">04</span>타입 페어링 예시</div>
+    <div class="pairing">
+      <div class="pair-card skin-surface">
+        <div class="h">제품 상세 페이지</div>
+        <div class="b">굵은 헤드라인 800 + 본문 400 조합. 대비가 커서 스캔 속도가 빠릅니다. 커머스·랜딩 페이지에 권장합니다.</div>
+        <div class="meta"><!-- mockup: 데모용 플레이스홀더 수치 -->H 800 / 44px · B 400 / 15px</div>
+      </div>
+      <div class="pair-card skin-surface">
+        <div class="h" style="font-weight:600">에디토리얼 캡션</div>
+        <div class="b">중간 굵기 600 + 낮은 대비 캡션. 조용한 톤이 필요한 문서·저널 페이지에 권장합니다.</div>
+        <div class="meta"><!-- mockup: 데모용 플레이스홀더 수치 -->H 600 / 24px · Caption 400 / 13px</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="border-bottom:none">
+    <div class="license-band">
+      <div>
+        <div class="lt">스튜디오 라이선스 — 5개 디바이스</div>
+        <div class="ld">데스크톱·웹 사용 포함, 상업 프로젝트 무제한. 팀 라이선스는 별도 문의.</div>
+      </div>
+      <a class="lb skin-cta" href="#">라이선스 문의</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot"><p>© 2026 GRAIN TYPE CO. — 이 페이지는 macrostructure 데모용으로 제작된 가상 파운드리입니다.</p></footer>
+
+<div class="demo-bar">타입 스페시먼 골격 데모 · <code>/taste --macro=type-specimen</code></div>
+</body>
+</html>
